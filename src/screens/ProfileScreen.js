@@ -1,4 +1,4 @@
-import { View, Text, Image } from "react-native";
+import { View, Text, Image, Pressable } from "react-native";
 import React from "react";
 import { styles } from "../styles/profile_design";
 import Header from "../components/Header.js";
@@ -21,14 +21,49 @@ const ProfileScreen = () => {
       <View style={styles.profile_stat}>
         <View>
           <Text style={styles.tstat}>Your Balance</Text>
-          <View style={{flexDirection:"row",margin:0,padding:0}}>
+          <View style={{ flexDirection: "row", margin: 0, padding: 0 }}>
             <Text style={styles.coin}>{balance}</Text>
-            <Text style={{fontFamily:"Bold",fontSize:18,textAlign:"auto",alignSelf:"flex-end",marginBottom:6}}>nrs</Text>
+            <Text
+              style={{
+                fontFamily: "Bold",
+                fontSize: 18,
+                textAlign: "auto",
+                alignSelf: "flex-end",
+                marginBottom: 6,
+              }}
+            >
+              nrs
+            </Text>
           </View>
         </View>
         <View>
           <Text style={styles.tstat}>Reward Points</Text>
           <Text style={styles.point}>{point}</Text>
+        </View>
+      </View>
+      <View style={styles.wallet_wrapper}>
+        <Text style={{ fontFamily: "SemiBold", fontSize: 16, marginLeft: 8 }}>
+          Load wallet with
+        </Text>
+        <View style={styles.wallet_con}>
+          <View style={styles.wallet}>
+            <Image
+              source={require("../../assets/esewa.png")}
+              style={styles.w_img}
+            />
+            <Pressable style={styles.w_btn}>
+              <Text style={{ fontFamily: "SemiBold", fontSize: 16 }}>Load</Text>
+            </Pressable>
+          </View>
+          <View style={styles.wallet}>
+            <Image
+              source={require("../../assets/khalti.png")}
+              style={styles.w_img}
+            />
+            <Pressable style={styles.w_btn}>
+              <Text style={{ fontFamily: "SemiBold", fontSize: 16 }}>Load</Text>
+            </Pressable>
+          </View>
         </View>
       </View>
     </View>

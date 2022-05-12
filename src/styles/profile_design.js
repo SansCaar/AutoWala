@@ -35,7 +35,8 @@ export const styles = StyleSheet.create({
     profile_stat:{
         marginTop:24,
         backgroundColor:Colors.white,
-        height:128,
+        height:"auto",
+        paddingVertical:24,
         borderRadius:24,
         flexDirection:"row",
         justifyContent:"space-between",
@@ -59,5 +60,36 @@ export const styles = StyleSheet.create({
         color:Colors.black,
         marginTop:8,
         alignSelf:"flex-end"
+    },
+    wallet_wrapper:{
+        marginTop:24,
+    },
+    wallet_con:{
+        marginTop:8,
+        backgroundColor:Colors.white,
+        height:"auto",
+        paddingHorizontal:24,
+        paddingTop:24,
+        borderRadius:24,
+        paddingBottom:8
+    },
+    wallet:{
+        flexDirection:"row",
+        justifyContent:"space-between",
+        alignItems:"center",
+        marginBottom:16
+    },
+    w_img:{
+        width:128,
+        height:48,
+        resizeMode:"contain"
+    },
+    w_btn:{
+        borderWidth:1,
+        height:40,
+        paddingHorizontal:24,
+        borderRadius:24,
+        justifyContent:"center",
+        alignItems:"center"
     }
 })
