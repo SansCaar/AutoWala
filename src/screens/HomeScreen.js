@@ -35,7 +35,7 @@ const defaultAddress = [
 export default function HomeScreen() {
   return (
     <View style={styles.conainer}>
-      <Header iconL="menu" iconR="user" />
+      <Header iconL="menu" iconR="user"/>
       <Text style={styles.h1}>Where are you going?</Text>
       <View style={{ flexDirection: "row", marginTop: 16 }}>
         <Image
