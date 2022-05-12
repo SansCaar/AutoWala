@@ -2,6 +2,8 @@ import { StatusBar } from "expo-status-bar";
 import { useFonts } from "expo-font";
 
 import HomeScreen from "./src/screens/HomeScreen";
+import LoginScreen from "./src/screens/LoginScreen";
+import SignupScreen from "./src/screens/SignupScreen";
 
 export default function App() {
   let [fontsLoaded] = useFonts({
@@ -12,6 +14,8 @@ export default function App() {
   if (!fontsLoaded) return null;
   return (
     <>
+    {/* <SignupScreen/> */}
+      {/* <LoginScreen/> */}
       <HomeScreen />
       <StatusBar style="auto" />
     </>
