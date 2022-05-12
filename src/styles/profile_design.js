@@ -1,0 +1,63 @@
+import { StyleSheet } from "react-native";
+import {Colors} from "../styles/Global"
+
+export const styles = StyleSheet.create({
+    container:
+    {
+        flex:1,
+        backgroundColor:Colors.background,
+        paddingHorizontal:24
+    },
+    profile_header:{
+        alignItems:"center",
+    },
+    profile_img:{
+        width:170,
+        height:170,
+        borderRadius:85,
+        resizeMode:"cover"
+    },
+    name:{
+        marginTop:8,
+        fontSize:24,
+        fontFamily:"Bold",
+    },
+    number:{
+        fontFamily:"Regular",
+        color:Colors.grey,
+        fontSize:16
+    },
+    email:{
+        fontFamily:"Regular",
+        color:Colors.grey,
+        fontSize:16  
+    },
+    profile_stat:{
+        marginTop:24,
+        backgroundColor:Colors.white,
+        height:128,
+        borderRadius:24,
+        flexDirection:"row",
+        justifyContent:"space-between",
+        alignItems:"center",
+        paddingHorizontal:24
+    },
+    tstat:{
+        color:Colors.light_grey,
+        fontSize:18,
+        fontFamily:"SemiBold"
+    },
+    coin:{
+        fontFamily:"Bold",
+        fontSize:36,
+        color:Colors.black,
+        paddingTop:8,
+    },
+    point:{
+        fontFamily:"Bold",
+        fontSize:36,
+        color:Colors.black,
+        marginTop:8,
+        alignSelf:"flex-end"
+    }
+})
