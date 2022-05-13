@@ -7,7 +7,7 @@ import {
   ScrollView,
   Pressable,
 } from "react-native";
-import React, { useContext } from "react";
+import React from "react";
 import { Colors } from "../styles/Global";
 import Header from "../components/Header";
 import DefaultLocationCard from "../components/DefaultLocationCard";
