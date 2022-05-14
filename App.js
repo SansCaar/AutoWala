@@ -16,8 +16,8 @@ export default function App() {
     <>
     {/* <SignupScreen/> */}
       {/* <LoginScreen/> */}
-      {/* <HomeScreen /> */}
-      <ProfileScreen/>
+      <HomeScreen />
+      {/* <ProfileScreen/> */}
       <StatusBar style="auto" />
     </>
   );
