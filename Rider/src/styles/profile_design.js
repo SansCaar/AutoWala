@@ -2,8 +2,7 @@ import { StyleSheet } from "react-native";
 import {Colors} from "../styles/Global"
 
 export const styles = StyleSheet.create({
-    container:
-    {
+    container:{
         flex:1,
         backgroundColor:Colors.background,
         paddingHorizontal:24
@@ -32,37 +31,8 @@ export const styles = StyleSheet.create({
         color:Colors.grey,
         fontSize:16  
     },
-    profile_stat:{
-        marginTop:24,
-        backgroundColor:Colors.white,
-        height:"auto",
-        paddingVertical:24,
-        borderRadius:24,
-        flexDirection:"row",
-        justifyContent:"space-between",
-        alignItems:"center",
-        paddingHorizontal:24
-    },
-    tstat:{
-        color:Colors.light_grey,
-        fontSize:18,
-        fontFamily:"SemiBold"
-    },
-    coin:{
-        fontFamily:"Bold",
-        fontSize:36,
-        color:Colors.black,
-        paddingTop:8,
-    },
-    point:{
-        fontFamily:"Bold",
-        fontSize:36,
-        color:Colors.black,
-        marginTop:8,
-        alignSelf:"flex-end"
-    },
     wallet_wrapper:{
-        marginTop:24,
+        marginTop:16,
     },
     wallet_con:{
         marginTop:8,
@@ -86,10 +56,29 @@ export const styles = StyleSheet.create({
     },
     w_btn:{
         borderWidth:1,
-        height:40,
+        height:32,
         paddingHorizontal:24,
         borderRadius:24,
         justifyContent:"center",
         alignItems:"center"
-    }
+    },
+    trans_con:{
+        marginTop:16,
+
+    },
+    addPlaceContaier: {
+        width: 180,
+        height: 180,
+        alignItems: "center",
+        justifyContent: "center",
+        borderStyle: "dashed",
+        borderWidth: 3,
+        borderRadius: 32,
+        marginRight: 8,
+      },
+      addPlaceText: {
+        fontFamily: "SemiBold",
+        fontSize: 20,
+        color: Colors.black,
+      },
 })
