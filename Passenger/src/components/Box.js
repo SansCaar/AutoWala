@@ -1,18 +1,14 @@
 import React from "react";
 import { View, StyleSheet } from "react-native";
 import { Colors } from "../styles/Global";
-export default function Box(){
-    return(
-        <View style={cstyles.box}>
-
-        </View>
-    )
+export default function Box({ children, style }) {
+  return <View style={[styles.box, { ...style }]}>{children}</View>;
 }
-const cstyles = StyleSheet.create({
-    backgroundColor:Colors.white,
-    height:"auto",
-    paddingVertical:24,
-    borderRadius:24,
-    paddingHorizontal:24,
-    flex:1
-})
+const styles = StyleSheet.create({
+  box: {
+    backgroundColor: Colors.white,
+    paddingVertical: 24,
+    borderRadius: 24,
+    paddingHorizontal: 24,
+  },
+});

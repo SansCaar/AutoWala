@@ -19,7 +19,6 @@ export default function App() {
       {/* <LoginScreen/> */}
       <HomeScreen />
       {/* <ProfileScreen/> */}
-      {/* <LastrideScreen/> */}
       <StatusBar style="auto" />
     </>
   );
