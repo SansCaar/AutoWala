@@ -3,9 +3,9 @@ import React from "react";
 import { styles } from "../styles/profile_design";
 import Header from "../components/Header.js";
 import ListBox from "../components/ListBox";
-import DefaultLocationCard from "../components/DefaultLocationCard";
 import Icon from "@expo/vector-icons/Feather";
 import { Colors } from "../styles/Global";
+import DefaultLocationList from "../components/DefaultLocationList";
 
 
 const listData = [
@@ -108,26 +108,7 @@ const ProfileScreen = () => {
         </View>
         <View style={{marginTop:'auto', marginBottom:60}}>
           <Text style={{fontFamily: "Bold", fontSize: 16, marginLeft: 8,marginBottom:8}}>Quick Places</Text>
-        <ScrollView
-          horizontal={true}
-          showsHorizontalScrollIndicator={false}
-          style={{marginLeft:2}}
-        >
-          {defaultAddress.map((address, i) => {
-            return (
-              <DefaultLocationCard
-                key={i}
-                iconName={address.icon}
-                name={address.name}
-                location={address.location}
-              />
-            );
-          })}
-          <Pressable style={styles.addPlaceContaier}>
-            <Icon name="plus" size={70} color={Colors.black} />
-            <Text style={styles.addPlaceText}>Add Place</Text>
-          </Pressable>
-        </ScrollView>
+        <DefaultLocationList defaultAddress={defaultAddress} />
       </View>
       </View>
     </ScrollView>
