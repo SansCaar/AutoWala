@@ -6,9 +6,9 @@ import Constants from "expo-constants";
 
 import { Colors } from "../styles/Global";
 
-export default function Header({ iconL, iconR, title, onPressR, onPressL }) {
+export default function Header({ iconL, iconR, title, onPressR, onPressL, style }) {
   return (
-    <View style={styles.headerContainer}>
+    <View style={[styles.headerContainer, {...style}]}>
       {iconL && (
         <Icon color={Colors.black} size={40} name={iconL} onPress={onPressL} />
       )}

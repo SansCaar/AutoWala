@@ -14,7 +14,7 @@ const ListBox = ({ title, data }) => {
               {datas.type === "transaction" ? (
                 <Image
                   source={require("../../assets/elogo.png")}
-                  style={styles.left_2}
+                  style={styles.left_2} 
                 />
               ) : (
                 <Image

@@ -5,6 +5,7 @@ import LoginScreen from "./src/screens/LoginScreen";
 import SignupScreen from "./src/screens/SignupScreen";
 import ProfileScreen from "./src/screens/ProfileScreen";
 import LastrideScreen from "./src/screens/LastrideScreen"
+import MapViewScreen from "./src/screens/MapViewScreen";
 
 export default function App() {
   let [fontsLoaded] = useFonts({
@@ -17,8 +18,9 @@ export default function App() {
     <>
     {/* <SignupScreen/> */}
       {/* <LoginScreen/> */}
-      <HomeScreen />
-      {/* <ProfileScreen/> */}
+      {/* <MapViewScreen/> */}
+      {/* <HomeScreen /> */}
+      <ProfileScreen/>
       <StatusBar style="auto" />
     </>
   );

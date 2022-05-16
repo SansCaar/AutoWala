@@ -15,6 +15,7 @@ import { styles } from "../styles/home_design";
 
 import Icon from "@expo/vector-icons/Feather";
 import Box from "../components/Box";
+import DefaultLocationList from "../components/DefaultLocationList";
 
 const defaultAddress = [
   {
@@ -83,24 +84,7 @@ export default function HomeScreen() {
           <Text style={styles.pointsButtonText}>Add</Text>
         </Pressable>
       </Box>
-      <View style={{ marginBottom: 60, marginTop:'auto' }}>
-        <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-          {defaultAddress.map((address, i) => {
-            return (
-              <DefaultLocationCard
-                key={i}
-                iconName={address.icon}
-                name={address.name}
-                location={address.location}
-              />
-            );
-          })}
-          <Pressable style={styles.addPlaceContaier}>
-            <Icon name="plus" size={70} color={Colors.black} />
-            <Text style={styles.addPlaceText}>Add Place</Text>
-          </Pressable>
-        </ScrollView>
-      </View>
+      <DefaultLocationList defaultAddress={defaultAddress} style={{marginLeft:-16}} />
     </View>
   );
 }
