@@ -10,7 +10,7 @@ export default function Header({ iconL, iconR, title, onPressR, onPressL, style 
   return (
     <View style={[styles.headerContainer, {...style}]}>
       {iconL && (
-        <Icon color={Colors.black} size={40} name={iconL} onPress={onPressL} />
+        <Icon color={Colors.black} size={24} name={iconL} onPress={onPressL} />
       )}
       {title && <Text style={styles.headerText}>{title}</Text>}
       {iconR && (

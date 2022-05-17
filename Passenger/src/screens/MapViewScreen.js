@@ -1,16 +1,16 @@
-import React from "react";
+import React, {createRef, useState} from "react";
 import {
   View,
   Text,
   Image,
   TextInput,
   StyleSheet,
-  ScrollView,
   Pressable,
 } from "react-native";
 import Header from "../components/Header";
 import { Colors } from "../styles/Global";
 import DefaultLocationList from "../components/DefaultLocationList";
+import BottomModal from "../components/BottomModal";
 
 const defaultAddress = [
   { 
@@ -31,9 +31,11 @@ const defaultAddress = [
 ];
 
 export default function MapViewScreen() {
+    let popupRef = createRef();
+
   return (
     <View style={styles.container}>
-      <Header iconL="arrow-left" v style={{ paddingHorizontal: 24 }} />
+      <Header iconL="arrow-left"  style={{ paddingHorizontal: 24 }} />
       <View style={{ paddingHorizontal: 24 }}>
         <Text style={styles.h1}>Where are you going?</Text>
         <View style={styles.inputsContainer}>
@@ -52,12 +54,12 @@ export default function MapViewScreen() {
                 style={{ ...styles.inputStyle, flex: 1 }}
                 placeholder="To"
               />
-              <View style={styles.sendButton}>
+              <Pressable onPress={()=>popupRef.show()} style={styles.sendButton}>
                 <Image
                   style={styles.sendButtonImg}
                   source={require("../../assets/Send.png")}
                 />
-              </View>
+              </Pressable>
             </View>
           </View>
         </View>
@@ -68,6 +70,7 @@ export default function MapViewScreen() {
         borderTopRightRadius={40}
         borderTopLeftRadius={40}
       />
+      <BottomModal animationType="slide" ref={(target)=> popupRef= target}/>
       <DefaultLocationList
         defaultAddress={defaultAddress}
         style={{ position: "absolute", bottom: 0 }}
@@ -96,7 +99,7 @@ const styles = StyleSheet.create({
   dotsImage: {
     alignSelf: "center",
     height: "100%",
-    marginRight: 24,
+    marginRight: 16,
     resizeMode: "contain",
   },
   inputsContainer: {
@@ -106,7 +109,8 @@ const styles = StyleSheet.create({
   },
   inputStyle: {
     backgroundColor: Colors.white,
-    paddingVertical: 16,
+    height:46,
+    // paddingVertical: 16,
     paddingHorizontal: 24,
     borderRadius: 30,
     fontSize: 18,
@@ -119,8 +123,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   sendButton: {
-    height: 54,
-    width: 54,
+    height: 40,
+    width: 40,
     backgroundColor: Colors.primary,
     borderRadius: 25,
     alignItems: "center",
@@ -128,8 +132,8 @@ const styles = StyleSheet.create({
     marginLeft: 20,
   },
   sendButtonImg: {
-    height: 30,
-    width: 30,
+    height: 24,
+    width: 24,
     resizeMode: "contain",
   },
 });

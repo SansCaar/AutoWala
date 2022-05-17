@@ -1,13 +1,13 @@
 import React from "react";
 import { View, Text, StyleSheet, ScrollView, Pressable } from "react-native";
-import { Colors } from "react-native/Libraries/NewAppScreen";
 import Icon from "@expo/vector-icons/Feather";
+import { Colors } from "../styles/Global";
 
 const DefaultLocationCard = ({ name, location, iconName }) => {
   return (
     <Pressable style={styles.locationContainer}>
       <View style={styles.iconContainer}>
-        <Icon color={Colors.white} size={30} name={iconName} />
+        <Icon color={Colors.white} size={24} name={iconName} />
       </View>
       <Text style={styles.nickname}>{name}</Text>
       <Text numberOfLines={1} style={styles.location}>
@@ -32,7 +32,7 @@ export default function DefaultLocationList({ defaultAddress, style }) {
           );
         })}
         <Pressable style={styles.addPlaceContaier}>
-          <Icon name="plus" size={70} color={Colors.black} />
+          <Icon name="plus" size={40} color={Colors.black} />
           <Text style={styles.addPlaceText}>Add Place</Text>
         </Pressable>
       </ScrollView>
@@ -40,13 +40,13 @@ export default function DefaultLocationList({ defaultAddress, style }) {
   );
 }
 const styles = StyleSheet.create({
-  container: {
-    marginBottom: 40,
+  container:{
+    marginBottom: 16,
     marginTop: "auto",
   },
   addPlaceContaier: {
-    width: 180,
-    height: 180,
+    width: 130,
+    height: 130,
     alignItems: "center",
     justifyContent: "center",
     borderStyle: "dashed",
@@ -61,31 +61,32 @@ const styles = StyleSheet.create({
   },
   locationContainer: {
     backgroundColor: Colors.primary,
-    paddingHorizontal: 24,
+    paddingHorizontal: 16,
     paddingVertical: 24,
     borderRadius: 32,
     alignItems: "flex-start",
     justifyContent: "center",
-    width: 180,
-    height: 180,
+    width:130,
+    height:130,
     marginLeft: 16,
   },
   iconContainer: {
     height: 48,
     width: 48,
     padding: 8,
+    alignItems:"center",
+    justifyContent:"center",
     backgroundColor: "#ffffff66",
     borderRadius: 8,
   },
   nickname: {
     fontFamily: "SemiBold",
-    fontSize: 24,
+    fontSize: 20,
     lineHeight: 28,
     color: Colors.white,
-    marginTop: 16,
+    marginTop:4
   },
   location: {
-    flex: 1,
     fontFamily: "Regular",
     color: Colors.white,
     fontSize: 16,

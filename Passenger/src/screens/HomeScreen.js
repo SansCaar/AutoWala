@@ -9,11 +9,9 @@ import {
 import React from "react";
 
 import Header from "../components/Header";
-import DefaultLocationCard from "../components/DefaultLocationCard";
 import { Colors } from "../styles/Global";
 import { styles } from "../styles/home_design";
 
-import Icon from "@expo/vector-icons/Feather";
 import Box from "../components/Box";
 import DefaultLocationList from "../components/DefaultLocationList";
 
