@@ -9,7 +9,6 @@ import {
 import React from "react";
 
 import Header from "../components/Header";
-import DefaultLocationCard from "../components/DefaultLocationCard";
 import { Colors } from "../styles/Global";
 import { styles } from "../styles/home_design";
 

@@ -2,6 +2,8 @@ import { StatusBar } from "expo-status-bar";
 import { useFonts } from "expo-font";
 import HomeScreen from "./src/screens/HomeScreen";
 import ProfileScreen from "./src/screens/ProfileScreen";
+import RidemapScreen from "./src/screens/RidemapScreen";
+import TestComponent from "./src/screens/TestComponent";
 
 export default function App() {
   let [fontsLoaded] = useFonts({
@@ -13,7 +15,9 @@ export default function App() {
   return (
     <>
       {/* <HomeScreen /> */}
-      <ProfileScreen/>
+      {/* <ProfileScreen/> */}
+      {/* <RidemapScreen/> */}
+      <TestComponent/>
       <StatusBar style="auto" />
     </>
   );

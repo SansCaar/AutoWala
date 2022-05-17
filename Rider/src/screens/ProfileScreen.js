@@ -35,17 +35,23 @@ const listData = [
 
 const stat_data = [
   {
-    y_income: 2000,
-    w_income: 5000,
-    y_fuel: 2000,
-    w_fuel: "20L",
+    title:"Yesterday",
+    sub_title:"This Week",
+    y_data: 2000,
+    w_data: 5000,
   },
+  {
+    title:"This Month",
+    sub_title:"Total",
+    y_data: 2000,
+    w_data: "20L",
+  }
 ];
-const StatBox = ({ title1, sub_title1,title2, sub_title2,data }) => {
+const StatBox = ({ data }) => {
   return (
     <>
       <View>
-        <Text style={styles.tstat1}>{title1}</Text>
+        <Text style={styles.tstat1}>{data.title}</Text>
         <View style={{ flexDirection: "row", margin: 0, padding: 0 }}>
           <Text
             style={{
@@ -58,11 +64,11 @@ const StatBox = ({ title1, sub_title1,title2, sub_title2,data }) => {
           >
             Rs.
           </Text>
-          <Text style={styles.coin}>{data.y_income}</Text>
+          <Text style={styles.coin}>{data.y_data}</Text>
         </View>
       </View>
       <View>
-        <Text style={styles.tstat2}>{sub_title1}</Text>
+        <Text style={styles.tstat2}>{data.sub_title}</Text>
         <View style={{ flexDirection: "row", margin: 0, padding: 0 }}>
           <Text
             style={{
@@ -75,7 +81,7 @@ const StatBox = ({ title1, sub_title1,title2, sub_title2,data }) => {
           >
             Rs.
           </Text>
-          <Text style={styles.coin}>{data.w_income}</Text>
+          <Text style={styles.coin}>{data.w_data}</Text>
         </View>
       </View>
     </>
@@ -116,17 +122,7 @@ const ProfileScreen = () => {
                         marginVertical:4,
                       }}
                     >
-                      <StatBox data={data} title1="Yesterday" sub_title1="Weekly" title2="This Month" sub_title2="Total" />
-                    </View>
-                    <View
-                      style={{
-                        flexDirection: "row",
-                        justifyContent: "space-between",
-                        alignItems: "center",
-                        marginVertical:4,
-                      }}
-                    >
-                      <StatBox data={data} title1="Yesterday" sub_title1="Weekly" title2="This Month" sub_title2="Total" />
+                      <StatBox data={data}/>
                     </View>
                   </>
                 );
