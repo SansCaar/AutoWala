@@ -1,13 +1,12 @@
-import { View, Text, StyleSheet, Image } from "react-native";
+import { View, Text, StyleSheet, Image, ScrollView } from "react-native";
 import React from "react";
 import { Colors } from "../styles/Global";
 
 const ListBox = ({ title, data }) => {
-  console.log(data);
-
   return (
     <>
       <Text style={styles.title}>{title}</Text>
+      <ScrollView>
       {data.map((datas, i) => {
         return (
           <View style={styles.box} key={i}>
@@ -58,6 +57,8 @@ const ListBox = ({ title, data }) => {
           </View>
         );
       })}
+              </ScrollView>
+
     </>
   );
 };
