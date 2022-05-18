@@ -16,17 +16,18 @@ export const styles = StyleSheet.create({
   dotsImage: {
     alignSelf: "center",
     height: "100%",
-    marginRight: 24,
+    marginRight: 16,
     resizeMode: "contain",
   },
   inputsContainer: {
     flexDirection: "row",
     marginTop: 16,
-    marginBottom: 40,
+    marginBottom: 32,
   },
   inputStyle: {
     backgroundColor: Colors.white,
-    paddingVertical: 16,
+    height: 46,
+    // paddingVertical: 16,
     paddingHorizontal: 24,
     borderRadius: 30,
     fontSize: 18,
@@ -39,8 +40,8 @@ export const styles = StyleSheet.create({
     justifyContent: "center",
   },
   sendButton: {
-    height: 54,
-    width: 54,
+    height: 40,
+    width: 40,
     backgroundColor: Colors.primary,
     borderRadius: 25,
     alignItems: "center",
@@ -48,8 +49,8 @@ export const styles = StyleSheet.create({
     marginLeft: 20,
   },
   sendButtonImg: {
-    height: 30,
-    width: 30,
+    height: 24,
+    width: 24,
     resizeMode: "contain",
   },
   addPlaceContaier: {

@@ -7,6 +7,7 @@ import {
   Pressable,
 } from "react-native";
 import React from "react";
+import { StatusBar } from "expo-status-bar";
 
 import Header from "../components/Header";
 import { Colors } from "../styles/Global";
@@ -33,10 +34,14 @@ const defaultAddress = [
   },
 ];
 
-export default function HomeScreen() {
+export default function HomeScreen({ navigation }) {
   return (
-    <View style={styles.container}>
-      <Header iconL="menu" iconR="user" />
+    <ScrollView style={styles.container}>
+      <Header
+        iconL="menu"
+        iconR="user"
+        onPressR={() => navigation.navigate("Profile")}
+      />
       <View>
         <Text style={styles.h1}>Where are you going?</Text>
         <View style={styles.inputsContainer}>
@@ -65,10 +70,10 @@ export default function HomeScreen() {
           </View>
         </View>
       </View>
-      <View>
+      <Pressable onPress={() => navigation.navigate("MapView")}>
         <Text style={styles.mapHeading}>Your location</Text>
         <Image source={require("../../assets/map.png")} style={styles.map} />
-      </View>
+      </Pressable>
       <Box style={styles.pointsContainer}>
         <View
           style={{ flex: 1, height: "auto", justifyContent: "space-between" }}
@@ -82,7 +87,15 @@ export default function HomeScreen() {
           <Text style={styles.pointsButtonText}>Add</Text>
         </Pressable>
       </Box>
-      <DefaultLocationList defaultAddress={defaultAddress} style={{marginLeft:-16}} />
-    </View>
+      <DefaultLocationList
+        defaultAddress={defaultAddress}
+        style={{ marginLeft: -16 }}
+      />
+      <StatusBar
+        style="auto"
+        translucent={false}
+        backgroundColor={Colors.background}
+      />
+    </ScrollView>
   );
 }

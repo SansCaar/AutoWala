@@ -5,15 +5,14 @@ import { Colors } from "../styles/Global";
 import Icon from "@expo/vector-icons/Ionicons";
 
 
-const CodePopup = ({data}) => {
-    const {title,name,location,time,code} = data[0]
+const CodePopup = ({title,name,from, to,time,code}) => {
   return (
     <>
       <Box style={css.container}>
         <View style={css.left}>
           <Text style={css.title}>{title}</Text>
           <Text style={css.name}>{name}</Text>
-          <Text style={css.location}>{location}</Text>
+          <Text style={css.location}>From {from} to {to}</Text>
           <Text style={css.distance}>{time}</Text>
           <Text style={css.code}>#{code}</Text>
         </View>

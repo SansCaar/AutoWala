@@ -16,7 +16,7 @@ export default function Header({ iconL, iconR, title, onPressR, onPressL, style 
       {iconR && (
         <Icon
           color={Colors.black}
-          size={40}
+          size={24}
           name={iconR}
           style={styles.rightIcon}
           onPress={onPressR}
@@ -28,7 +28,7 @@ export default function Header({ iconL, iconR, title, onPressR, onPressL, style 
 const styles = StyleSheet.create({
   headerContainer: {
     flexDirection: "row",
-    marginTop: Constants.statusBarHeight + 40,
+    marginTop: Constants.statusBarHeight+20,
     marginBottom: 20,
     alignItems: "center",
   },

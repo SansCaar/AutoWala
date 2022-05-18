@@ -32,7 +32,7 @@ const defaultAddress = [
     location: "Golpark",
   },
 ];
-const ProfileScreen = () => {
+const ProfileScreen = ({navigation}) => {
   const balance = 2000;
   const point = 1000;
   return (
@@ -41,7 +41,7 @@ const ProfileScreen = () => {
 
     >
       <View style={styles.container}>
-        <Header iconL="arrow-left" />
+        <Header iconL="arrow-left" onPressL={navigation.goBack} />
         <View style={styles.profile_header}>
             <Image
               source={require("../../assets/pp.jpg")}

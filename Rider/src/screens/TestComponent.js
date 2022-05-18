@@ -3,15 +3,15 @@ import React from "react";
 import CodePopup from "../components/CodePopup";
 import { Colors } from "../styles/Global";
 
-const dummy_data = [
-    {
-        title:"Your Ride",
-        name:"Utsav Bhattarai",
-        location:"From Golpark to Devinagar",
-        time:"12min",
-        code:745645
-    }
-]
+const dummy_data = {
+  title: "Your Ride",
+  name: "Utsav Bhattarai",
+  from: "Golpark",
+  to: "Devinagar",
+  time: "12min",
+  code: 745645,
+};
+
 const TestComponent = () => {
   return (
     <View
