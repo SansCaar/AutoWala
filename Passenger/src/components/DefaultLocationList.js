@@ -45,8 +45,8 @@ const styles = StyleSheet.create({
     marginTop: "auto",
   },
   addPlaceContaier: {
-    width: 130,
-    height: 130,
+    width: 140,
+    height: 140,
     alignItems: "center",
     justifyContent: "center",
     borderStyle: "dashed",
@@ -66,8 +66,8 @@ const styles = StyleSheet.create({
     borderRadius: 32,
     alignItems: "flex-start",
     justifyContent: "center",
-    width:130,
-    height:130,
+    width:140,
+    height:140,
     marginLeft: 16,
   },
   iconContainer: {

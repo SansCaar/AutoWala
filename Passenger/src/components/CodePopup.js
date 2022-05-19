@@ -1,26 +1,26 @@
-import { View, Text, StyleSheet, Pressable } from "react-native";
+import { View, Text, StyleSheet, Pressable, Linking } from "react-native";
 import React from "react";
 import Box from "./Box";
 import { Colors } from "../styles/Global";
 import Icon from "@expo/vector-icons/Ionicons";
 
-const CodePopup = ({data}) => {
-    const {title,name,location,time,code} = data[0]
+const CodePopup = ({title,name,from, to,time,code, phoneNumber}) => {
   return (
     <>
-      <Box style={css.container}>
-        <View style={css.left}>
-          <Text style={css.title}>{title}</Text>
-          <Text style={css.name}>{name}</Text>
-          <Text style={css.location}>{location}</Text>
-          <Text style={css.distance}>{time}</Text>
-          <Text style={css.code}>#{code}</Text>
+      <Box style={styles.container}>
+        <View style={styles.left}>
+          <Text style={styles.title}>{title}</Text>
+          <Text style={styles.name}>{name}</Text>
+          <Text style={styles.location}>From {from} to {to}</Text>
+          <Text style={styles.distance}>{time}</Text>
+          <Text style={styles.code}>#{code}</Text>
         </View>
-        <View style={css.right}>
-          <Pressable style={{backgroundColor:"#FFD600",...css.btn}}>
+        <View style={styles.right}>
+          <Pressable style={{backgroundColor:"#FFD600",...styles.btn}} onPress={()=>Linking.openURL(`sms:${phoneNumber}`)
+} >
               <Icon name="mail" size={28} color={Colors.white}/>
           </Pressable>
-          <Pressable style={{backgroundColor:"#78E975",...css.btn}}>
+          <Pressable style={{backgroundColor:"#78E975",...styles.btn}} onPress={()=>Linking.openURL(`tel:${phoneNumber}`)}>
           <Icon name="call" size={28} color={Colors.white}/>
           </Pressable>
         </View>
@@ -28,7 +28,7 @@ const CodePopup = ({data}) => {
     </>
   );
 };
-const css = StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
     justifyContent: "space-between",
     flexDirection: "row",
