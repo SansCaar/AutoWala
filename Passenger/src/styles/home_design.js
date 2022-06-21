@@ -74,9 +74,9 @@ export const styles = StyleSheet.create({
     color: Colors.black,
   },
   map: {
+    borderRadius:24,
     width:'auto',
-    height:250,
-    resizeMode: "cover",
+    height:200,
     borderRadius: 24,
     marginTop: 16,
   },

@@ -5,16 +5,20 @@ import {
   TextInput,
   ScrollView,
   Pressable,
+  Alert,
 } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import { StatusBar } from "expo-status-bar";
 
 import Header from "../components/Header";
 import { Colors } from "../styles/Global";
 import { styles } from "../styles/home_design";
 
+import * as Location from "expo-location";
 import Box from "../components/Box";
 import DefaultLocationList from "../components/DefaultLocationList";
+
+import MapView from "react-native-maps";
 
 const defaultAddress = [
   {
@@ -35,6 +39,24 @@ const defaultAddress = [
 ];
 
 export default function HomeScreen({ navigation }) {
+  const [location, setLocation] = useState({});
+
+  React.useEffect( () => {
+    async function GetLocation() {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== "granted") {
+        console.log("hello");
+      } else {
+        let { coords } = await Location.getCurrentPositionAsync({});
+        if (coords) {
+          setLocation( coords);
+          console.log( coords);
+        }
+      }
+    }
+  GetLocation();
+  }, []);
+
   return (
     <ScrollView style={styles.container}>
       <Header
@@ -70,9 +92,20 @@ export default function HomeScreen({ navigation }) {
           </View>
         </View>
       </View>
-      <Pressable onPress={() => navigation.navigate("MapView")}>
+      <Pressable>
         <Text style={styles.mapHeading}>Your location</Text>
-        <Image source={require("../../assets/map.png")} style={styles.map} />
+        <View style={{ borderRadius: 24 }}>
+          <MapView
+            style={styles.map}
+            mapType="standard"
+            initialRegion={{
+              latitude: location.latitude,
+              longitude: location.longitude,
+              latitudeDelta: 0.00522,
+              longitudeDelta: 0.00021,
+            }}
+          />
+        </View>
       </Pressable>
       <Box style={styles.pointsContainer}>
         <View
