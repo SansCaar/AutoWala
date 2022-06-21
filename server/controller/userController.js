@@ -1,7 +1,7 @@
 import usersSchema from "../model/users";
 
-
-export const getAllUsers = () =>{
+const getAllUsers = () =>{
 
     
 };
+export default getAllUsers;
