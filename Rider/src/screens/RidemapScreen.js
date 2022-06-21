@@ -29,10 +29,15 @@ const passenger = [
     passengerAway: "120m",
   },
 ];
-const RidemapScreen = () => {
+const RidemapScreen = ({ navigation }) => {
   return (
     <View style={styles.con}>
-      <Header iconL="arrow-left" iconR="user" />
+      <Header
+        onPressL={navigation.goBack}
+        iconL="arrow-left"
+        iconR="user"
+        onPressR={() => navigation.navigate("Profile")}
+      />
       <View style={styles.bottomWrapper}>
         <View style={styles.bottom_con}>
           <Text style={styles.b_text}>Ride Request</Text>
@@ -57,7 +62,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   bottom_con: {
-    width:"100%",
+    width: "100%",
     height: 230,
     position: "absolute",
     bottom: 16,
