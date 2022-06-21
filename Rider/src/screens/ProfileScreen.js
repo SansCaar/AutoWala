@@ -35,17 +35,17 @@ const listData = [
 
 const stat_data = [
   {
-    title:"Yesterday",
-    sub_title:"This Week",
+    title: "Yesterday",
+    sub_title: "This Week",
     y_data: 2000,
     w_data: 5000,
   },
   {
-    title:"This Month",
-    sub_title:"Total",
+    title: "This Month",
+    sub_title: "Total",
     y_data: 2000,
     w_data: "20L",
-  }
+  },
 ];
 const StatBox = ({ data }) => {
   return (
@@ -88,13 +88,13 @@ const StatBox = ({ data }) => {
   );
 };
 
-const ProfileScreen = () => {
+const ProfileScreen = ({navigation}) => {
   const balance = 2000;
   const point = 1000;
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
       <View style={styles.container}>
-        <Header iconL="arrow-left" />
+        <Header onPressL={navigation.goBack} iconL="arrow-left" />
         <View style={styles.profile_header}>
           <Image
             source={require("../../assets/pp.jpg")}
@@ -119,10 +119,10 @@ const ProfileScreen = () => {
                         flexDirection: "row",
                         justifyContent: "space-between",
                         alignItems: "center",
-                        marginVertical:4,
+                        marginVertical: 4,
                       }}
                     >
-                      <StatBox data={data}/>
+                      <StatBox data={data} />
                     </View>
                   </>
                 );

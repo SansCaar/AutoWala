@@ -20,13 +20,16 @@ const passenger = [
     location: "From Golpark to Devinagar",
     time: "12min",
   },
-  
 ];
 
-export default function HomeScreen() {
+export default function HomeScreen({ navigation }) {
   return (
     <View style={styles.conainer}>
-      <Header iconL="menu" iconR="user" />
+      <Header
+        iconL="menu"
+        iconR="user"
+        onPressR={() => navigation.navigate("Profile")}
+      />
       <Stat balance={balance} point={point} location="Home" />
       <View style={styles.map}>
         <Text style={styles.map_text}>Your Location</Text>
@@ -47,9 +50,12 @@ export default function HomeScreen() {
                 <Text style={styles.address}>{data.location}</Text>
                 <Text style={styles.time}>{data.time}</Text>
               </View>
-              <View style={styles.right}>
+              <Pressable
+                style={styles.right}
+                onPress={() => navigation.navigate("Ride")}
+              >
                 <Icon size={40} name="arrow-right" color={Colors.white} />
-              </View>
+              </Pressable>
             </View>
           );
         })}
