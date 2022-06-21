@@ -1,7 +1,7 @@
 import express from "express";
 import cors from "cors";
 import usersRouters from "./routes/usersRouter.js";
-
+import "./db/connect.js";
 const app = express();
 
 // for monitoring the incomming requests to the server
