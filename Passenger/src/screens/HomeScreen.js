@@ -44,7 +44,7 @@ export default function HomeScreen({ navigation }) {
     async function GetLocation() {
       let { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== "granted") {
-        console.log("hello");
+        console.log("Error");
       } else {
         let { coords } = await Location.getCurrentPositionAsync({});
         if (coords) {
