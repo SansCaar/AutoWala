@@ -49,7 +49,6 @@ export default function HomeScreen({ navigation }) {
         let { coords } = await Location.getCurrentPositionAsync({});
         if (coords) {
           setLocation( coords);
-          console.log( coords);
         }
       }
     }
