@@ -12,8 +12,14 @@ export default function App() {
   if (!fontsLoaded) return null;
   return (
     <>
+<<<<<<< HEAD
+      {/* <HomeScreen /> */}
+      {/* <ProfileScreen/> */}
+      { <RidemapScreen/> }
+=======
       <AppStack/>
+>>>>>>> c0250253c9317a340c10a5e32e3f13e3a32e01a7
       <StatusBar style="auto" />
     </>
-  );
+  );    
 }
