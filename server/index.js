@@ -1,7 +1,7 @@
 import express from "express";
 import cors from "cors";
 import "./db/connect.js";
-import router from './routes/usersRouter.js';
+import userRouter from './routes/usersRouter.js';
 const app = express();
 
 // for monitoring the incomming requests to the server
@@ -17,4 +17,4 @@ app.listen(PORT, () => {
   console.log(`The application is running in the port ${PORT}`);
 });
 
-app.use("/v1/api/user/",router)
+app.use("/v1/api/users",userRouter)

@@ -3,7 +3,7 @@ mongoose.connect("mongodb+srv://projectx:autowalaprojectx@cluster0.1f41p.mongodb
 	useNewUrlParser:true,
 	useUnifiedTopology:true,
 }).then(()=>{
-	console.log(" ok")
+	console.log("Database connection successfull!")
 }).catch((e)=>
 {
 console.log(e)
