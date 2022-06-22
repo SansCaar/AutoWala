@@ -40,7 +40,7 @@ const defaultAddress = [
 export default function HomeScreen({ navigation }) {
   const [location, setLocation] = useState({});
 
-  React.useEffect( () => {
+  React.useEffect(() => {
     async function GetLocation() {
       let { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== "granted") {
@@ -48,11 +48,11 @@ export default function HomeScreen({ navigation }) {
       } else {
         let { coords } = await Location.getCurrentPositionAsync({});
         if (coords) {
-          setLocation( coords);
+          setLocation(coords);
         }
       }
     }
-  GetLocation();
+    GetLocation();
   }, []);
 
   return (
@@ -99,8 +99,8 @@ export default function HomeScreen({ navigation }) {
             showsUserLocation={true}   
             followsUserLocation={true}
             initialRegion={{
-              latitude: location?.latitude,
-              longitude: location?.longitude,
+              latitude: location.latitude,
+              longitude: location.longitude,
               latitudeDelta: 0.00522,
               longitudeDelta: 0.00021,
             }}

@@ -7,11 +7,14 @@ import {
   ScrollView,
   Pressable,
 } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import { Colors } from "../styles/Global";
 import Header from "../components/Header";
 import Icon from "@expo/vector-icons/Feather";
 import Stat from "../components/Stat";
+import MapView from "react-native-maps";
+import * as Location from "expo-location";
+
 const balance = 2000;
 const point = 20;
 const passenger = [
@@ -23,6 +26,22 @@ const passenger = [
 ];
 
 export default function HomeScreen({ navigation }) {
+  const [location, setLocation] = useState({});
+
+  React.useEffect(() => {
+    async function GetLocation() {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== "granted") {
+        console.log("hello");
+      } else {
+        let { coords } = await Location.getCurrentPositionAsync({});
+        if (coords) {
+          setLocation(coords);
+        }
+      }
+    }
+    GetLocation();
+  }, []);
   return (
     <View style={styles.conainer}>
       <Header
@@ -33,10 +52,18 @@ export default function HomeScreen({ navigation }) {
       <Stat balance={balance} point={point} location="Home" />
       <View style={styles.map}>
         <Text style={styles.map_text}>Your Location</Text>
-        <View style={{ marginTop: 16 }}>
-          <Image
-            source={require("../../assets/map.png")}
+        <View style={{ marginTop: 16, borderRadius: 24 }}>
+          <MapView
             style={styles.map_img}
+            mapType="standard"
+            showsUserLocation={true}
+            followsUserLocation={true}
+            initialRegion={{
+              latitude: location?.latitude,
+              longitude: location?.longitude,
+              latitudeDelta: 0.00522,
+              longitudeDelta: 0.00021,
+            }}
           />
         </View>
       </View>
@@ -80,8 +107,8 @@ const styles = StyleSheet.create({
   },
   map_img: {
     height: 200,
-    width: "100%",
-    borderRadius: 8,
+    width: "auto",
+    borderRadius: 24,
   },
   box: {
     backgroundColor: Colors.white,
