@@ -146,7 +146,7 @@ const styles = StyleSheet.create({
     fontFamily: "Bold",
     fontSize: 24,
     color: Colors.black,
-  },
+  }, 
   map: {
     flex: 1,
     // position: "absolute",
@@ -163,7 +163,7 @@ const styles = StyleSheet.create({
   inputsContainer: {
     flexDirection: "row",
     marginTop: 16,
-    marginBottom: 40,
+    marginBottom: 16,
   },
   inputStyle: {
     backgroundColor: Colors.white,
