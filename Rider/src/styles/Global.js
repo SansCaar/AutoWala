@@ -7,6 +7,3 @@ export const Colors = {
   black: "#2B2B2B",
 };
 
-
-
-//hello

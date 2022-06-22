@@ -132,3 +132,4 @@ export default function HomeScreen({ navigation }) {
     </ScrollView>
   );
 }
+    
