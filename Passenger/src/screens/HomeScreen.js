@@ -17,7 +17,8 @@ import * as Location from "expo-location";
 import Box from "../components/Box";
 import DefaultLocationList from "../components/DefaultLocationList";
 
-import MapView from "react-native-maps";
+import MapView, { Marker } from "react-native-maps";
+import { getAddress, getCoordinates } from "../context/geocoding";
 
 const defaultAddress = [
   {
@@ -39,6 +40,9 @@ const defaultAddress = [
 
 export default function HomeScreen({ navigation }) {
   const [location, setLocation] = useState({});
+  const [from, setFrom] = useState();
+
+  const [markers, setMarkers] = useState([]);
 
   React.useEffect(() => {
     async function GetLocation() {
@@ -74,37 +78,63 @@ export default function HomeScreen({ navigation }) {
               style={styles.inputStyle}
               placeholderTextColor={Colors.grey}
               placeholder="From"
+              value={from}
+              onChangeText={(text) => setFrom(text)}
             />
             <View style={styles.inputContainer}>
               <TextInput
                 style={{ ...styles.inputStyle, flex: 1 }}
                 placeholder="To"
               />
-              <View style={styles.sendButton}>
+              <Pressable
+                style={styles.sendButton}
+                onPress={async () => {
+                  navigation.navigate("MapView", {location})
+                  
+                }}
+              >
                 <Image
                   style={styles.sendButtonImg}
                   source={require("../../assets/Send.png")}
                 />
-              </View>
+              </Pressable>
             </View>
           </View>
         </View>
       </View>
       <Pressable>
         <Text style={styles.mapHeading}>Your location</Text>
-        <View style={{ borderRadius: 24 }}>
-          <MapView
+        <View style={{ borderRadius: 16, overflow:"hidden",marginTop:16 }}>
+          {
+            location && <MapView
             style={styles.map}
             mapType="standard"
-            showsUserLocation={true}   
+            showsUserLocation={true}
             followsUserLocation={true}
             initialRegion={{
-              latitude: location.latitude,
-              longitude: location.longitude,
+              latitude: location?.latitude,
+              longitude: location?.longitude,
               latitudeDelta: 0.00522,
               longitudeDelta: 0.00021,
             }}
+            onPress={async (e) => {
+              let { latitude, longitude } = e.nativeEvent.coordinate;
+              let res = await getAddress(latitude, longitude);
+              console.log(res);
+            }}
           />
+          }
+            {/* {markers.map((marker, i) => {
+              return (
+                <Marker
+                  key={i}
+                  coordinate={{
+                    latitude: marker.latitude,
+                    longitude: marker.longitude,
+                  }}
+                />
+              );
+            })} */}
         </View>
       </Pressable>
       <Box style={styles.pointsContainer}>
@@ -132,4 +162,3 @@ export default function HomeScreen({ navigation }) {
     </ScrollView>
   );
 }
-    
