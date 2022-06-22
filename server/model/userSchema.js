@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-const userScheme = new mongoose.Schema({
+const userSchema = new mongoose.Schema({
   user_name: {
     type: String,
     required: true,
@@ -20,11 +20,7 @@ const userScheme = new mongoose.Schema({
     type: Number,
     required: true,
   },
-  user_doc: {
-    type: Date,
-    default: Date.now,
-    required: true,
-  },
+
   user_toc: {
     type: String,
     required: true,
