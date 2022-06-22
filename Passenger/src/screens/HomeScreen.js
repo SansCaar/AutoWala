@@ -96,7 +96,7 @@ export default function HomeScreen({ navigation }) {
           <MapView
             style={styles.map}
             mapType="standard"
-            showsUserLocation={true}
+            showsUserLocation={true}   
             followsUserLocation={true}
             initialRegion={{
               latitude: location?.latitude,
