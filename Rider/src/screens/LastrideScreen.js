@@ -20,6 +20,13 @@ const listData = [
     payment_method: "esewa",
     add_balance: "20",
   },
+  {
+    type: "charge",
+    date: "20 Mar 2020",
+    balance: 1001,
+    payment_method: "esewa",
+    add_balance: "20",
+  },
 ];
 const LastrideScreen = () => {
 

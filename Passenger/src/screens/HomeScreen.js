@@ -99,8 +99,8 @@ export default function HomeScreen({ navigation }) {
             style={styles.map}
             mapType="standard"
             initialRegion={{
-              latitude: location.latitude,
-              longitude: location.longitude,
+              latitude: location?.latitude,
+              longitude: location?.longitude,
               latitudeDelta: 0.00522,
               longitudeDelta: 0.00021,
             }}

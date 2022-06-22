@@ -5,7 +5,8 @@ import { Colors } from "../styles/Global";
 import Icon from "@expo/vector-icons/Ionicons";
 
 
-const CodePopup = ({title,name,from, to,time,code}) => {
+const CodePopup = ({data}) => {
+  const {title,name,from, to,time,code} = data;
   return (
     <>
       <Box style={css.container}>
