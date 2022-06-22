@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-=======
 import {
   View,
   Text,
@@ -135,4 +133,4 @@ export default function HomeScreen({ navigation }) {
     </ScrollView>
   );
 }
->>>>>>> 72466c00051ccef855d5338a91733eb46b130243
+    
