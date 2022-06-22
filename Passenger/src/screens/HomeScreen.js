@@ -1,9 +1,9 @@
 import {
   View,
-  Text,
-  Image,
-  TextInput,
-  ScrollView,
+  Text, 
+  Image,    
+  TextInput,    
+  ScrollView,                         
   Pressable,
 } from "react-native";
 import React from "react";

@@ -16,9 +16,8 @@ export default function App() {
     <>
       {/* <HomeScreen /> */}
       {/* <ProfileScreen/> */}
-      {/* <RidemapScreen/> */}
-      <TestComponent/>
+      { <RidemapScreen/> }
       <StatusBar style="auto" />
     </>
-  );
+  );    
 }
