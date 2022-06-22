@@ -77,8 +77,7 @@ export const styles = StyleSheet.create({
     borderRadius:24,
     width:'auto',
     height:200,
-    borderRadius: 24,
-    marginTop: 16,
+    // marginTop: 16,
   },
   pointsContainer: {
     flexDirection: "row",

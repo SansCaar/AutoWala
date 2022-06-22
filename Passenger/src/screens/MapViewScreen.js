@@ -12,6 +12,7 @@ import { Colors } from "../styles/Global";
 import DefaultLocationList from "../components/DefaultLocationList";
 import BottomModal from "../components/BottomModal";
 import ConfirmModal from "../components/ConfirmModal";
+import MapView, { Marker } from "react-native-maps";
 
 const defaultAddress = [
   {
@@ -31,13 +32,20 @@ const defaultAddress = [
   },
 ];
 
-export default function MapViewScreen({navigation}) {
+export default function MapViewScreen({ navigation, route }) {
+  
   const [searching, setSearching] = useState(null);
+  let {location} = route.params;
+
   let popupRef = createRef();
   let popupRef2 = createRef();
   return (
-    <View style={styles.container}>
-      <Header iconL="arrow-left" onPressL={navigation.goBack} style={{ paddingHorizontal: 24 }} />
+    <View style={styles.container}>  
+      <Header
+        iconL="arrow-left"
+        onPressL={navigation.goBack}
+        style={{ paddingHorizontal: 24 }}
+      />
       <View style={{ paddingHorizontal: 24 }}>
         <Text style={styles.h1}>Where are you going?</Text>
         <View style={styles.inputsContainer}>
@@ -69,26 +77,46 @@ export default function MapViewScreen({navigation}) {
           </View>
         </View>
       </View>
-      <Image
-        source={require("../../assets/map2.png")}
-        style={styles.map}
-        borderTopRightRadius={40}
-        borderTopLeftRadius={40}
-      />
+      <View style={{borderTopRightRadius:24, borderTopLeftRadius:24,flex:1, overflow:"hidden"}}>
+        <MapView
+          style={styles.map}
+          mapType="standard"
+          showsUserLocation={true}
+          followsUserLocation={true}
+          initialRegion={{
+            latitude: location?.latitude,
+            longitude: location?.longitude,
+            latitudeDelta: 0.00522,
+            longitudeDelta: 0.00021,
+          }}
+        />
+      </View>
+
       <ConfirmModal
         ref={(target) => (popupRef2 = target)}
         title={searching ? null : "Confirm"}
         onPressOk={() => {
           setSearching(true);
-          setTimeout(() => {navigation.navigate("Ride");setSearching(false)}, 5000)
-          
+          setTimeout(() => {
+            navigation.navigate("Ride");
+            setSearching(false);
+          }, 5000);
         }}
         buttons={searching ? false : true}
       >
         {searching && (
-          <View style={{justifyContent:"center", alignItems:"center", }}>
+          <View style={{ justifyContent: "center", alignItems: "center" }}>
             <Image source={require("../../assets/LoadingGif.png")} />
-            <Text style={{fontSize:24, fontFamily:"Regular", color:Colors.black,marginTop:24,}}>Searching...</Text>
+            <Text
+              style={{
+                fontSize: 24,
+                fontFamily: "Regular",
+                color: Colors.black,
+                marginTop: 24,
+              }}
+            >
+              Searching...
+            </Text>
           </View>
         )}
         {!searching && (
@@ -146,7 +174,7 @@ const styles = StyleSheet.create({
     fontFamily: "Bold",
     fontSize: 24,
     color: Colors.black,
-  }, 
+  },
   map: {
     flex: 1,
     // position: "absolute",
