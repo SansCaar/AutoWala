@@ -5,7 +5,6 @@ import {
   TextInput,
   ScrollView,
   Pressable,
-  Alert,
 } from "react-native";
 import React, { useState } from "react";
 import { StatusBar } from "expo-status-bar";
@@ -98,9 +97,11 @@ export default function HomeScreen({ navigation }) {
           <MapView
             style={styles.map}
             mapType="standard"
+            showsUserLocation={true}
+            followsUserLocation={true}
             initialRegion={{
-              latitude: location.latitude,
-              longitude: location.longitude,
+              latitude: location?.latitude,
+              longitude: location?.longitude,
               latitudeDelta: 0.00522,
               longitudeDelta: 0.00021,
             }}
