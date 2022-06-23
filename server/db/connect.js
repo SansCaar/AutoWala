@@ -1,15 +1,10 @@
 import mongoose from 'mongoose';
-mongoose.connect("mongodb+srv://projectx:autowalaprojectx@cluster0.1f41p.mongodb.net/?retryWrites=true&w=majority",{
-	useNewUrlParser:true,
-	useUnifiedTopology:true,
-}).then(()=>{
-<<<<<<< HEAD
-	console.log("ok")
-=======
-	console.log("Database connection successfull!")
->>>>>>> aa7dd69e5b65ba47629d25133f2ad5ec847b2b39
-}).catch((e)=>
-{
-console.log(e)
-})
-
+export const connectDB = async () =>{
+	try {
+		const conn = await mongoose.connect(process.env.MONGO_URL)
+		console.log(`Database connected : ${conn.connection.host}`.cyan.bold)
+		
+	} catch (error) {
+		console.log("Database error:"+error.red)
+	}
+}

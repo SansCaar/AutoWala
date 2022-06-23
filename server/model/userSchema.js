@@ -20,7 +20,6 @@ const userSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
-
   user_toc: {
     type: String,
     required: true,
