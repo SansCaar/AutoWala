@@ -71,7 +71,7 @@
             <Header
               iconL="arrow-left"
               onPressL={navigation.goBack}
-              style={{ paddingHorizontal: 24 }}
+              style={{ paddingHorizontal: 24, marginTop:Constants.statusBarHeight }}
             />
             <View style={{ paddingHorizontal: 24 }}>
               <Text style={styles.h1}>Where are you going?</Text>
