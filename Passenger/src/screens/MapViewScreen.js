@@ -20,23 +20,7 @@ import AppContext from "../context/AppContext";
 import Constants from "expo-constants";
 import { getAddress } from "../context/geocoding";
 
-const defaultAddress = [
-  {
-    icon: "home",
-    name: "Home",
-    location: "Golpark",
-  },
-  {
-    icon: "briefcase",
-    name: "Work",
-    location: "Janakinagar",
-  },
-  {
-    icon: "home",
-    name: "Home",
-    location: "Golpark",
-  },
-];
+
 
 export default function MapViewScreen({ navigation, route }) {
   const { location } = useContext(AppContext);
@@ -51,13 +35,11 @@ export default function MapViewScreen({ navigation, route }) {
   let popupRef2 = createRef();
 
   const setMarker = (data) => {
+
     try {
-      getAddress(data.latitude, data.longitude).then((res) => {
-        console.log(res.data[0])
-        res = res.data[0]
-        data["name"] = res["label"];
+      getAddress(data.latitude, data.longitude).then((address) => {
+        data["name"] = address;
   
-        console.log(data);
         if (focus) {
           if (focus == "t1") {
             setFrom(data);
