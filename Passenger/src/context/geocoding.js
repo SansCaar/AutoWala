@@ -61,3 +61,13 @@ export async function getRoutes(from, to){
   return res;
 }
 
+ export async function complete(search) {
+  var url =
+    'https://api.locationiq.com/v1/autocomplete?key=pk.47f78342a09e37b19d7be8701334eb01&q=' +
+    search+'&countrycodes=NP&limit=5';  
+  console.log(url);
+
+  let response = await fetch(url);   
+  let data = await response.json();
+  return data;
+}

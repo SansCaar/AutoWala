@@ -5,11 +5,13 @@ import {
   Image,
   TextInput,
   StyleSheet,
+  Card,
   Pressable,
   FlatList,
   KeyboardAvoidingView,
   Dimensions,
 } from "react-native";
+
 import Header from "../components/Header";
 import { Colors } from "../styles/Global";
 
@@ -18,11 +20,12 @@ import ConfirmModal from "../components/ConfirmModal";
 import MapView, { Marker } from "react-native-maps";
 import AppContext from "../context/AppContext";
 import Constants from "expo-constants";
-import { getAddress, getRoutes } from "../context/geocoding";
+import { getAddress, getRoutes ,complete} from "../context/geocoding";
 
 export default function MapViewScreen({ navigation, route }) {
   const { location } = useContext(AppContext);
   const inputRef = useRef();
+  const [data, setData] = useState([]);
 
   const [searching, setSearching] = useState(null);
   const [from, setFrom] = useState(null);
@@ -114,7 +117,16 @@ export default function MapViewScreen({ navigation, route }) {
               <TextInput
                 autoFocus={true}
                 style={styles.inputStyle}
-                onChangeText={(value) => setFrom(value)}
+                onChangeText={async (value) => 
+                  {
+                  setFrom(value)
+const completedata =await complete(from);
+console.log(completedata)
+setData(completedata)
+
+
+                }
+                }
                 placeholderTextColor={Colors.grey}
                 placeholder="From"
                 returnKeyType="next"
@@ -125,6 +137,55 @@ export default function MapViewScreen({ navigation, route }) {
                   inputRef.current.focus();
                 }}
               />
+
+<View style={{ marginTop: 30,position:"absolute",zIndex:4 ,                    width:"100%",
+}}>
+            <FlatList
+              data={Object.values(data)}
+              keyExtractor={({ id }, index) => id}
+              renderItem={({ item }) => {
+                return(
+                <View
+                  style={{
+                    padding: 10,
+                    borderBottomColor:"black",
+                    borderBottomWidth:2,
+                    height:60,
+                    backgroundColor: 'white',     
+                  }}>
+                  <View style={{}}>
+                  
+                    <Text
+                      style={{
+                        position: 'absolute',
+                        color: 'black',  
+                        left: 30,
+                        fontSize: 14,
+                        fontFamily: '500',
+                      }}>
+                      {item.display_address}{' '} 
+                    </Text> 
+                    <Text
+                      style={{
+                        position: 'absolute',
+                        fontFamily: '300',
+                        color: '#ADAEC0',
+                        fontSize: 12,
+                        top: 25,
+                        left: 30,
+                      }}>
+                      By {item.display_name}{' '}
+                    </Text>
+
+                   
+                  </View>
+                  
+                </View>
+                  )  }}
+            />
+          </View>
+
+
               <View style={styles.inputContainer}>
                 <TextInput
                   style={{ ...styles.inputStyle, flex: 1 }}
