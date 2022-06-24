@@ -1,6 +1,7 @@
 const APIKEY = "38899f5c95bf3dcef35c5a284ccf9316";
+const AUTOCOMPLETE_APIKEY = "pk.47f78342a09e37b19d7be8701334eb01"
 const BASE_URL = "http://api.positionstack.com/v1";
-
+const AUTOCOMPLETE_URL  = "https://api.locationiq.com/v1/autocomplete";
 async function get(url) {
   let headers = {
     Accept: "application/json",
@@ -31,4 +32,20 @@ export async function getCoordinates(place_name) {
   let data = await response.json();
   let objdata = data.data[0];
   return objdata;
+}
+
+export async function getSuggestions(input){
+  let url = AUTOCOMPLETE_URL + `?key=${AUTOCOMPLETE_APIKEY}&q=${input}&countrycodes=NP`
+  let res = await fetch(url);
+  res = res.json();
+  console.log(res)
+  return res;
+}
+
+export async function getRoutes(from, to){
+  let url = AUTOCOMPLETE_URL + `?key=${AUTOCOMPLETE_APIKEY}&q=${input}&countrycodes=NP`
+  let res = await fetch(url);
+  res = res.json();
+  console.log(res)
+  return res;
 }

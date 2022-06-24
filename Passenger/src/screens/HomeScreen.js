@@ -13,12 +13,15 @@ import Header from "../components/Header";
 import { Colors } from "../styles/Global";
 import { styles } from "../styles/home_design";
 
-import * as Location from "expo-location";
 import Box from "../components/Box";
 import DefaultLocationList from "../components/DefaultLocationList";
 
 import MapView, { Marker } from "react-native-maps";
-import { getAddress, getCoordinates } from "../context/geocoding";
+import {
+  getAddress,
+  getCoordinates,
+  getSuggestions,
+} from "../context/geocoding";
 import AppContext from "../context/AppContext";
 
 const defaultAddress = [
@@ -40,27 +43,9 @@ const defaultAddress = [
 ];
 
 export default function HomeScreen({ navigation }) {
-
-  const {location, setLocation} = useContext(AppContext)
-  console.log(location)
-  const [from, setFrom] = useState();
-
-  const [markers, setMarkers] = useState([]);
-
-  React.useEffect(() => {
-    async function GetLocation() {
-      let { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== "granted") {
-        console.log("Error");
-      } else {
-        let { coords } = await Location.getCurrentPositionAsync({});
-        if (coords) {
-          setLocation(coords);
-        }
-      }
-    }
-    GetLocation();
-  }, []);
+  const { location, setLocation } = useContext(AppContext);
+  console.log(location);
+  // const [from, setFrom] = useState();
 
   return (
     <ScrollView style={styles.container}>
@@ -76,68 +61,57 @@ export default function HomeScreen({ navigation }) {
             style={styles.dotsImage}
             source={require("../../assets/locationArt.png")}
           />
-          <View style={{ flex: 1 }}>
+          <Pressable
+            style={{ flex: 1 }}
+            onPress={async () => {
+              navigation.navigate("MapView");
+            }}
+          >
             <TextInput
               style={styles.inputStyle}
               placeholderTextColor={Colors.grey}
               placeholder="From"
-              value={from}
-              onChangeText={(text) => setFrom(text)}
+              editable={false}
             />
             <View style={styles.inputContainer}>
               <TextInput
                 style={{ ...styles.inputStyle, flex: 1 }}
                 placeholder="To"
+                editable={false}
               />
-              <Pressable
-                style={styles.sendButton}
-                onPress={async () => {
-                  navigation.navigate("MapView")
-                }}
-              >
+              <View style={styles.sendButton}>
                 <Image
                   style={styles.sendButtonImg}
                   source={require("../../assets/Send.png")}
                 />
-              </Pressable>
+              </View>
             </View>
-          </View>
+          </Pressable>
         </View>
       </View>
       <Pressable>
         <Text style={styles.mapHeading}>Your location</Text>
-        <View style={{ borderRadius: 16, overflow:"hidden",marginTop:16 }}>
-          {
-            location && <MapView
-            style={styles.map}
-            mapType="standard"
-            showsUserLocation={true}
-            followsUserLocation={true}
-            initialRegion={{
-              latitude: location?.latitude,
-              longitude: location?.longitude,
-              latitudeDelta: 0.00522,
-              longitudeDelta: 0.00021,
-            }}
-            onPress={async (e) => {
-              let { latitude, longitude } = e.nativeEvent.coordinate;
-              let res = await getAddress(latitude, longitude);
-              console.log(res);
-            }}
-          >
-            {/* {markers.map((marker, i) => {
-              return (
-                <Marker
-                  key={i}
-                  coordinate={{
-                    latitude: marker.latitude,
-                    longitude: marker.longitude,
-                  }}
-                />
-              );
-            })} */}
+        <View style={{ borderRadius: 16, overflow: "hidden", marginTop: 16 }}>
+          {location && (
+            <MapView
+              style={styles.map}
+              mapType="standard"
+              showsUserLocation={true}
+              followsUserLocation={true}
+              initialRegion={{
+                latitude: location?.latitude,
+                longitude: location?.longitude,
+                latitudeDelta: 0.00522,
+                longitudeDelta: 0.00021,
+              }}
+              onPress={async (e) => {
+                let { latitude, longitude } = e.nativeEvent.coordinate;
+                let res = await getAddress(latitude, longitude);
+                console.log(res);
+              }}
+            >
             </MapView>
-          }
+          )}
         </View>
       </Pressable>
       <Box style={styles.pointsContainer}>
