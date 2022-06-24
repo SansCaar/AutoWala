@@ -163,18 +163,19 @@ setData(completedata)
                         fontSize: 14,
                         fontFamily: '500',
                       }}>
-                      {item.display_address}{' '} 
+                      {item.display_place}{' '} 
                     </Text> 
                     <Text
                       style={{
                         position: 'absolute',
                         fontFamily: '300',
                         color: '#ADAEC0',
-                        fontSize: 12,
+                        fontSize: 10,
                         top: 25,
                         left: 30,
                       }}>
-                      By {item.display_name}{' '}
+                        { item.display_address}
+
                     </Text>
 
                    
@@ -183,7 +184,9 @@ setData(completedata)
                 </View>
                   )  }}
             />
-          </View>
+          </View> 
+          
+          
 
 
               <View style={styles.inputContainer}>
