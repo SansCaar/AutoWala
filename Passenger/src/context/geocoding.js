@@ -28,8 +28,6 @@ export async function getAddress(lat, long) {
   let response = await get(url);
   console.log(response.data)
   response = response.data[0]['label']
-  console.log(response)
-
   return response;
 }
 
@@ -38,7 +36,6 @@ export async function getCoordinates(place_name) {
     BASE_URL + `/forward?access_key=${APIKEY}&country=NP&query=${place_name}`;
   let response = await fetch(url);
   let data = await response.json();
-  console.log(data);
   let objdata = data.data[0];
   return objdata;
 }
@@ -47,17 +44,16 @@ export async function getSuggestions(input){
   let url = AUTOCOMPLETE_URL + `?key=${AUTOCOMPLETE_APIKEY}&q=${input}&countrycodes=NP`
   let res = await fetch(url);
   res = res.json();
-  console.log(res)
   return res;
 }
 
 export async function getRoutes(from, to){
   console.log(from)
   let url = ROUTE_URL + `?apiKey=${ROUTE_APIKEY}&waypoints=${from.latitude}%2C${from.longitude}%7C${to.latitude}%2C${to.longitude}&mode=drive`
-  console.log(url)
   let res = await get(url);
-  res = res
   console.log(res)
+  res = res.features[0].geometry.coordinates[0];
+  res = res.map(cords => ({longitude:cords[0], latitude:cords[1]}))
   return res;
 }
 
