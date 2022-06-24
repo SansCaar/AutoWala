@@ -5,7 +5,7 @@ import { getSuggestions } from "./geocoding";
 const AppContext = createContext({});
 
 export const ContextProvider = ({ children }) => {
-  const [location, setLocation] = useState({});
+  const [location, setLocation] = useState(null);
 
   useEffect(() => {
     async function GetLocation() {
