@@ -48,13 +48,22 @@ export default function MapViewScreen({ navigation, route }) {
   let popupRef2 = createRef();
   return (
     <KeyboardAvoidingView style={styles.container}>
+      <MapView
+        style={styles.map}
+        mapType="standard"
+        showsUserLocation={true}
+        followsUserLocation={true}
+        initialRegion={{
+          latitude: location.latitude,
+          longitude: location.longitude,
+          latitudeDelta: 0.00522,
+          longitudeDelta: 0.00021,
+        }}
+      />
         <View
           style={{
             position: "absolute",
             width: "100%",
-            height: "100%",
-            zIndex: 1,
-            pointerEvents: "none",
           }}
         >
           <Header
@@ -185,18 +194,6 @@ export default function MapViewScreen({ navigation, route }) {
             />
           </View>
         </View>
-        <MapView
-          style={styles.map}
-          mapType="standard"
-          showsUserLocation={true}
-          followsUserLocation={true}
-          initialRegion={{
-            latitude: location.latitude,
-            longitude: location.longitude,
-            latitudeDelta: 0.00522,
-            longitudeDelta: 0.00021,
-          }}
-        />
     </KeyboardAvoidingView>
   );
 }
