@@ -61,8 +61,6 @@ export default function MapViewScreen({ navigation, route }) {
         if (focus) {
           if (focus == "t1") {
             setFrom(data);
-            setFocus("t2");
-            inputRef.current.focus();
             // console.log(from)
           }
           if (focus == "t2") {
