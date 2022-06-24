@@ -27,7 +27,10 @@ export async function getAddress(lat, long) {
 
 export async function getCoordinates(place_name) {
   let url = BASE_URL + `/forward?access_key=${APIKEY}&country=NP&query=${place_name}`;
-  let response = await get(url);
-  return response;
+  console.log(url)
+  let response = await fetch(url);
+  let data = await response.json();
+  let objdata = data.data[0];
+return objdata;
 }
 

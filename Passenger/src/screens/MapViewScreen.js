@@ -13,6 +13,7 @@ import DefaultLocationList from "../components/DefaultLocationList";
 import BottomModal from "../components/BottomModal";
 import ConfirmModal from "../components/ConfirmModal";
 import MapView, { Marker } from "react-native-maps";
+import { getCoordinates } from "../context/geocoding";
 
 const defaultAddress = [
   {
@@ -36,7 +37,10 @@ export default function MapViewScreen({ navigation, route }) {
   
   const [searching, setSearching] = useState(null);
   let {location} = route.params;
-
+  const [from, setFrom] = useState(null);
+  const [to, setTo] = useState(null);
+  const [fromlat, setFromlat] = useState(location?.latitude);
+  const [fromlong, setFromlong] = useState(location?.longitude);
   let popupRef = createRef();
   let popupRef2 = createRef();
   return (
@@ -56,16 +60,28 @@ export default function MapViewScreen({ navigation, route }) {
           <View style={{ flex: 1 }}>
             <TextInput
               style={styles.inputStyle}
+              onChangeText={(value)=>setFrom(value)}
               placeholderTextColor={Colors.grey}
               placeholder="From"
             />
             <View style={styles.inputContainer}>
               <TextInput
                 style={{ ...styles.inputStyle, flex: 1 }}
+                onChangeText={(value)=>setTo(value)}
+
                 placeholder="To"
               />
               <Pressable
-                onPress={() => popupRef.show()}
+                onPress={async () => {
+     const fromcord=await getCoordinates(from) 
+     setFromlat(fromcord.latitude)  
+console.log(fromlat)
+    //  const cord= getCoordinates(to)   
+     setFromlong(fromcord.longitude)  
+     console.log(fromlong)
+
+          popupRef.show()}
+                }
                 style={styles.sendButton}
               >
                 <Image
@@ -78,14 +94,15 @@ export default function MapViewScreen({ navigation, route }) {
         </View>
       </View>
       <View style={{borderTopRightRadius:24, borderTopLeftRadius:24,flex:1, overflow:"hidden"}}>
+        {/* yesma latitude longitude aaxa teslai yesma integrate garna paryo */}
         <MapView
           style={styles.map}
           mapType="standard"
           showsUserLocation={true}
           followsUserLocation={true}
           initialRegion={{
-            latitude: location?.latitude,
-            longitude: location?.longitude,
+            latitude: fromlat,
+            longitude: fromlat,
             latitudeDelta: 0.00522,
             longitudeDelta: 0.00021,
           }}
