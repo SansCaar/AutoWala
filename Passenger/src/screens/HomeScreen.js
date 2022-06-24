@@ -6,7 +6,7 @@ import {
   ScrollView,
   Pressable,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { StatusBar } from "expo-status-bar";
 
 import Header from "../components/Header";
@@ -19,6 +19,7 @@ import DefaultLocationList from "../components/DefaultLocationList";
 
 import MapView, { Marker } from "react-native-maps";
 import { getAddress, getCoordinates } from "../context/geocoding";
+import AppContext from "../context/AppContext";
 
 const defaultAddress = [
   {
@@ -39,7 +40,9 @@ const defaultAddress = [
 ];
 
 export default function HomeScreen({ navigation }) {
-  const [location, setLocation] = useState({});
+
+  const {location, setLocation} = useContext(AppContext)
+  console.log(location)
   const [from, setFrom] = useState();
 
   const [markers, setMarkers] = useState([]);
@@ -89,8 +92,7 @@ export default function HomeScreen({ navigation }) {
               <Pressable
                 style={styles.sendButton}
                 onPress={async () => {
-                  navigation.navigate("MapView", {location})
-                  
+                  navigation.navigate("MapView")
                 }}
               >
                 <Image
@@ -122,8 +124,7 @@ export default function HomeScreen({ navigation }) {
               let res = await getAddress(latitude, longitude);
               console.log(res);
             }}
-          />
-          }
+          >
             {/* {markers.map((marker, i) => {
               return (
                 <Marker
@@ -135,6 +136,8 @@ export default function HomeScreen({ navigation }) {
                 />
               );
             })} */}
+            </MapView>
+          }
         </View>
       </Pressable>
       <Box style={styles.pointsContainer}>

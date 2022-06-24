@@ -1,4 +1,4 @@
-import React, { createRef, useState } from "react";
+import React, { createRef, useContext, useState } from "react";
 import {
   View,
   Text,
@@ -6,6 +6,9 @@ import {
   TextInput,
   StyleSheet,
   Pressable,
+  FlatList,
+  KeyboardAvoidingView,
+  Dimensions,
 } from "react-native";
 import Header from "../components/Header";
 import { Colors } from "../styles/Global";
@@ -14,6 +17,7 @@ import BottomModal from "../components/BottomModal";
 import ConfirmModal from "../components/ConfirmModal";
 import MapView, { Marker } from "react-native-maps";
 import { getCoordinates } from "../context/geocoding";
+import AppContext from "../context/AppContext";
 
 const defaultAddress = [
   {
@@ -34,9 +38,8 @@ const defaultAddress = [
 ];
 
 export default function MapViewScreen({ navigation, route }) {
-  
+  const { location, setLocation } = useContext(AppContext);
   const [searching, setSearching] = useState(null);
-  let {location} = route.params;
   const [from, setFrom] = useState(null);
   const [to, setTo] = useState(null);
   const [fromlat, setFromlat] = useState(location?.latitude);
@@ -44,141 +47,157 @@ export default function MapViewScreen({ navigation, route }) {
   let popupRef = createRef();
   let popupRef2 = createRef();
   return (
-    <View style={styles.container}>  
-      <Header
-        iconL="arrow-left"
-        onPressL={navigation.goBack}
-        style={{ paddingHorizontal: 24 }}
-      />
-      <View style={{ paddingHorizontal: 24 }}>
-        <Text style={styles.h1}>Where are you going?</Text>
-        <View style={styles.inputsContainer}>
-          <Image
-            style={styles.dotsImage}
-            source={require("../../assets/locationArt.png")}
+    <KeyboardAvoidingView style={styles.container}>
+        <View
+          style={{
+            position: "absolute",
+            width: "100%",
+            height: "100%",
+            zIndex: 1,
+            pointerEvents: "none",
+          }}
+        >
+          <Header
+            iconL="arrow-left"
+            onPressL={navigation.goBack}
+            style={{ paddingHorizontal: 24 }}
           />
-          <View style={{ flex: 1 }}>
-            <TextInput
-              style={styles.inputStyle}
-              onChangeText={(value)=>setFrom(value)}
-              placeholderTextColor={Colors.grey}
-              placeholder="From"
-            />
-            <View style={styles.inputContainer}>
-              <TextInput
-                style={{ ...styles.inputStyle, flex: 1 }}
-                onChangeText={(value)=>setTo(value)}
-
-                placeholder="To"
+          <View style={{ paddingHorizontal: 24 }}>
+            <Text style={styles.h1}>Where are you going?</Text>
+            <View style={styles.inputsContainer}>
+              <Image
+                style={styles.dotsImage}
+                source={require("../../assets/locationArt.png")}
               />
-              <Pressable
-                onPress={async () => {
-     const fromcord=await getCoordinates(from) 
-     setFromlat(fromcord.latitude)  
-console.log(fromlat)
-    //  const cord= getCoordinates(to)   
-     setFromlong(fromcord.longitude)  
-     console.log(fromlong)
-
-          popupRef.show()}
-                }
-                style={styles.sendButton}
-              >
-                <Image
-                  style={styles.sendButtonImg}
-                  source={require("../../assets/Send.png")}
+              <View style={{ flex: 1 }}>
+                <TextInput
+                  style={styles.inputStyle}
+                  onChangeText={(value) => setFrom(value)}
+                  placeholderTextColor={Colors.grey}
+                  placeholder="From"
                 />
-              </Pressable>
+                <View style={styles.inputContainer}>
+                  <TextInput
+                    style={{ ...styles.inputStyle, flex: 1 }}
+                    onChangeText={(value) => setTo(value)}
+                    placeholder="To"
+                  />
+                  <Pressable
+                    onPress={async () => {
+                      const fromcord = await getCoordinates(from);
+                      setFromlat(fromcord.latitude);
+                      console.log(fromlat);
+                      //  const cord= getCoordinates(to)
+                      setFromlong(fromcord.longitude);
+                      console.log(fromlong);
+
+                      popupRef.show();
+                    }}
+                    style={styles.sendButton}
+                  >
+                    <Image
+                      style={styles.sendButtonImg}
+                      source={require("../../assets/Send.png")}
+                    />
+                  </Pressable>
+                </View>
+              </View>
             </View>
+            <FlatList />
+          </View>
+          <View
+            style={{
+              borderTopRightRadius: 24,
+              borderTopLeftRadius: 24,
+              flex: 1,
+              overflow: "hidden",
+            }}
+          >
+            {/* yesma latitude longitude aaxa teslai yesma integrate garna paryo */}
+
+            <ConfirmModal
+              ref={(target) => (popupRef2 = target)}
+              title={searching ? null : "Confirm"}
+              onPressOk={() => {
+                setSearching(true);
+                setTimeout(() => {
+                  navigation.navigate("Ride");
+                  setSearching(false);
+                }, 5000);
+              }}
+              buttons={searching ? false : true}
+            >
+              {searching && (
+                <View
+                  style={{ justifyContent: "center", alignItems: "center" }}
+                >
+                  <Image source={require("../../assets/LoadingGif.png")} />
+                  <Text
+                    style={{
+                      fontSize: 24,
+                      fontFamily: "Regular",
+                      color: Colors.black,
+                      marginTop: 24,
+                    }}
+                  >
+                    Searching...
+                  </Text>
+                </View>
+              )}
+              {!searching && (
+                <>
+                  <View>
+                    <View style={styles.row}>
+                      <Text style={styles.normalText}>Advance Charge</Text>
+                      <Text style={[styles.normalText, { color: "red" }]}>
+                        10 coins
+                      </Text>
+                    </View>
+                    <View style={styles.row}>
+                      <Text style={styles.normalText}>Due Charge</Text>
+                      <Text style={styles.normalText}>20 coins</Text>
+                    </View>
+                    <View style={styles.seperator} />
+                    <View style={styles.row}>
+                      <Text style={styles.normalText}>Total Charge</Text>
+                      <Text style={styles.normalText}>30 coins</Text>
+                    </View>
+                  </View>
+                  <Text
+                    style={{
+                      textAlign: "center",
+                      fontSize: 14,
+                      color: Colors.light_grey,
+                      fontFamily: "Regular",
+                      marginTop: 8,
+                    }}
+                  >
+                    The charges will only deduct after the driver accepts your
+                    ride.
+                  </Text>
+                </>
+              )}
+            </ConfirmModal>
+            <BottomModal
+              animationType="slide"
+              ref={(target) => (popupRef = target)}
+              onPressBook={() => popupRef2.show()}
+            />
           </View>
         </View>
-      </View>
-      <View style={{borderTopRightRadius:24, borderTopLeftRadius:24,flex:1, overflow:"hidden"}}>
-        {/* yesma latitude longitude aaxa teslai yesma integrate garna paryo */}
         <MapView
           style={styles.map}
           mapType="standard"
           showsUserLocation={true}
           followsUserLocation={true}
           initialRegion={{
-            latitude: fromlat,
-            longitude: fromlat,
+            latitude: location.latitude,
+            longitude: location.longitude,
             latitudeDelta: 0.00522,
             longitudeDelta: 0.00021,
           }}
         />
-      </View>
-
-      <ConfirmModal
-        ref={(target) => (popupRef2 = target)}
-        title={searching ? null : "Confirm"}
-        onPressOk={() => {
-          setSearching(true);
-          setTimeout(() => {
-            navigation.navigate("Ride");
-            setSearching(false);
-          }, 5000);
-        }}
-        buttons={searching ? false : true}
-      >
-        {searching && (
-          <View style={{ justifyContent: "center", alignItems: "center" }}>
-            <Image source={require("../../assets/LoadingGif.png")} />
-            <Text
-              style={{
-                fontSize: 24,
-                fontFamily: "Regular",
-                color: Colors.black,
-                marginTop: 24,
-              }}
-            >
-              Searching...
-            </Text>
-          </View>
-        )}
-        {!searching && (
-          <>
-            <View>
-              <View style={styles.row}>
-                <Text style={styles.normalText}>Advance Charge</Text>
-                <Text style={[styles.normalText, { color: "red" }]}>
-                  10 coins
-                </Text>
-              </View>
-              <View style={styles.row}>
-                <Text style={styles.normalText}>Due Charge</Text>
-                <Text style={styles.normalText}>20 coins</Text>
-              </View>
-              <View style={styles.seperator} />
-              <View style={styles.row}>
-                <Text style={styles.normalText}>Total Charge</Text>
-                <Text style={styles.normalText}>30 coins</Text>
-              </View>
-            </View>
-            <Text
-              style={{
-                textAlign: "center",
-                fontSize: 14,
-                color: Colors.light_grey,
-                fontFamily: "Regular",
-                marginTop: 8,
-              }}
-            >
-              The charges will only deduct after the driver accepts your ride.
-            </Text>
-          </>
-        )}
-      </ConfirmModal>
-      <BottomModal
-        animationType="slide"
-        ref={(target) => (popupRef = target)}
-        onPressBook={() => popupRef2.show()}
-      />
-      <DefaultLocationList
-        defaultAddress={defaultAddress}
-        style={{ position: "absolute", bottom: 0 }}
-      />
-    </View>
+    </KeyboardAvoidingView>
   );
 }
 const styles = StyleSheet.create({
@@ -193,11 +212,7 @@ const styles = StyleSheet.create({
     color: Colors.black,
   },
   map: {
-    flex: 1,
-    // position: "absolute",
-    height: "100%",
-    width: "100%",
-    bottom: 0,
+    flex: 1, // position: "absolute",
   },
   dotsImage: {
     alignSelf: "center",

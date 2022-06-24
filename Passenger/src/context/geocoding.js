@@ -18,19 +18,17 @@ async function get(url) {
 }
 
 export async function getAddress(lat, long) {
-  console.log(lat+ ',' + long)
-  let url =
-    BASE_URL + `/reverse?access_key=${APIKEY}&query=${lat},${long}`;
+  console.log(lat + "," + long);
+  let url = BASE_URL + `/reverse?access_key=${APIKEY}&query=${lat},${long}`;
   let response = await get(url);
-  return response
+  return response;
 }
 
 export async function getCoordinates(place_name) {
-  let url = BASE_URL + `/forward?access_key=${APIKEY}&country=NP&query=${place_name}`;
-  console.log(url)
+  let url =
+    BASE_URL + `/forward?access_key=${APIKEY}&country=NP&query=${place_name}`;
   let response = await fetch(url);
   let data = await response.json();
   let objdata = data.data[0];
-return objdata;
+  return objdata;
 }
-
