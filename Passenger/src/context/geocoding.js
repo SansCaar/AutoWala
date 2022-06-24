@@ -52,8 +52,12 @@ export async function getSuggestions(input){
 }
 
 export async function getRoutes(from, to){
-  let url = ROUTE_URL + `?apiKey=${ROUTE_APIKEY}&waypoints=${from}%2C${to}&mode=drive`
+  console.log(from)
+  let url = ROUTE_URL + `?apiKey=${ROUTE_APIKEY}&waypoints=${from.latitude}%2C${from.longitude}%7C${to.latitude}%2C${to.longitude}&mode=drive`
+  console.log(url)
   let res = await get(url);
+  res = res
   console.log(res)
+  return res;
 }
 

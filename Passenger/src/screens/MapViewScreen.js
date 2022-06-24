@@ -12,15 +12,13 @@ import {
 } from "react-native";
 import Header from "../components/Header";
 import { Colors } from "../styles/Global";
-import DefaultLocationList from "../components/DefaultLocationList";
+
 import BottomModal from "../components/BottomModal";
 import ConfirmModal from "../components/ConfirmModal";
 import MapView, { Marker } from "react-native-maps";
 import AppContext from "../context/AppContext";
 import Constants from "expo-constants";
-import { getAddress } from "../context/geocoding";
-
-
+import { getAddress, getRoutes } from "../context/geocoding";
 
 export default function MapViewScreen({ navigation, route }) {
   const { location } = useContext(AppContext);
@@ -30,28 +28,24 @@ export default function MapViewScreen({ navigation, route }) {
   const [from, setFrom] = useState(null);
   const [focus, setFocus] = useState(null);
   const [to, setTo] = useState(null);
+  const [routes, setRoutes] = useState(null);
 
   let popupRef = createRef();
   let popupRef2 = createRef();
 
-  const setMarker = (data) => {
-
+  const setMarker = async (data) => {
     try {
-      getAddress(data.latitude, data.longitude).then((address) => {
-        data["name"] = address;
-  
-        if (focus) {
-          if (focus == "t1") {
-            setFrom(data);
-            // console.log(from)
-          }
-          if (focus == "t2") {
-            setTo(data);
-            // console.log('To')
-            // console.log(to)
-          }
+      const address = await getAddress(data.latitude, data.longitude);
+      data["name"] = address;
+      if (focus) {
+        if (focus == "t1") {
+          setFrom(data);
         }
-      });
+        if (focus == "t2") {
+          setTo(data);
+        }
+      }
+      let route = from && to ? await getRoutes(from, to) : null;
     } catch (e) {
       console.log(e);
     }
@@ -60,39 +54,41 @@ export default function MapViewScreen({ navigation, route }) {
     <KeyboardAvoidingView
       style={{ ...styles.container, marginTop: Constants.statusBarHeight }}
     >
-      {location.latitude&&location.longitude&& <MapView
-        style={styles.map}
-        mapType="standard"
-        showsUserLocation={true}
-        followsUserLocation={true}
-        initialRegion={{
-          latitude: location?.latitude,
-          longitude: location?.longitude,
-          latitudeDelta: 0.00522,
-          longitudeDelta: 0.00021,
-        }}
-        onPress={(e) => {
-          let { latitude, longitude } = e.nativeEvent.coordinate;
-          setMarker({ latitude, longitude });
-        }}
-      >
-        {from && (
-          <Marker
-            coordinate={{
-              latitude: from?.latitude,
-              longitude: from?.longitude,
-            }}
-          />
-        )}
-        {to && (
-          <Marker
-            coordinate={{
-              latitude: to?.latitude,
-              longitude: to?.longitude,
-            }}
-          />
-        )}
-      </MapView>}
+      {location.latitude && location.longitude && (
+        <MapView
+          style={styles.map}
+          mapType="standard"
+          showsUserLocation={true}
+          followsUserLocation={true}
+          initialRegion={{
+            latitude: location?.latitude,
+            longitude: location?.longitude,
+            latitudeDelta: 0.00522,
+            longitudeDelta: 0.00021,
+          }}
+          onPress={(e) => {
+            let { latitude, longitude } = e.nativeEvent.coordinate;
+            setMarker({ latitude, longitude });
+          }}
+        >
+          {from && (
+            <Marker
+              coordinate={{
+                latitude: from?.latitude,
+                longitude: from?.longitude,
+              }}
+            />
+          )}
+          {to && (
+            <Marker
+              coordinate={{
+                latitude: to?.latitude,
+                longitude: to?.longitude,
+              }}
+            />
+          )}
+        </MapView>
+      )}
       <View
         style={{
           position: "absolute",
