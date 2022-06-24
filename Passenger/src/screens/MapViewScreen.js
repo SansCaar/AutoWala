@@ -54,7 +54,7 @@ export default function MapViewScreen({ navigation, route }) {
     <KeyboardAvoidingView
       style={{ ...styles.container, marginTop: Constants.statusBarHeight }}
     >
-      {location.latitude && location.longitude && (
+      {location?.latitude && location?.longitude && (
         <MapView
           style={styles.map}
           mapType="standard"
@@ -71,7 +71,7 @@ export default function MapViewScreen({ navigation, route }) {
             setMarker({ latitude, longitude });
           }}
         >
-          {from && (
+          {from?.latitude && from?.longitude && (
             <Marker
               coordinate={{
                 latitude: from?.latitude,
@@ -79,7 +79,7 @@ export default function MapViewScreen({ navigation, route }) {
               }}
             />
           )}
-          {to && (
+          {to?.latitude&& to?.longitude && (
             <Marker
               coordinate={{
                 latitude: to?.latitude,
