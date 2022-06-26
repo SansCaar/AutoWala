@@ -1,4 +1,10 @@
-import React, { createRef, useContext, useRef, useState } from "react";
+import React, {
+  createRef,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import {
   View,
   Text,
@@ -20,231 +26,9 @@ import ConfirmModal from "../components/ConfirmModal";
 import MapView, { Marker, Polyline } from "react-native-maps";
 import AppContext from "../context/AppContext";
 import Constants from "expo-constants";
-import { getAddress, getRoutes ,complete} from "../context/geocoding";
+import { getAddress, getRoutes, complete } from "../context/geocoding";
 
 export default function MapViewScreen({ navigation }) {
-  const random = [
-    {
-      latitude: 83.46657,
-      longitude: 27.718867,
-    },
-    {
-      latitude: 83.466549,
-      longitude: 27.718844,
-    },
-    {
-      latitude: 83.46633,
-      longitude: 27.718691,
-    },
-    {
-      latitude: 83.466158,
-      longitude: 27.718568,
-    },
-    {
-      latitude: 83.466053,
-      longitude: 27.718429,
-    },
-    {
-      latitude: 83.466022,
-      longitude: 27.718296,
-    },
-    {
-      latitude: 83.466022,
-      longitude: 27.717776,
-    },
-    {
-      latitude: 83.465981,
-      longitude: 27.717203,
-    },
-    {
-      latitude: 83.466017,
-      longitude: 27.716966,
-    },
-    {
-      latitude: 83.466036,
-      longitude: 27.716817,
-    },
-    {
-      latitude: 83.46607,
-      longitude: 27.716658,
-    },
-    {
-      latitude: 83.466141,
-      longitude: 27.716456,
-    },
-    {
-      latitude: 83.466305,
-      longitude: 27.716059,
-    },
-    {
-      latitude: 83.466359,
-      longitude: 27.715861,
-    },
-    {
-      latitude: 83.466388,
-      longitude: 27.71565,
-    },
-    {
-      latitude: 83.466456,
-      longitude: 27.71524,
-    },
-    {
-      latitude: 83.466607,
-      longitude: 27.714378,
-    },
-    {
-      latitude: 83.466645,
-      longitude: 27.714088,
-    },
-    {
-      latitude: 83.466676,
-      longitude: 27.713901,
-    },
-    {
-      latitude: 83.466698,
-      longitude: 27.713787,
-    },
-    {
-      latitude: 83.466701,
-      longitude: 27.71377,
-    },
-    {
-      latitude: 83.466764,
-      longitude: 27.713385,
-    },
-    {
-      latitude: 83.46678,
-      longitude: 27.71328,
-    },
-    {
-      latitude: 83.466828,
-      longitude: 27.713078,
-    },
-    {
-      latitude: 83.466857,
-      longitude: 27.712972,
-    },
-    {
-      latitude: 83.466947,
-      longitude: 27.712688,
-    },
-    {
-      latitude: 83.466967,
-      longitude: 27.712655,
-    },
-    {
-      latitude: 83.466977,
-      longitude: 27.712612,
-    },
-    {
-      latitude: 83.466984,
-      longitude: 27.71255,
-    },
-    {
-      latitude: 83.467009,
-      longitude: 27.712462,
-    },
-    {
-      latitude: 83.467035,
-      longitude: 27.712353,
-    },
-    {
-      latitude: 83.467042,
-      longitude: 27.712261,
-    },
-    {
-      latitude: 83.467169,
-      longitude: 27.711856,
-    },
-    {
-      latitude: 83.467159,
-      longitude: 27.711822,
-    },
-    {
-      latitude: 83.467328,
-      longitude: 27.711325,
-    },
-    {
-      latitude: 83.467662,
-      longitude: 27.710149,
-    },
-    {
-      latitude: 83.467768,
-      longitude: 27.709588,
-    },
-    {
-      latitude: 83.467784,
-      longitude: 27.709142,
-    },
-    {
-      latitude: 83.467763,
-      longitude: 27.708827,
-    },
-    {
-      latitude: 83.467727,
-      longitude: 27.708281,
-    },
-    {
-      latitude: 83.467375,
-      longitude: 27.706732,
-    },
-    {
-      latitude: 83.467345,
-      longitude: 27.706612,
-    },
-    {
-      latitude: 83.46718,
-      longitude: 27.70588,
-    },
-    {
-      latitude: 83.467111,
-      longitude: 27.705576,
-    },
-    {
-      latitude: 83.467006,
-      longitude: 27.705138,
-    },
-    {
-      latitude: 83.466936,
-      longitude: 27.704801,
-    },
-    {
-      latitude: 83.466894,
-      longitude: 27.704612,
-    },
-    {
-      latitude: 83.466746,
-      longitude: 27.703968,
-    },
-    {
-      latitude: 83.466415,
-      longitude: 27.702556,
-    },
-    {
-      latitude: 83.466289,
-      longitude: 27.701971,
-    },
-    {
-      latitude: 83.466112,
-      longitude: 27.70115,
-    },
-    {
-      latitude: 83.466015,
-      longitude: 27.700764,
-    },
-    {
-      latitude: 83.465793,
-      longitude: 27.69987,
-    },
-    {
-      latitude: 83.465616,
-      longitude: 27.698975,
-    },
-    {
-      latitude: 83.465626,
-      longitude: 27.6989,
-    },
-  ];
   const { location } = useContext(AppContext);
   const inputRef = useRef();
   const [data, setData] = useState([]);
@@ -258,21 +42,24 @@ export default function MapViewScreen({ navigation }) {
   let popupRef = createRef();
   let popupRef2 = createRef();
 
+  useEffect(async () => {
+    if (from && to) {
+      const route = await getRoutes(from, to);
+      setRoutes(route);
+    }
+  }, []);
   const setMarker = async (data) => {
-    try {
+    try { 
       const address = await getAddress(data.latitude, data.longitude);
       data["name"] = address;
       if (focus) {
         if (focus == "t1") {
           setFrom(data);
-        }
+        } 
         if (focus == "t2") {
           setTo(data);
         }
       }
-      let route = from && to ? await getRoutes(from, to) : null;
-      setRoutes(route);
-      console.log(routes);
     } catch (e) {
       console.log(e);
     }
@@ -281,7 +68,7 @@ export default function MapViewScreen({ navigation }) {
     <KeyboardAvoidingView
       style={{ ...styles.container, marginTop: Constants.statusBarHeight }}
     >
-      {location?.latitude && location?.longitude && (
+      {(routes || true) && location?.latitude && location?.longitude && (
         <MapView
           style={styles.map}
           mapType="standard"
@@ -360,16 +147,12 @@ export default function MapViewScreen({ navigation }) {
               <TextInput
                 autoFocus={true}
                 style={styles.inputStyle}
-                onChangeText={async (value) => 
-                  {
-                  setFrom(value)
-const completedata =await complete(from);
-console.log(completedata)
-setData(completedata)
-
-
-                }
-                }
+                onChangeText={async (value) => {
+                  setFrom(value);
+                  const completedata = await complete(from);
+                  console.log(completedata);
+                  setData(completedata);
+                }}
                 placeholderTextColor={Colors.grey}
                 placeholder="From"
                 returnKeyType="next"
@@ -381,56 +164,58 @@ setData(completedata)
                 }}
               />
 
-<View style={{ marginTop: 30,position:"absolute",zIndex:4 ,                    width:"100%",
-}}>
-            <FlatList
-              data={Object.values(data)}
-              keyExtractor={({ id }, index) => id}
-              renderItem={({ item }) => {
-                return(
-                <View
-                  style={{
-                    padding: 10,
-                    borderBottomColor:"black",
-                    borderBottomWidth:2,
-                    height:60,
-                    backgroundColor: 'white',     
-                  }}>
-                  <View style={{}}>
-                  
-                    <Text
-                      style={{
-                        position: 'absolute',
-                        color: 'black',  
-                        left: 30,
-                        fontSize: 14,
-                        fontFamily: '500',
-                      }}>
-                      {item.display_place}{' '} 
-                    </Text> 
-                    <Text
-                      style={{
-                        position: 'absolute',
-                        fontFamily: '300',
-                        color: '#ADAEC0',
-                        fontSize: 10,
-                        top: 25,
-                        left: 30,
-                      }}>
-                        { item.display_address}
-
-                    </Text>
-
-                   
-                  </View>
-                  
-                </View>
-                  )  }}
-            />
-          </View> 
-          
-          
-
+              <View
+                style={{
+                  marginTop: 30,
+                  position: "absolute",
+                  zIndex: 4,
+                  width: "100%",
+                }}
+              >
+                <FlatList
+                  data={Object.values(data)}
+                  keyExtractor={({ id }, index) => id}
+                  renderItem={({ item }) => {
+                    return (
+                      <View
+                        style={{
+                          padding: 10,
+                          borderBottomColor: "black",
+                          borderBottomWidth: 2,
+                          height: 60,
+                          backgroundColor: "white",
+                        }}
+                      >
+                        <View style={{}}>
+                          <Text
+                            style={{
+                              position: "absolute",
+                              color: "black",
+                              left: 30,
+                              fontSize: 14,
+                              // fontFamily: "500",
+                            }}
+                          >
+                            {item.display_place}{" "}
+                          </Text>
+                          <Text
+                            style={{
+                              position: "absolute",
+                              // fontFamily: "300",
+                              color: "#ADAEC0",
+                              fontSize: 10,
+                              top: 25,
+                              left: 30,
+                            }}
+                          >
+                            {item.display_address}
+                          </Text>
+                        </View>
+                      </View>
+                    );
+                  }}
+                />
+              </View>
 
               <View style={styles.inputContainer}>
                 <TextInput
