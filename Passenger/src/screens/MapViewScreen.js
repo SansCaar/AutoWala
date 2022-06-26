@@ -38,6 +38,7 @@ export default function MapViewScreen({ navigation }) {
   const [focus, setFocus] = useState(null);
   const [to, setTo] = useState(null);
   const [routes, setRoutes] = useState(null);
+  const [showfromcom, setShowfromcom] = useState(false);
 
   let popupRef = createRef();
   let popupRef2 = createRef();
@@ -147,12 +148,24 @@ export default function MapViewScreen({ navigation }) {
               <TextInput
                 autoFocus={true}
                 style={styles.inputStyle}
-                onChangeText={async (value) => {
-                  setFrom(value);
-                  const completedata = await complete(from);
-                  console.log(completedata);
-                  setData(completedata);
-                }}
+                
+                onChangeText={async (value) => 
+                  {
+                  setFrom(value)
+const completedata =await complete(from);
+setData(completedata)
+if(value.length==0||value.length==1)
+{
+setShowfromcom(false)
+ }
+ else{
+  setShowfromcom(true)
+
+ }
+
+  }
+                }
+                
                 placeholderTextColor={Colors.grey}
                 placeholder="From"
                 returnKeyType="next"
@@ -163,6 +176,7 @@ export default function MapViewScreen({ navigation }) {
                   inputRef.current.focus();
                 }}
               />
+<<<<<<< HEAD
 
               <View
                 style={{
@@ -216,6 +230,70 @@ export default function MapViewScreen({ navigation }) {
                   }}
                 />
               </View>
+=======
+ {showfromcom?
+<View style={{ marginTop: 30,position:"absolute",zIndex:4 ,  
+                  width:"100%",
+}}>
+            <FlatList
+              data={Object.values(data)}
+              keyExtractor={({ id }, index) => id}
+              renderItem={({ item }) => {
+                return(
+                <View 
+                  style={{
+                    
+                    padding: 10,
+                    borderBottomColor:"black",
+                    borderBottomWidth:2,
+                    
+                    height:60,
+                    backgroundColor: 'white',     
+                  }}>
+                  <View style={{ }} >
+                  
+                    <Text
+                                onPress={()=>{
+                                  data["name"] = item.display_place;
+                                setFrom(data)
+                                setShowfromcom(false)
+                                
+                                }
+                                }
+
+                      style={{
+                        position: 'absolute',
+                        color: 'black',  
+                        left: 10,
+                        fontSize: 14,
+                        fontFamily: '500',
+                      }}>
+                      {item.display_place}{' '} 
+                    </Text> 
+                    <Text
+                      style={{
+                        position: 'absolute',
+                        fontFamily: '300',
+                        color: '#ADAEC0',
+                        fontSize: 10,
+                        top: 25,
+                        left: 10,
+                      }}>
+                        { item.display_address}
+
+                    </Text>
+
+                   
+                  </View>
+                  
+                </View>
+                  )  }}
+            /> 
+
+          </View>  :null }
+          
+     
+>>>>>>> 47ec7fe8a09a3b7b0a7c280c0c998699e623b904
 
               <View style={styles.inputContainer}>
                 <TextInput
