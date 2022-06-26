@@ -254,6 +254,7 @@ export default function MapViewScreen({ navigation }) {
   const [focus, setFocus] = useState(null);
   const [to, setTo] = useState(null);
   const [routes, setRoutes] = useState(null);
+  const [showfromcom, setShowfromcom] = useState(false);
 
   let popupRef = createRef();
   let popupRef2 = createRef();
@@ -360,16 +361,24 @@ export default function MapViewScreen({ navigation }) {
               <TextInput
                 autoFocus={true}
                 style={styles.inputStyle}
+                
                 onChangeText={async (value) => 
                   {
                   setFrom(value)
 const completedata =await complete(from);
-console.log(completedata)
 setData(completedata)
+if(value.length==0||value.length==1)
+{
+setShowfromcom(false)
+ }
+ else{
+  setShowfromcom(true)
 
+ }
 
+  }
                 }
-                }
+                
                 placeholderTextColor={Colors.grey}
                 placeholder="From"
                 returnKeyType="next"
@@ -380,29 +389,40 @@ setData(completedata)
                   inputRef.current.focus();
                 }}
               />
-
-<View style={{ marginTop: 30,position:"absolute",zIndex:4 ,                    width:"100%",
+ {showfromcom?
+<View style={{ marginTop: 30,position:"absolute",zIndex:4 ,  
+                  width:"100%",
 }}>
             <FlatList
               data={Object.values(data)}
               keyExtractor={({ id }, index) => id}
               renderItem={({ item }) => {
                 return(
-                <View
+                <View 
                   style={{
+                    
                     padding: 10,
                     borderBottomColor:"black",
                     borderBottomWidth:2,
+                    
                     height:60,
                     backgroundColor: 'white',     
                   }}>
-                  <View style={{}}>
+                  <View style={{ }} >
                   
                     <Text
+                                onPress={()=>{
+                                  data["name"] = item.display_place;
+                                setFrom(data)
+                                setShowfromcom(false)
+                                
+                                }
+                                }
+
                       style={{
                         position: 'absolute',
                         color: 'black',  
-                        left: 30,
+                        left: 10,
                         fontSize: 14,
                         fontFamily: '500',
                       }}>
@@ -415,7 +435,7 @@ setData(completedata)
                         color: '#ADAEC0',
                         fontSize: 10,
                         top: 25,
-                        left: 30,
+                        left: 10,
                       }}>
                         { item.display_address}
 
@@ -426,11 +446,11 @@ setData(completedata)
                   
                 </View>
                   )  }}
-            />
-          </View> 
-          
-          
+            /> 
 
+          </View>  :null }
+          
+     
 
               <View style={styles.inputContainer}>
                 <TextInput
