@@ -367,6 +367,7 @@ export default function MapViewScreen({ navigation }) {
                   setFrom(value)
 const completedata =await complete(from);
 setData(completedata)
+console.log(completedata)
 if(value.length==0||value.length==1)
 {
 setShowfromcom(false)
@@ -414,8 +415,9 @@ setShowfromcom(false)
                                 onPress={()=>{
                                   data["name"] = item.display_place;
                                 setFrom(data)
+                                console.log(item.lat)
                                 setShowfromcom(false)
-                                
+                             
                                 }
                                 }
 
