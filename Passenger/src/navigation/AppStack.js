@@ -7,16 +7,18 @@ import LastrideScreen from "../screens/LastrideScreen"
 import MapViewScreen from "../screens/MapViewScreen";
 import RideScreen from '../screens/RideScreen';
 const Stack = createNativeStackNavigator();
-
+import SignupScreen from "../screens/SignupScreen";
 const AppStack = () => {
   return (
     <NavigationContainer>
-    <Stack.Navigator initialRouteName='Home' screenOptions={{headerShown:false}}>
+    <Stack.Navigator initialRouteName='SignUp' screenOptions={{headerShown:false}}>
       <Stack.Screen name="Home" component={HomeScreen} />
       <Stack.Screen name="Profile" component={ProfileScreen} />
       <Stack.Screen name="LastRides" component={LastrideScreen} />
       <Stack.Screen name="MapView" component={MapViewScreen} />
       <Stack.Screen name="Ride" component={RideScreen} />
+      <Stack.Screen name="SignUp" component={SignupScreen} />
+
     </Stack.Navigator>
   </NavigationContainer>
   )
