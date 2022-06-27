@@ -37,7 +37,7 @@ export const styles = StyleSheet.create({
     textDecorationLine: "underline",
   },
   text: {
-    fontSize: 18,
+    fontSize: 16,
     flex: 0.75,
     color: Colors.black,
     fontFamily: "Regular",
