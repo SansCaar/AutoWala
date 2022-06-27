@@ -44,7 +44,6 @@ const defaultAddress = [
 
 export default function HomeScreen({ navigation }) {
   const { location, setLocation } = useContext(AppContext);
-  console.log(location);
   // const [from, setFrom] = useState();
 
   return (

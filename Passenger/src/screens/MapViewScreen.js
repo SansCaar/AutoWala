@@ -4,6 +4,7 @@ import React, {
   useEffect,
   useRef,
   useState,
+  useCallback,
 } from "react";
 import {
   View,
@@ -17,16 +18,18 @@ import {
   KeyboardAvoidingView,
   Dimensions,
 } from "react-native";
+import Constants from "expo-constants";
+import MapView, { Marker, Polyline } from "react-native-maps";
 
 import Header from "../components/Header";
 import { Colors } from "../styles/Global";
 
 import BottomModal from "../components/BottomModal";
 import ConfirmModal from "../components/ConfirmModal";
-import MapView, { Marker, Polyline } from "react-native-maps";
+
 import AppContext from "../context/AppContext";
-import Constants from "expo-constants";
 import { getAddress, getRoutes, complete } from "../context/geocoding";
+import Autocomplete from "../components/AutoCompleteInput";
 
 export default function MapViewScreen({ navigation }) {
   const { location } = useContext(AppContext);
@@ -36,22 +39,51 @@ export default function MapViewScreen({ navigation }) {
   const [from, setFrom] = useState(null);
   const [to, setTo] = useState(null);
 
-  const [focus, setFocus] = useState(null);
-  
   const [routes, setRoutes] = useState(null);
-  const [showfromcom, setShowfromcom] = useState(false);
 
   const inputRef = useRef();
+  const map = useRef();
+
   let popupRef = createRef();
   let popupRef2 = createRef();
 
   useEffect(() => {
     async function apiCalls() {
-      const route = await getRoutes(from, to);
-      setRoutes(route);
+      if (from && to) {
+        const route = await getRoutes(from, to);
+        setRoutes(route);
+        console.log(routes);
+      }
     }
-    if (from && to) apiCalls();
-  }, []);
+    map.current.fitToCoordinates(
+      [
+        { latitude: from?.latitude, longitude: from?.longitude },
+        { latitude: to?.latitude, longitude: to?.longitude },
+      ],
+      {
+        animated: true,
+        edgePadding: {
+          top: 150,
+          right: 50,
+          bottom: 50,
+          left: 50,
+        },
+      }
+    );
+    apiCalls();
+  }, [from, to]);
+
+  const onMapReadyHandler = () => {
+    map.current.fitToSuppliedMarkers(["FROM", "TO"], {
+      animated: true,
+      edgePadding: {
+        top: 150,
+        right: 50,
+        bottom: 50,
+        left: 50,
+      },
+    });
+  };
 
   const setMarker = async (data, textInput) => {
     try {
@@ -63,18 +95,20 @@ export default function MapViewScreen({ navigation }) {
       if (textInput == "t2") {
         setTo(data);
       }
-    } catch (e) {
       console.log(e);
-    }
+    } catch (e) {}
   };
 
-  function renderMarker(latitude, longitude) {
-    <Marker
-      coordinate={{
-        latitude: latitude,
-        longitude: longitude,
-      }}
-    />;
+  function renderMarker(latitude, longitude, identifier) {
+    return (
+      <Marker
+        identifier={identifier}
+        coordinate={{
+          latitude: latitude,
+          longitude: longitude,
+        }}
+      />
+    );
   }
   function renderPolyLine(routes) {
     return (
@@ -84,8 +118,8 @@ export default function MapViewScreen({ navigation }) {
           ...routes,
           { latitude: to?.latitude, longitude: to?.longitude },
         ]}
-        strokeColor="#000" // fallback for when `strokeColors` is not supported by the map-provider
-        strokeWidth={4}
+        strokeColor={Colors.primary} // fallback for when `strokeColors` is not supported by the map-provider
+        strokeWidth={5}
       />
     );
   }
@@ -93,8 +127,9 @@ export default function MapViewScreen({ navigation }) {
     <KeyboardAvoidingView
       style={{ ...styles.container, marginTop: Constants.statusBarHeight }}
     >
-      {location?.latitude && location?.longitude&& (
+      {location?.latitude && location?.longitude && (
         <MapView
+          ref={map}
           style={styles.map}
           mapType="standard"
           showsUserLocation={true}
@@ -104,14 +139,21 @@ export default function MapViewScreen({ navigation }) {
             latitudeDelta: 0.00522,
             longitudeDelta: 0.00021,
           }}
+          onMapReady={onMapReadyHandler}
+          onMapLoaded={onMapReadyHandler}
+          // fitToSuppliedMarkers={{ markerIDs: ["FROM", "TO"], animate: true }}
           // onPress={(e) => {
           //   let { latitude, longitude } = e.nativeEvent.coordinate;
           //   setMarker({ latitude, longitude }, focus);
           // }}
         >
           {routes && renderPolyLine(routes)}
-          {from?.latitude && renderMarker(...from)}
-          {to?.latitude && renderMarker(...to)}
+          {from &&
+            from?.latitude &&
+            renderMarker(from?.latitude, from?.longitude, "FROM")}
+          {to &&
+            to?.latitude &&
+            renderMarker(to?.latitude, to?.longitude, "TRUE")}
         </MapView>
       )}
       <View
@@ -135,97 +177,68 @@ export default function MapViewScreen({ navigation }) {
               source={require("../../assets/locationArt.png")}
             />
             <View style={{ flex: 1 }}>
-              <TextInput
-                autoFocus={true}
-                style={styles.inputStyle}
-                onChangeText={async (value) => {
-                  setFrom((prev) => ({ ...prev, name: value }));
-                  if (value.length == 0 || value.length == 1) {
-                    setShowfromcom(false);
-                  } else {
-                    const completedata = await complete(from?.name);
-                    setData(completedata);
-                    setShowfromcom(true);
-                  }
-                }}
+              <Autocomplete
                 placeholderTextColor={Colors.grey}
                 placeholder="From"
                 returnKeyType="next"
-                onFocus={() => setFocus("t1")}
-                onBlur={() => setFocus(null)}
-                value={from?.name}
+                autoFocus={true}
+                label="Model"
+                style={styles.inputStyle}
+                data={data}
+                menuStyle={{ backgroundColor: "white" }}
+                value={from}
+                setValue={setFrom}
+                onChange={async (value) => {
+                  if (value.length > 1) {
+                    const completedata = await complete(from?.name);
+                    console.log(completedata);
+                    setData(completedata);
+                  }
+                }}
+                onSuggestionPress={(item) => {
+                  console.log(item.lat + "," + item.lon);
+
+                  setMarker(
+                    {
+                      latitude: parseFloat(item.lat),
+                      longitude: parseFloat(item.lon),
+                    },
+                    "t1"
+                  );
+                }}
                 onSubmitEditing={() => {
                   inputRef.current.focus();
                 }}
               />
-              {showfromcom ? (
-                <View
-                  style={{
-                    marginTop: 30,
-                    position: "absolute",
-                    zIndex: 4,
-                    width: "100%",
-                  }}
-                >
-                  <FlatList
-                    data={Object.values(data)}
-                    keyExtractor={({ id }) => id}
-                    renderItem={({ item }) => {
-                      return (
-                        <Pressable
-                          style={{
-                            padding: 10,
-                            borderBottomColor: "black",
-                            borderBottomWidth: 2,
-                            height: 60,
-                            backgroundColor: "white",
-                          }}
-                          onPress={() => {
-                            console.log(item.lat + "," + item.lon);
-                            setMarker(
-                              {
-                                latitude: parseFloat(item.lat),
-                                longitude: parseFloat(item.lon),
-                              },
-                              "t1"
-                            );
-                            setShowfromcom(false);
-                          }}
-                        >
-                          <View style={{}}>
-                            <Text
-                              style={{
-                                position: "absolute",
-                                color: "black",
-                                left: 30,
-                                fontSize: 14,
-                                // fontFamily: "500",
-                              }}
-                            >
-                              {item.display_place}{" "}
-                            </Text>
-                            <Text
-                              style={{
-                                position: "absolute",
-                                // fontFamily: "300",
-                                color: "#ADAEC0",
-                                fontSize: 10,
-                                top: 25,
-                                left: 30,
-                              }}
-                            >
-                              {item.display_address}
-                            </Text>
-                          </View>
-                        </Pressable>
-                      );
-                    }}
-                  />
-                </View>
-              ) : null}
               <View style={styles.inputContainer}>
-                <TextInput
-                  style={{ ...styles.inputStyle, flex: 1 }}
+                <Autocomplete
+                  placeholderTextColor={Colors.grey}
+                  placeholder="To"
+                  containerStyle={{ flex: 1 }}
+                  style={styles.inputStyle}
+                  data={data}
+                  menuStyle={{ backgroundColor: "white" }}
+                  value={to}
+                  setValue={setTo}
+                  onChange={async (value) => {
+                    if (value.length > 1) {
+                      const completedata = await complete(to?.name);
+                      console.log(completedata);
+                      setData(completedata);
+                    }
+                  }}
+                  onSuggestionPress={(item) => {
+                    console.log(item.lat + "," + item.lon);
+                    setMarker(
+                      {
+                        latitude: parseFloat(item.lat),
+                        longitude: parseFloat(item.lon),
+                      },
+                      "t2"
+                    );
+                  }}
+                />
+                {/* <TextInput
                   onChangeText={(value) =>
                     setTo((prev) => {
                       return { ...prev, name: value };
@@ -236,7 +249,7 @@ export default function MapViewScreen({ navigation }) {
                   onBlur={() => setFocus(null)}
                   value={to?.name}
                   ref={inputRef}
-                />
+                /> */}
                 <Pressable
                   onPress={async () => {
                     // const fromcord = await getCoordinates(from);

@@ -2,7 +2,7 @@ import { View, Text, Pressable, Image } from "react-native";
 import React from "react";
 import { styles } from "../styles/login_design.js";
 import { Colors } from "../styles/Global.js";
-
+// import signInWithGoogleAsync from "./googlesignin.js";
 const SignupScreen = () => {
   return (
     <>
@@ -15,7 +15,12 @@ const SignupScreen = () => {
         <View style={styles.con}>
           <View>
             <View style={styles.logo}></View>
-            <Pressable style={styles.btn}>
+            <Pressable
+              style={styles.btn}
+              // onPress={async () => {
+              //   await signInWithGoogleAsync()
+              // }}
+            >
               <Image
                 source={require("../../assets/g1.png")}
                 style={styles.img}
