@@ -52,7 +52,7 @@ export default function HomeScreen({ navigation }) {
       <Stat balance={balance} point={point} location="Home" />
       <View style={styles.map}>
         <Text style={styles.map_text}>Your Location</Text>
-        <View style={{ marginTop: 16, borderRadius: 24 }}>
+        <View style={{ marginTop: 16, borderRadius: 16,overflow:"hidden" }}>
           <MapView
             style={styles.map_img}
             mapType="standard"
