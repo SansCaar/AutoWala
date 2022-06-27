@@ -23,10 +23,8 @@ async function get(url) {
 }
 
 export async function getAddress(lat, long) {
-  console.log(lat + "," + long);
   let url = BASE_URL + `/reverse?access_key=${APIKEY}&query=${lat},${long}`;
   let response = await get(url);
-  console.log(response.data)
   response = response.data[0]['label']
   return response;
 }
@@ -48,10 +46,8 @@ export async function getSuggestions(input){
 }
 
 export async function getRoutes(from, to){
-  console.log(from)
   let url = ROUTE_URL + `?apiKey=${ROUTE_APIKEY}&waypoints=${from.latitude}%2C${from.longitude}%7C${to.latitude}%2C${to.longitude}&mode=drive`
   let res = await get(url);
-  console.log(res)
   res = res.features[0].geometry.coordinates[0];
   res = res.map(cords => ({longitude:cords[0], latitude:cords[1]}))
   return res;
@@ -61,8 +57,6 @@ export async function getRoutes(from, to){
   var url =
     'https://api.locationiq.com/v1/autocomplete?key=pk.47f78342a09e37b19d7be8701334eb01&q=' +
     search+'&countrycodes=NP&limit=5';  
-  console.log(url);
-
   let response = await fetch(url);   
   let data = await response.json();
   return data;

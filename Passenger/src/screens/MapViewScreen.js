@@ -30,99 +30,88 @@ import { getAddress, getRoutes, complete } from "../context/geocoding";
 
 export default function MapViewScreen({ navigation }) {
   const { location } = useContext(AppContext);
-  const inputRef = useRef();
   const [data, setData] = useState([]);
 
   const [searching, setSearching] = useState(null);
   const [from, setFrom] = useState(null);
-  const [focus, setFocus] = useState(null);
   const [to, setTo] = useState(null);
-  const [routes, setRoutes] = useState(null);
 
+  const [focus, setFocus] = useState(null);
+  
+  const [routes, setRoutes] = useState(null);
+  const [showfromcom, setShowfromcom] = useState(false);
+
+  const inputRef = useRef();
   let popupRef = createRef();
   let popupRef2 = createRef();
 
   useEffect(() => {
     async function apiCalls() {
-      if (from && to) {
-        const route = await getRoutes(from, to);
-        setRoutes(route);
-      }
+      const route = await getRoutes(from, to);
+      setRoutes(route);
     }
-    apiCalls();
+    if (from && to) apiCalls();
   }, []);
-  const setMarker = async (data) => {
+
+  const setMarker = async (data, textInput) => {
     try {
       const address = await getAddress(data.latitude, data.longitude);
       data["name"] = address;
-      if (focus) {
-        if (focus == "t1") {
-          setFrom(data);
-        }
-        if (focus == "t2") {
-          setTo(data);
-        }
+      if (textInput == "t1") {
+        setFrom(data);
+      }
+      if (textInput == "t2") {
+        setTo(data);
       }
     } catch (e) {
       console.log(e);
     }
   };
+
+  function renderMarker(latitude, longitude) {
+    <Marker
+      coordinate={{
+        latitude: latitude,
+        longitude: longitude,
+      }}
+    />;
+  }
+  function renderPolyLine(routes) {
+    return (
+      <Polyline
+        coordinates={[
+          { latitude: from?.latitude, longitude: from?.longitude },
+          ...routes,
+          { latitude: to?.latitude, longitude: to?.longitude },
+        ]}
+        strokeColor="#000" // fallback for when `strokeColors` is not supported by the map-provider
+        strokeWidth={4}
+      />
+    );
+  }
   return (
     <KeyboardAvoidingView
       style={{ ...styles.container, marginTop: Constants.statusBarHeight }}
     >
-      {(routes || true) && location?.latitude && location?.longitude && (
+      {location?.latitude && location?.longitude&& (
         <MapView
           style={styles.map}
           mapType="standard"
           showsUserLocation={true}
-          followsUserLocation={true}
           initialRegion={{
             latitude: location?.latitude,
             longitude: location?.longitude,
             latitudeDelta: 0.00522,
             longitudeDelta: 0.00021,
           }}
-          onPress={(e) => {
-            let { latitude, longitude } = e.nativeEvent.coordinate;
-            setMarker({ latitude, longitude });
-          }}
+          // onPress={(e) => {
+          //   let { latitude, longitude } = e.nativeEvent.coordinate;
+          //   setMarker({ latitude, longitude }, focus);
+          // }}
         >
-          {routes && (
-            <Polyline
-              coordinates={[
-                { latitude: from?.latitude, longitude: from?.longitude },
-                ...routes,
-                { latitude: to?.latitude, longitude: to?.longitude },
-              ]}
-              strokeColor="#000" // fallback for when `strokeColors` is not supported by the map-provider
-              strokeColors={[
-                "#7F0000",
-                "#00000000", // no color, creates a "long" gradient between the previous and next coordinate
-                "#B24112",
-                "#E5845C",
-                "#238C23",
-                "#7F0000",
-              ]}
-              strokeWidth={4}
-            />
-          )}
-          {from?.latitude && from?.longitude && (
-            <Marker
-              coordinate={{
-                latitude: from?.latitude,
-                longitude: from?.longitude,
-              }}
-            />
-          )}
-          {to?.latitude && to?.longitude && (
-            <Marker
-              coordinate={{
-                latitude: to?.latitude,
-                longitude: to?.longitude,
-              }}
-            />
-          )}
+          {routes && renderPolyLine(routes)}
+          {from?.latitude && renderMarker(...from)}
+          {to?.latitude && renderMarker(...to)}
         </MapView>
       )}
       <View
@@ -140,7 +129,6 @@ export default function MapViewScreen({ navigation }) {
           }}
         />
         <View style={{ paddingHorizontal: 24 }}>
-          {/* <Text style={styles.h1}>Where are you going?</Text> */}
           <View style={styles.inputsContainer}>
             <Image
               style={styles.dotsImage}
@@ -151,10 +139,14 @@ export default function MapViewScreen({ navigation }) {
                 autoFocus={true}
                 style={styles.inputStyle}
                 onChangeText={async (value) => {
-                  setFrom(value);
-                  const completedata = await complete(from);
-                  console.log(completedata);
-                  setData(completedata);
+                  setFrom((prev) => ({ ...prev, name: value }));
+                  if (value.length == 0 || value.length == 1) {
+                    setShowfromcom(false);
+                  } else {
+                    const completedata = await complete(from?.name);
+                    setData(completedata);
+                    setShowfromcom(true);
+                  }
                 }}
                 placeholderTextColor={Colors.grey}
                 placeholder="From"
@@ -166,60 +158,71 @@ export default function MapViewScreen({ navigation }) {
                   inputRef.current.focus();
                 }}
               />
-
-              <View
-                style={{
-                  marginTop: 30,
-                  position: "absolute",
-                  zIndex: 4,
-                  width: "100%",
-                }}
-              >
-                <FlatList
-                  data={Object.values(data)}
-                  keyExtractor={({ id }) => id}
-                  renderItem={({ item }) => {
-                    return (
-                      <View
-                        style={{
-                          padding: 10,
-                          borderBottomColor: "black",
-                          borderBottomWidth: 2,
-                          height: 60,
-                          backgroundColor: "white",
-                        }}
-                      >
-                        <View style={{}}>
-                          <Text
-                            style={{
-                              position: "absolute",
-                              color: "black",
-                              left: 30,
-                              fontSize: 14,
-                              // fontFamily: "500",
-                            }}
-                          >
-                            {item.display_place}{" "}
-                          </Text>
-                          <Text
-                            style={{
-                              position: "absolute",
-                              // fontFamily: "300",
-                              color: "#ADAEC0",
-                              fontSize: 10,
-                              top: 25,
-                              left: 30,
-                            }}
-                          >
-                            {item.display_address}
-                          </Text>
-                        </View>
-                      </View>
-                    );
+              {showfromcom ? (
+                <View
+                  style={{
+                    marginTop: 30,
+                    position: "absolute",
+                    zIndex: 4,
+                    width: "100%",
                   }}
-                />
-              </View>
-
+                >
+                  <FlatList
+                    data={Object.values(data)}
+                    keyExtractor={({ id }) => id}
+                    renderItem={({ item }) => {
+                      return (
+                        <Pressable
+                          style={{
+                            padding: 10,
+                            borderBottomColor: "black",
+                            borderBottomWidth: 2,
+                            height: 60,
+                            backgroundColor: "white",
+                          }}
+                          onPress={() => {
+                            console.log(item.lat + "," + item.lon);
+                            setMarker(
+                              {
+                                latitude: parseFloat(item.lat),
+                                longitude: parseFloat(item.lon),
+                              },
+                              "t1"
+                            );
+                            setShowfromcom(false);
+                          }}
+                        >
+                          <View style={{}}>
+                            <Text
+                              style={{
+                                position: "absolute",
+                                color: "black",
+                                left: 30,
+                                fontSize: 14,
+                                // fontFamily: "500",
+                              }}
+                            >
+                              {item.display_place}{" "}
+                            </Text>
+                            <Text
+                              style={{
+                                position: "absolute",
+                                // fontFamily: "300",
+                                color: "#ADAEC0",
+                                fontSize: 10,
+                                top: 25,
+                                left: 30,
+                              }}
+                            >
+                              {item.display_address}
+                            </Text>
+                          </View>
+                        </Pressable>
+                      );
+                    }}
+                  />
+                </View>
+              ) : null}
               <View style={styles.inputContainer}>
                 <TextInput
                   style={{ ...styles.inputStyle, flex: 1 }}
