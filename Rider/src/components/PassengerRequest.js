@@ -35,8 +35,8 @@ const PassengerRequest = ({data}) => {
       <View style={styles.right}>
         <Text style={styles.r_text}>{ride_status} away</Text>
         <Pressable onPress={ async()=>{
-          
          var data =await setAccepted(_id)
+         
       
          }} style={{ backgroundColor: "#78E975", ...styles.btn }}>
           <Icon name="check" size={32} color={Colors.white} />
