@@ -20,16 +20,14 @@ import { Colors } from "../styles/Global";
 import Icon from "@expo/vector-icons/Feather";
 import PassengerRequest from "../components/PassengerRequest";
 import { getrides  } from "../context/api";
-const ride=async ()=>{
-  const allrides = await getrides()
-  console.log(allrides)
-  setPassenger(allrides)
-}
+
 const RidemapScreen =  ({ navigation }) => {
   const [passenger,setPassenger] =useState([]);
-
- ride()
- console.log("passenger"+passenger)
+  const ride =async   ()=>{
+    const allrides = await getrides()
+    setPassenger(allrides)
+  }
+  ride()
   return (
     <View style={styles.con}>
       <Header
@@ -41,16 +39,14 @@ const RidemapScreen =  ({ navigation }) => {
       <View style={styles.bottomWrapper}>
         <View style={styles.bottom_con}>
           <Text style={styles.b_text}>Ride Request</Text>
-          {/* <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}
-           > */}
-            {  
+          <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+            {
             passenger.map((data, i) => {
-              console.log("ok undefined"+passenger)
+              console.log(data)
             return <PassengerRequest data={data} key={i} />;
+          })         
           }
-          )         
-          }
-          {/* </ScrollView> */}
+          </ScrollView>
         </View>
       </View>
     </View>

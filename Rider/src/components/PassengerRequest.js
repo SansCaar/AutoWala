@@ -1,39 +1,44 @@
-import { View, Text, StyleSheet,Image,Pressable } from "react-native";
+import { View, Text, StyleSheet,Image,Pressable, Dimensions } from "react-native";
 import React from "react";
 import { Colors } from "../styles/Global";
 import Icon from "@expo/vector-icons/Feather";
 import Box from "../components/Box";
-
+import {setAccepted} from "../context/api"
 
 const PassengerRequest = ({data}) => {
-  console.log(data)
-    const {_id,ride_available} = data;
+  
+    const {_id,ride_available,ride_noofseats,user_fromlatitude,user_tolatitude} = data;
+    console.log(data)
   return (
-    <Box style={styles.box} key={key}>
+    <Box style={styles.box} >
       <View style={styles.left}>
-        <Text style={styles.l_text}>{name}</Text>
+        <Text style={styles.l_text}>{ride_available}</Text>
         <View style={styles.mid}>
           <Image
             source={require("../../assets/locationArt.png")}
             style={styles.l_img}
           />
           <View style={styles.l_location}>
-            <Text style={{ fontFamily: "Regular" }}>{to}</Text>
+            <Text style={{ fontFamily: "Regular" }}>{user_fromlatitude}</Text>
             <Text style={{ fontFamily: "Regular" }}>
-              {from}{"  "}{" "}
-              <Text style={{ color: Colors.light_grey }}>({distance})</Text>
+              {user_tolatitude}{"  "}{" "}
+              <Text style={{ color: Colors.light_grey }}></Text>
             </Text>
           </View>
         </View>
-        <Text style={styles.text}>No. of Passenger: {noPassenger}</Text>
+        <Text style={styles.text}>No. of Passenger: {ride_noofseats}</Text>
         <Text style={styles.text}>
-          Total Price: 25*5 ={" "}
-          <Text style={{ color: "#78E975", ...styles.text }}>125</Text>
+          Total Price: 25*{ride_noofseats} ={" "}
+          <Text style={{ color: "#78E975", ...styles.text }}>{25*ride_noofseats}</Text>
         </Text>
       </View>
       <View style={styles.right}>
         <Text style={styles.r_text}>{ride_available} away</Text>
-        <Pressable style={{ backgroundColor: "#78E975", ...styles.btn }}>
+        <Pressable onPress={ async()=>{
+          
+         var data =await setAccepted(_id)
+      
+         }} style={{ backgroundColor: "#78E975", ...styles.btn }}>
           <Icon name="check" size={32} color={Colors.white} />
         </Pressable>
         <Pressable style={{ backgroundColor: "#FF3838", ...styles.btn }}>
@@ -45,11 +50,11 @@ const PassengerRequest = ({data}) => {
 };
 const styles = StyleSheet.create({
   box: {
+    width:"100%",
     height: "auto",
-    marginVertical: 8,
-    elevation: 2,
     flex:1,
-    justifyContent: "space-between",
+    marginVertical: 8,
+    elevation: 5,
     alignItems: "center",
     flexDirection: "row",
     marginRight:8,
@@ -73,6 +78,7 @@ const styles = StyleSheet.create({
   right: {
     alignSelf: "flex-end",
     flex: 1 / 4,
+    marginLeft:50,
     flexDirection: "column",
   },
   r_text: {

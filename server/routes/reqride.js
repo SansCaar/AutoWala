@@ -1,10 +1,11 @@
 import express from "express";
-import {setRide,getRide, getValidRides} from '../controller/_reqrides.js';
+import {setRide,getRide, getValidRides,setAccepted} from '../controller/_reqrides.js';
 const reqriderouter = express.Router();
 
 reqriderouter.route("/").get(getRide)
 reqriderouter.route("/post").post(setRide)
-reqriderouter.route("/get").get(getValidRides)
+reqriderouter.route("/getrides").get(getValidRides)
+reqriderouter.route("/accept/:id").get(setAccepted)
 
 // router.route("/:id").get(getOneUser)
 // router.route("/:id").delete(dltUser)

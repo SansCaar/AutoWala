@@ -55,5 +55,5 @@ const reqrideSchema = new mongoose.Schema({
 
 });
 
-const reqrideschema = mongoose.model("Reqride", reqrideSchema);
+const reqrideschema = mongoose.model("reqride", reqrideSchema);
 export default reqrideschema;
