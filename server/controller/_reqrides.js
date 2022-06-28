@@ -20,14 +20,28 @@ export const setRide = async (req, res) => {
   
   export const getValidRides = async (req, res) => {
     try {
-      const _id = req.params.id;
-      const singleUser = await reqrideschema.find({ride_available:0,ride_booked:{'$ne':1},ride_ended:{'$ne':1}});
-      if (!singleUser) {
+      const validrides = await reqrideschema.find({ride_available:0,ride_booked:{'$ne':0},ride_ended:{'$ne':0}});
+      if (!validrides) {
         return res.status(404).send();
       } else {
-        res.status(201).send(singleUser);
+        res.status(201).send(validrides);
       }
     } catch (error) {
       res.status(500).send(error);
+    }
+  };
+  export const setAccepted = async (req, res) => {
+    try {
+      const _id = req.params.id;
+      console.log(_id)
+      const updateRide = await reqrideschema.findByIdAndUpdate(_id, {
+        ride_booked: 0,
+      });
+
+      console.log(updateRide)
+      updateRide.save()
+      res.status(201).send(updateRide);
+    } catch (error) {
+      res.status(400).send(error);
     }
   };
