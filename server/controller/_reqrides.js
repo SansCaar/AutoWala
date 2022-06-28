@@ -46,3 +46,18 @@ export const setRide = async (req, res) => {
       res.status(400).send(error);
     }
   };
+
+  export const checkAccepted = async (req, res) => {
+    try {
+      const _id = req.params.id;
+      const accepted = await userSchema.findById(_id);
+      if (!accepted) {
+        return res.status(404).send();
+      } else {
+        res.status(201).send(accepted);
+      }
+    } catch (error) {
+      res.status(500).send(error);
+    }
+  };
+  
