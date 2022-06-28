@@ -30,7 +30,7 @@ const reqrideSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
-  ride_State:{
+  ride_Status:{
     type: String,
     required:true
 
