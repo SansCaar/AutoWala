@@ -41,21 +41,16 @@ ride_to:{
     type: Number,
     required: true,
   },
-  ride_available:{
-    type: Number,
-    required:true
-  },
-  ride_booked :{
-    type: Number,
-    required:true
-  },
-   ride_ended:{
-    type: Number,
+  ride_status:{
+    type: String,
     required:true
   },
   ride_code:{
     type: Number,
     required:true
+  },
+  rider_id:{
+    type:Number,
   }
 
 });

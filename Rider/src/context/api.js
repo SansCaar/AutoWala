@@ -5,7 +5,6 @@ export async function getrides() {
     return data;
   }
   export async function setAccepted(id) {
-    alert(id)
     var url = "http://192.168.1.17:3001/v1/api/reqride/accept/"+id;
     let response = await fetch(url);
     let data = await response.json();
