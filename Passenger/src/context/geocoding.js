@@ -30,6 +30,7 @@ export async function getAddress(lat, long) {
   let url = BASE_URL + `/reverse?access_key=${APIKEY}&query=${lat},${long}`;
   let response = await get(url);
   response = response.data[0]["label"];
+  console.log("API1");
   return response;
 }
 
@@ -39,6 +40,8 @@ export async function getCoordinates(place_name) {
   let response = await fetch(url);
   let data = await response.json();
   let objdata = data.data[0];
+  console.log("API2");
+
   return objdata;
 }
 
@@ -47,6 +50,8 @@ export async function getSuggestions(input) {
     AUTOCOMPLETE_URL + `?key=${AUTOCOMPLETE_APIKEY}&q=${input}&countrycodes=NP`;
   let res = await fetch(url);
   res = res.json();
+  console.log("API3");
+
   return res;
 }
 
@@ -57,6 +62,8 @@ export async function getRoutes(from, to) {
   let res = await get(url);
   res = res.features[0].geometry.coordinates[0];
   res = res.map((cords) => ({ longitude: cords[0], latitude: cords[1] }));
+  console.log("API4");
+
   return res;
 }
 
@@ -67,6 +74,8 @@ export async function complete(search) {
     "&countrycodes=NP&limit=5";
   let response = await fetch(url);
   let data = await response.json();
+  console.log("API15");
+
   if (data.error) return null;
   return data;
 }
@@ -107,7 +116,7 @@ export async function requestRide(data) {
       },
     });
     console.log(res);
-    return true;
+    return res.data._id;
   } catch (error) {
     console.log(error);
   }

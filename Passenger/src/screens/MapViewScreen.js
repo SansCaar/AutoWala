@@ -42,21 +42,21 @@ export default function MapViewScreen({ navigation }) {
 
   const [routes, setRoutes] = useState(null);
 
-  const inputRef = useRef();
-  const map = useRef();
+  const inputRef = useRef(null);
+  const map = useRef(null);
 
   let popupRef = createRef();
   let popupRef2 = createRef();
 
   useEffect(() => {
     async function apiCalls() {
-      if (from && to) {
+      if (from?.latitude && to?.latitude) {
         const route = await getRoutes(from, to);
         setRoutes(route);
-        console.log(routes);
+        console.log('hi');
       }
     }
-    map.current.fitToCoordinates(
+    map?.current?.fitToCoordinates(
       [
         { latitude: from?.latitude, longitude: from?.longitude },
         { latitude: to?.latitude, longitude: to?.longitude },
@@ -214,9 +214,10 @@ export default function MapViewScreen({ navigation }) {
                   data={data}
                   menuStyle={{ backgroundColor: "white" }}
                   value={to}
+                  ref={inputRef}
                   setValue={setTo}
                   onChange={async (value) => {
-                    if (value.length > 1) {
+                    if (value.length > 2) {
                       const completedata = await complete(to?.name);
                       console.log(completedata);
                       setData(completedata);
@@ -234,8 +235,10 @@ export default function MapViewScreen({ navigation }) {
                   }}
                 />
                 <Pressable
-                  onPress={async () => {
-                    popupRef.show();
+                  onPress={() => {
+                    if (from?.latitude && to?.latitude) {
+                      popupRef.show();
+                    }
                   }}
                   style={styles.sendButton}
                 >
@@ -262,22 +265,25 @@ export default function MapViewScreen({ navigation }) {
             onPressOk={async () => {
               let res = await requestRide({
                 user_id: 1243,
-                user_name:'Sanskar',
+                user_name: "Sanskar",
                 from,
                 to,
-                ride_code: parseInt(Math.random()*10000),
-                ride_noofseats:4,
-                ride_status:'AVAILABLE',
-                ride_toc:new Date().toISOString()
+                ride_code: parseInt(Math.random() * 10000),
+                ride_noofseats: 4,
+                ride_status: "AVAILABLE",
+                ride_toc: new Date().toISOString(),
               });
               console.log("hello: " + res);
               if (res) {
                 setSearching(true);
+                // const apiCall = setInterval(()=>{
+
+                // }, 5000)
                 setTimeout(() => {
-                  navigation.navigate("Ride");
-                  setSearching(false);
-                }, 5000);
+                  navigation.navigate("Ride", {rideId:res});
+                },5000 );
               }
+              setSearching(false);
             }}
             buttons={searching ? false : true}
           >

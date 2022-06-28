@@ -3,14 +3,32 @@ import { StyleSheet, Text, View, Image, Linking } from "react-native";
 import CodePopup from "../components/CodePopup";
 import Header from "../components/Header";
 
-const rideDetails = { title: 'Your Ride', name:"Ram Prasad", from:"Golpark", to:"Devinagar", time:"12min", code:12345, phoneNumber:'+9779847000000' };
-const RideScreen = ({ navigation }) => {
+const rideDetails = {
+  title: "Your Ride",
+  name: "Ram Prasad",
+  from: "Golpark",
+  to: "Devinagar",
+  time: "12min",
+  code: 12345,
+  phoneNumber: "+9779847000000",
+};
+const RideScreen = ({ navigation, route }) => {
+  const { rideID } = route.params;
+  console.log(rideID);
+
   return (
     <View style={{ flex: 1 }}>
       <Image source={require("../../assets/map2.png")} style={styles.map} />
-      <View style={{ position: "absolute", flex:1, paddingHorizontal: 24, ...StyleSheet.absoluteFill }}>
+      <View
+        style={{
+          position: "absolute",
+          flex: 1,
+          paddingHorizontal: 24,
+          ...StyleSheet.absoluteFill,
+        }}
+      >
         <Header iconL="arrow-left" onPressL={navigation.goBack} />
-        <CodePopup {...rideDetails}/>
+        <CodePopup {...rideDetails} />
       </View>
     </View>
   );
