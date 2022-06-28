@@ -50,7 +50,7 @@ export const setRide = async (req, res) => {
   export const checkAccepted = async (req, res) => {
     try {
       const _id = req.params.id;
-      const accepted = await userSchema.findById(_id);
+      const accepted = await reqrideschema.findById(_id);
       if (!accepted) {
         return res.status(404).send();
       } else {
