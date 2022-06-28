@@ -6,8 +6,9 @@ import ProfileScreen from "../screens/ProfileScreen";
 import LastrideScreen from "../screens/LastrideScreen"
 import MapViewScreen from "../screens/MapViewScreen";
 import RideScreen from '../screens/RideScreen';
+
+
 const Stack = createNativeStackNavigator();
-import SignupScreen from "../screens/SignupScreen";
 const AppStack = () => {
   return (
     <NavigationContainer>
@@ -17,7 +18,8 @@ const AppStack = () => {
       <Stack.Screen name="LastRides" component={LastrideScreen} />
       <Stack.Screen name="MapView" component={MapViewScreen} />
       <Stack.Screen name="Ride" component={RideScreen} />
-      <Stack.Screen name="SignUp" component={SignupScreen} />
+      {/* <Stack.Screen name="SignUp" component={SignupScreen} /> */}
+      {/* <Stack.Screen name="GetDetail" component={GetDetailScreen} /> */}
 
     </Stack.Navigator>
   </NavigationContainer>

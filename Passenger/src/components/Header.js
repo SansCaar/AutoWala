@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
   headerContainer: {
     flexDirection: "row",
     marginTop: Constants.statusBarHeight+20,
-    marginBottom: 20,
+    marginBottom: 16,
     alignItems: "center",
   },
   headerText: {

@@ -15,10 +15,12 @@ const SignupScreen = () => {
         <View style={styles.con}>
           <View>
             <View style={styles.logo}></View>
-            <Pressable style={styles.btn} onPress={async()=>
-            {
-alert("hello")
-}}>
+            <Pressable
+              style={styles.btn}
+              // onPress={async () => {
+              //   await signInWithGoogleAsync()
+              // }}
+            >
               <Image
                 source={require("../../assets/g1.png")}
                 style={styles.img}

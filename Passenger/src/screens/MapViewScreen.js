@@ -1,4 +1,11 @@
-import React, { createRef, useContext, useRef, useState } from "react";
+import React, {
+  createRef,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+  useCallback,
+} from "react";
 import {
   View,
   Text,
@@ -11,329 +18,142 @@ import {
   KeyboardAvoidingView,
   Dimensions,
 } from "react-native";
+import Constants from "expo-constants";
+import MapView, { Marker, Polyline } from "react-native-maps";
 
 import Header from "../components/Header";
 import { Colors } from "../styles/Global";
 
 import BottomModal from "../components/BottomModal";
 import ConfirmModal from "../components/ConfirmModal";
-import MapView, { Marker, Polyline } from "react-native-maps";
+
 import AppContext from "../context/AppContext";
-import Constants from "expo-constants";
-import { getAddress, getRoutes ,complete} from "../context/geocoding";
+import { getAddress, getRoutes, complete } from "../context/geocoding";
+import Autocomplete from "../components/AutoCompleteInput";
 
 export default function MapViewScreen({ navigation }) {
-  const random = [
-    {
-      latitude: 83.46657,
-      longitude: 27.718867,
-    },
-    {
-      latitude: 83.466549,
-      longitude: 27.718844,
-    },
-    {
-      latitude: 83.46633,
-      longitude: 27.718691,
-    },
-    {
-      latitude: 83.466158,
-      longitude: 27.718568,
-    },
-    {
-      latitude: 83.466053,
-      longitude: 27.718429,
-    },
-    {
-      latitude: 83.466022,
-      longitude: 27.718296,
-    },
-    {
-      latitude: 83.466022,
-      longitude: 27.717776,
-    },
-    {
-      latitude: 83.465981,
-      longitude: 27.717203,
-    },
-    {
-      latitude: 83.466017,
-      longitude: 27.716966,
-    },
-    {
-      latitude: 83.466036,
-      longitude: 27.716817,
-    },
-    {
-      latitude: 83.46607,
-      longitude: 27.716658,
-    },
-    {
-      latitude: 83.466141,
-      longitude: 27.716456,
-    },
-    {
-      latitude: 83.466305,
-      longitude: 27.716059,
-    },
-    {
-      latitude: 83.466359,
-      longitude: 27.715861,
-    },
-    {
-      latitude: 83.466388,
-      longitude: 27.71565,
-    },
-    {
-      latitude: 83.466456,
-      longitude: 27.71524,
-    },
-    {
-      latitude: 83.466607,
-      longitude: 27.714378,
-    },
-    {
-      latitude: 83.466645,
-      longitude: 27.714088,
-    },
-    {
-      latitude: 83.466676,
-      longitude: 27.713901,
-    },
-    {
-      latitude: 83.466698,
-      longitude: 27.713787,
-    },
-    {
-      latitude: 83.466701,
-      longitude: 27.71377,
-    },
-    {
-      latitude: 83.466764,
-      longitude: 27.713385,
-    },
-    {
-      latitude: 83.46678,
-      longitude: 27.71328,
-    },
-    {
-      latitude: 83.466828,
-      longitude: 27.713078,
-    },
-    {
-      latitude: 83.466857,
-      longitude: 27.712972,
-    },
-    {
-      latitude: 83.466947,
-      longitude: 27.712688,
-    },
-    {
-      latitude: 83.466967,
-      longitude: 27.712655,
-    },
-    {
-      latitude: 83.466977,
-      longitude: 27.712612,
-    },
-    {
-      latitude: 83.466984,
-      longitude: 27.71255,
-    },
-    {
-      latitude: 83.467009,
-      longitude: 27.712462,
-    },
-    {
-      latitude: 83.467035,
-      longitude: 27.712353,
-    },
-    {
-      latitude: 83.467042,
-      longitude: 27.712261,
-    },
-    {
-      latitude: 83.467169,
-      longitude: 27.711856,
-    },
-    {
-      latitude: 83.467159,
-      longitude: 27.711822,
-    },
-    {
-      latitude: 83.467328,
-      longitude: 27.711325,
-    },
-    {
-      latitude: 83.467662,
-      longitude: 27.710149,
-    },
-    {
-      latitude: 83.467768,
-      longitude: 27.709588,
-    },
-    {
-      latitude: 83.467784,
-      longitude: 27.709142,
-    },
-    {
-      latitude: 83.467763,
-      longitude: 27.708827,
-    },
-    {
-      latitude: 83.467727,
-      longitude: 27.708281,
-    },
-    {
-      latitude: 83.467375,
-      longitude: 27.706732,
-    },
-    {
-      latitude: 83.467345,
-      longitude: 27.706612,
-    },
-    {
-      latitude: 83.46718,
-      longitude: 27.70588,
-    },
-    {
-      latitude: 83.467111,
-      longitude: 27.705576,
-    },
-    {
-      latitude: 83.467006,
-      longitude: 27.705138,
-    },
-    {
-      latitude: 83.466936,
-      longitude: 27.704801,
-    },
-    {
-      latitude: 83.466894,
-      longitude: 27.704612,
-    },
-    {
-      latitude: 83.466746,
-      longitude: 27.703968,
-    },
-    {
-      latitude: 83.466415,
-      longitude: 27.702556,
-    },
-    {
-      latitude: 83.466289,
-      longitude: 27.701971,
-    },
-    {
-      latitude: 83.466112,
-      longitude: 27.70115,
-    },
-    {
-      latitude: 83.466015,
-      longitude: 27.700764,
-    },
-    {
-      latitude: 83.465793,
-      longitude: 27.69987,
-    },
-    {
-      latitude: 83.465616,
-      longitude: 27.698975,
-    },
-    {
-      latitude: 83.465626,
-      longitude: 27.6989,
-    },
-  ];
   const { location } = useContext(AppContext);
-  const inputRef = useRef();
   const [data, setData] = useState([]);
 
   const [searching, setSearching] = useState(null);
   const [from, setFrom] = useState(null);
-  const [focus, setFocus] = useState(null);
   const [to, setTo] = useState(null);
+
   const [routes, setRoutes] = useState(null);
-  const [showfromcom, setShowfromcom] = useState(false);
+
+  const inputRef = useRef();
+  const map = useRef();
 
   let popupRef = createRef();
   let popupRef2 = createRef();
 
-  const setMarker = async (data) => {
+  useEffect(() => {
+    async function apiCalls() {
+      if (from && to) {
+        const route = await getRoutes(from, to);
+        setRoutes(route);
+        console.log(routes);
+      }
+    }
+    map.current.fitToCoordinates(
+      [
+        { latitude: from?.latitude, longitude: from?.longitude },
+        { latitude: to?.latitude, longitude: to?.longitude },
+      ],
+      {
+        animated: true,
+        edgePadding: {
+          top: 150,
+          right: 50,
+          bottom: 50,
+          left: 50,
+        },
+      }
+    );
+    apiCalls();
+  }, [from, to]);
+
+  const onMapReadyHandler = () => {
+    map.current.fitToSuppliedMarkers(["FROM", "TO"], {
+      animated: true,
+      edgePadding: {
+        top: 150,
+        right: 50,
+        bottom: 50,
+        left: 50,
+      },
+    });
+  };
+
+  const setMarker = async (data, textInput) => {
     try {
       const address = await getAddress(data.latitude, data.longitude);
       data["name"] = address;
-      if (focus) {
-        if (focus == "t1") {
-          setFrom(data);
-        }
-        if (focus == "t2") {
-          setTo(data);
-        }
+      if (textInput == "t1") {
+        setFrom(data);
       }
-      let route = from && to ? await getRoutes(from, to) : null;
-      setRoutes(route);
-      console.log(routes);
-    } catch (e) {
+      if (textInput == "t2") {
+        setTo(data);
+      }
       console.log(e);
-    }
+    } catch (e) {}
   };
+
+  function renderMarker(latitude, longitude, identifier) {
+    return (
+      <Marker
+        identifier={identifier}
+        coordinate={{
+          latitude: latitude,
+          longitude: longitude,
+        }}
+      />
+    );
+  }
+  function renderPolyLine(routes) {
+    return (
+      <Polyline
+        coordinates={[
+          { latitude: from?.latitude, longitude: from?.longitude },
+          ...routes,
+          { latitude: to?.latitude, longitude: to?.longitude },
+        ]}
+        strokeColor={Colors.primary} // fallback for when `strokeColors` is not supported by the map-provider
+        strokeWidth={5}
+      />
+    );
+  }
   return (
     <KeyboardAvoidingView
       style={{ ...styles.container, marginTop: Constants.statusBarHeight }}
     >
       {location?.latitude && location?.longitude && (
         <MapView
+          ref={map}
           style={styles.map}
           mapType="standard"
           showsUserLocation={true}
-          followsUserLocation={true}
           initialRegion={{
             latitude: location?.latitude,
             longitude: location?.longitude,
             latitudeDelta: 0.00522,
             longitudeDelta: 0.00021,
           }}
-          onPress={(e) => {
-            let { latitude, longitude } = e.nativeEvent.coordinate;
-            setMarker({ latitude, longitude });
-          }}
+          onMapReady={onMapReadyHandler}
+          onMapLoaded={onMapReadyHandler}
+          // fitToSuppliedMarkers={{ markerIDs: ["FROM", "TO"], animate: true }}
+          // onPress={(e) => {
+          //   let { latitude, longitude } = e.nativeEvent.coordinate;
+          //   setMarker({ latitude, longitude }, focus);
+          // }}
         >
-          {routes && (
-            <Polyline
-              coordinates={[
-                { latitude: from?.latitude, longitude: from?.longitude },
-                ...routes,
-                { latitude: to?.latitude, longitude: to?.longitude },
-              ]}
-              strokeColor="#000" // fallback for when `strokeColors` is not supported by the map-provider
-              strokeColors={[
-                "#7F0000",
-                "#00000000", // no color, creates a "long" gradient between the previous and next coordinate
-                "#B24112",
-                "#E5845C",
-                "#238C23",
-                "#7F0000",
-              ]}
-              strokeWidth={4}
-            />
-          )}
-          {from?.latitude && from?.longitude && (
-            <Marker
-              coordinate={{
-                latitude: from?.latitude,
-                longitude: from?.longitude,
-              }}
-            />
-          )}
-          {to?.latitude && to?.longitude && (
-            <Marker
-              coordinate={{
-                latitude: to?.latitude,
-                longitude: to?.longitude,
-              }}
-            />
-          )}
+          {routes && renderPolyLine(routes)}
+          {from &&
+            from?.latitude &&
+            renderMarker(from?.latitude, from?.longitude, "FROM")}
+          {to &&
+            to?.latitude &&
+            renderMarker(to?.latitude, to?.longitude, "TRUE")}
         </MapView>
       )}
       <View
@@ -351,112 +171,74 @@ export default function MapViewScreen({ navigation }) {
           }}
         />
         <View style={{ paddingHorizontal: 24 }}>
-          {/* <Text style={styles.h1}>Where are you going?</Text> */}
           <View style={styles.inputsContainer}>
             <Image
               style={styles.dotsImage}
               source={require("../../assets/locationArt.png")}
             />
             <View style={{ flex: 1 }}>
-              <TextInput
-                autoFocus={true}
-                style={styles.inputStyle}
-                
-                onChangeText={async (value) => 
-                  {
-                  setFrom(value)
-const completedata =await complete(from);
-setData(completedata)
-console.log(completedata)
-if(value.length==0||value.length==1)
-{
-setShowfromcom(false)
- }
- else{
-  setShowfromcom(true)
-
- }
-
-  }
-                }
-                
+              <Autocomplete
                 placeholderTextColor={Colors.grey}
                 placeholder="From"
                 returnKeyType="next"
-                onFocus={() => setFocus("t1")}
-                onBlur={() => setFocus(null)}
-                value={from?.name}
+                autoFocus={true}
+                label="Model"
+                style={styles.inputStyle}
+                data={data}
+                menuStyle={{ backgroundColor: "white" }}
+                value={from}
+                setValue={setFrom}
+                onChange={async (value) => {
+                  if (value.length > 1) {
+                    const completedata = await complete(from?.name);
+                    console.log(completedata);
+                    setData(completedata);
+                  }
+                }}
+                onSuggestionPress={(item) => {
+                  console.log(item.lat + "," + item.lon);
+
+                  setMarker(
+                    {
+                      latitude: parseFloat(item.lat),
+                      longitude: parseFloat(item.lon),
+                    },
+                    "t1"
+                  );
+                }}
                 onSubmitEditing={() => {
                   inputRef.current.focus();
                 }}
               />
- {showfromcom?
-<View style={{ marginTop: 30,position:"absolute",zIndex:4 ,  
-                  width:"100%",
-}}>
-            <FlatList
-              data={Object.values(data)}
-              keyExtractor={({ id }, index) => id}
-              renderItem={({ item }) => {
-                return(
-                <View 
-                  style={{
-                    
-                    padding: 10,
-                    borderBottomColor:"black",
-                    borderBottomWidth:2,
-                    
-                    height:60,
-                    backgroundColor: 'white',     
-                  }}>
-                  <View style={{ }} >
-                  
-                    <Text
-                                onPress={()=>{
-                                  data["name"] = item.display_place;
-                                setFrom(data)
-                                console.log(item.lat)
-                                setShowfromcom(false)
-                             
-                                }
-                                }
-
-                      style={{
-                        position: 'absolute',
-                        color: 'black',  
-                        left: 10,
-                        fontSize: 14,
-                        fontFamily: '500',
-                      }}>
-                      {item.display_place}{' '} 
-                    </Text> 
-                    <Text
-                      style={{
-                        position: 'absolute',
-                        fontFamily: '300',
-                        color: '#ADAEC0',
-                        fontSize: 10,
-                        top: 25,
-                        left: 10,
-                      }}>
-                        { item.display_address}
-
-                    </Text>
-
-                   
-                  </View>
-                  
-                </View>
-                  )  }}
-            /> 
-
-          </View>  :null }
-          
-     
-
               <View style={styles.inputContainer}>
-                <TextInput
-                  style={{ ...styles.inputStyle, flex: 1 }}
+                <Autocomplete
+                  placeholderTextColor={Colors.grey}
+                  placeholder="To"
+                  containerStyle={{ flex: 1 }}
+                  style={styles.inputStyle}
+                  data={data}
+                  menuStyle={{ backgroundColor: "white" }}
+                  value={to}
+                  setValue={setTo}
+                  onChange={async (value) => {
+                    if (value.length > 1) {
+                      const completedata = await complete(to?.name);
+                      console.log(completedata);
+                      setData(completedata);
+                    }
+                  }}
+                  onSuggestionPress={(item) => {
+                    console.log(item.lat + "," + item.lon);
+                    setMarker(
+                      {
+                        latitude: parseFloat(item.lat),
+                        longitude: parseFloat(item.lon),
+                      },
+                      "t2"
+                    );
+                  }}
+                />
+                {/* <TextInput
                   onChangeText={(value) =>
                     setTo((prev) => {
                       return { ...prev, name: value };
@@ -467,7 +249,7 @@ setShowfromcom(false)
                   onBlur={() => setFocus(null)}
                   value={to?.name}
                   ref={inputRef}
-                />
+                /> */}
                 <Pressable
                   onPress={async () => {
                     // const fromcord = await getCoordinates(from);
@@ -489,7 +271,6 @@ setShowfromcom(false)
               </View>
             </View>
           </View>
-          <FlatList />
         </View>
         <View
           style={{
