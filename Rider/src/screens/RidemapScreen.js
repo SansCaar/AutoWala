@@ -13,23 +13,23 @@ import {
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
 
-import React from "react";
+import React,{useState} from "react";
 import Header from "../components/Header";
 import Box from "../components/Box";
 import { Colors } from "../styles/Global";
 import Icon from "@expo/vector-icons/Feather";
 import PassengerRequest from "../components/PassengerRequest";
-const passenger = [
-  {
-    name: "Utsav Bhattarai",
-    from: "Devinagr",
-    to: "Butwal-8,Golpark",
-    noPassenger: 5,
-    distance: "2km",
-    passengerAway: "120m",
-  },
-];
-const RidemapScreen = ({ navigation }) => {
+import { getrides  } from "../context/api";
+const ride=async ()=>{
+  const allrides = await getrides()
+  console.log(allrides)
+  setPassenger(allrides)
+}
+const RidemapScreen =  ({ navigation }) => {
+  const [passenger,setPassenger] =useState([]);
+
+ ride()
+ console.log("passenger"+passenger)
   return (
     <View style={styles.con}>
       <Header
@@ -43,9 +43,13 @@ const RidemapScreen = ({ navigation }) => {
           <Text style={styles.b_text}>Ride Request</Text>
           {/* <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}
            > */}
-          {passenger.map((data, i) => {
+            {  
+            passenger.map((data, i) => {
+              console.log("ok undefined"+passenger)
             return <PassengerRequest data={data} key={i} />;
-          })}
+          }
+          )         
+          }
           {/* </ScrollView> */}
         </View>
       </View>

@@ -26,14 +26,34 @@ const reqrideSchema = new mongoose.Schema({
     required: true,
   },
 
-  user_noofseats: {
+  ride_noofseats: {
     type: Number,
     required: true,
   },
+  ride_available:{
+    type: Number,
+    required:true
 
+
+  },
+  ride_booked :{
+    type: Number,
+    required:true
+
+
+  },
+   ride_ended:{
+    type: Number,
+    required:true
+
+  },
+  ride_code:{
+    type: Number,
+    required:true
+  }
 
 
 });
 
-const reqrideschema = mongoose.model("reqride", reqrideSchema);
+const reqrideschema = mongoose.model("Reqride", reqrideSchema);
 export default reqrideschema;

@@ -6,9 +6,10 @@ import Box from "../components/Box";
 
 
 const PassengerRequest = ({data}) => {
-    const {name,from,to,noPassenger,distance,passengerAway} = data;
+  console.log(data)
+    const {_id,ride_available} = data;
   return (
-    <Box style={styles.box}>
+    <Box style={styles.box} key={key}>
       <View style={styles.left}>
         <Text style={styles.l_text}>{name}</Text>
         <View style={styles.mid}>
@@ -31,7 +32,7 @@ const PassengerRequest = ({data}) => {
         </Text>
       </View>
       <View style={styles.right}>
-        <Text style={styles.r_text}>{passengerAway} away</Text>
+        <Text style={styles.r_text}>{ride_available} away</Text>
         <Pressable style={{ backgroundColor: "#78E975", ...styles.btn }}>
           <Icon name="check" size={32} color={Colors.white} />
         </Pressable>
