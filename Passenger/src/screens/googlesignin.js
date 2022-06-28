@@ -1,4 +1,4 @@
-// import * as Google from 'expo-auth-session/providers/google';
+// import * as Google from 'expo-auth-session';
 
 // export default async function signInWithGoogleAsync() {
 //   try {

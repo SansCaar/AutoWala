@@ -17,7 +17,7 @@ const SignupScreen = () => {
             <View style={styles.logo}></View>
             <Pressable style={styles.btn} onPress={async()=>
             {
-  // await signInWithGoogleAsync()         
+alert("hello")
 }}>
               <Image
                 source={require("../../assets/g1.png")}
