@@ -30,21 +30,10 @@ const reqrideSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
-  ride_available:{
-    type: Number,
+  ride_State:{
+    type: String,
     required:true
 
-
-  },
-  ride_booked :{
-    type: Number,
-    required:true
-
-
-  },
-   ride_ended:{
-    type: Number,
-    required:true
 
   },
   ride_code:{

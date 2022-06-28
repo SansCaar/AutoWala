@@ -74,6 +74,7 @@ const Autocomplete = ({
               }}
               title={datum?.display_name}
               noOFLines={1}
+              fontSize="16"
             />
           ))}
         </View>

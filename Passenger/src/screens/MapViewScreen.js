@@ -238,27 +238,8 @@ export default function MapViewScreen({ navigation }) {
                     );
                   }}
                 />
-                {/* <TextInput
-                  onChangeText={(value) =>
-                    setTo((prev) => {
-                      return { ...prev, name: value };
-                    })
-                  }
-                  placeholder="To"
-                  onFocus={() => setFocus("t2")}
-                  onBlur={() => setFocus(null)}
-                  value={to?.name}
-                  ref={inputRef}
-                /> */}
                 <Pressable
                   onPress={async () => {
-                    // const fromcord = await getCoordinates(from);
-                    // setFromlat(fromcord.latitude);
-                    // console.log(fromlat);
-                    // //  const cord= getCoordinates(to)
-                    // setFromlong(fromcord.longitude);
-                    // console.log(fromlong);
-
                     popupRef.show();
                   }}
                   style={styles.sendButton}
@@ -280,8 +261,6 @@ export default function MapViewScreen({ navigation }) {
             overflow: "hidden",
           }}
         >
-          {/* yesma latitude longitude aaxa teslai yesma integrate garna paryo */}
-
           <ConfirmModal
             ref={(target) => (popupRef2 = target)}
             title={searching ? null : "Confirm"}
