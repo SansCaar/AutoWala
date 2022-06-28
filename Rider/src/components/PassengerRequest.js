@@ -6,22 +6,23 @@ import Box from "../components/Box";
 import {setAccepted} from "../context/api"
 
 const PassengerRequest = ({data}) => {
-  
-    const {_id,ride_status,ride_noofseats,user_fromlatitude,user_tolatitude} = data;
+    const {_id,ride_status,ride_noofseats,user_fromlatitude,user_tolatitude,user_name,ride_from,ride_to} = data;
+    const distance =((user_tolatitude)^2+(user_fromlatitude)^2)^1/2
+
     console.log(data)
   return (
     <Box style={styles.box} >
       <View style={styles.left}>
-        <Text style={styles.l_text}>{ride_status}</Text>
+        <Text style={styles.l_text}>{user_name}</Text>
         <View style={styles.mid}>
           <Image
             source={require("../../assets/locationArt.png")}
             style={styles.l_img}
           />
           <View style={styles.l_location}>
-            <Text style={{ fontFamily: "Regular" }}>{user_fromlatitude}</Text>
-            <Text style={{ fontFamily: "Regular" }}>
-              {user_tolatitude}{"  "}{" "}
+            <Text style={{ fontFamily: "Regular" }} numberOfLines={1}>{ride_from}</Text>
+            <Text style={{ fontFamily: "Regular" }} numberOfLines={1}>
+              {ride_to}{"  "}{" "}
               <Text style={{ color: Colors.light_grey }}></Text>
             </Text>
           </View>
@@ -33,7 +34,7 @@ const PassengerRequest = ({data}) => {
         </Text>
       </View>
       <View style={styles.right}>
-        <Text style={styles.r_text}>{ride_status} away</Text>
+        <Text style={styles.r_text}>{distance} away</Text>
         <Pressable onPress={ async()=>{
          var data =await setAccepted(_id)
          
@@ -50,7 +51,6 @@ const PassengerRequest = ({data}) => {
 };
 const styles = StyleSheet.create({
   box: {
-    width:"100%",
     height: "auto",
     flex:1,
     marginVertical: 8,
@@ -73,7 +73,6 @@ const styles = StyleSheet.create({
   },
   left: {
     height: "auto",
-    flex: 1 / 1.6,
   },
   right: {
     alignSelf: "flex-end",

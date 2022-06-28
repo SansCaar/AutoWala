@@ -20,7 +20,7 @@ export const setRide = async (req, res) => {
   
   export const getValidRides = async (req, res) => {
     try {
-      const validrides = await reqrideschema.find({ride_status:'Available'});
+      const validrides = await reqrideschema.find({ride_status:'AVAILABLE'});
       if (!validrides) {
         return res.status(404).send();
       } else {
@@ -37,6 +37,7 @@ export const setRide = async (req, res) => {
       const updateRide = await reqrideschema.findByIdAndUpdate(_id,
          {
        ride_status: "BOOKED",
+       rider_id:123,
       });
 
       console.log(updateRide)
