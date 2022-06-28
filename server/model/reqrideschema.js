@@ -51,6 +51,7 @@ const reqrideSchema = new mongoose.Schema({
   },
   rider_id:{
     type:Number,
+    default:null,
   }
 });
 
