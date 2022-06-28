@@ -7,12 +7,12 @@ import {setAccepted} from "../context/api"
 
 const PassengerRequest = ({data}) => {
   
-    const {_id,ride_available,ride_noofseats,user_fromlatitude,user_tolatitude} = data;
+    const {_id,ride_status,ride_noofseats,user_fromlatitude,user_tolatitude} = data;
     console.log(data)
   return (
     <Box style={styles.box} >
       <View style={styles.left}>
-        <Text style={styles.l_text}>{ride_available}</Text>
+        <Text style={styles.l_text}>{ride_status}</Text>
         <View style={styles.mid}>
           <Image
             source={require("../../assets/locationArt.png")}
@@ -33,7 +33,7 @@ const PassengerRequest = ({data}) => {
         </Text>
       </View>
       <View style={styles.right}>
-        <Text style={styles.r_text}>{ride_available} away</Text>
+        <Text style={styles.r_text}>{ride_status} away</Text>
         <Pressable onPress={ async()=>{
           
          var data =await setAccepted(_id)

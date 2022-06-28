@@ -33,8 +33,6 @@ const reqrideSchema = new mongoose.Schema({
   ride_Status:{
     type: String,
     required:true
-
-
   },
   ride_code:{
     type: Number,
