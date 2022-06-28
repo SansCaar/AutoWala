@@ -4,17 +4,13 @@ import React, {
   useEffect,
   useRef,
   useState,
-  useCallback,
 } from "react";
 import {
   View,
   Text,
   Image,
-  TextInput,
   StyleSheet,
-  Card,
   Pressable,
-  FlatList,
   KeyboardAvoidingView,
   Dimensions,
 } from "react-native";
@@ -28,7 +24,12 @@ import BottomModal from "../components/BottomModal";
 import ConfirmModal from "../components/ConfirmModal";
 
 import AppContext from "../context/AppContext";
-import { getAddress, getRoutes, complete } from "../context/geocoding";
+import {
+  getAddress,
+  getRoutes,
+  complete,
+  requestRide,
+} from "../context/geocoding";
 import Autocomplete from "../components/AutoCompleteInput";
 
 export default function MapViewScreen({ navigation }) {
@@ -141,11 +142,6 @@ export default function MapViewScreen({ navigation }) {
           }}
           onMapReady={onMapReadyHandler}
           onMapLoaded={onMapReadyHandler}
-          // fitToSuppliedMarkers={{ markerIDs: ["FROM", "TO"], animate: true }}
-          // onPress={(e) => {
-          //   let { latitude, longitude } = e.nativeEvent.coordinate;
-          //   setMarker({ latitude, longitude }, focus);
-          // }}
         >
           {routes && renderPolyLine(routes)}
           {from &&
@@ -197,7 +193,6 @@ export default function MapViewScreen({ navigation }) {
                 }}
                 onSuggestionPress={(item) => {
                   console.log(item.lat + "," + item.lon);
-
                   setMarker(
                     {
                       latitude: parseFloat(item.lat),
@@ -264,12 +259,25 @@ export default function MapViewScreen({ navigation }) {
           <ConfirmModal
             ref={(target) => (popupRef2 = target)}
             title={searching ? null : "Confirm"}
-            onPressOk={() => {
-              setSearching(true);
-              setTimeout(() => {
-                navigation.navigate("Ride");
-                setSearching(false);
-              }, 5000);
+            onPressOk={async () => {
+              let res = await requestRide({
+                user_id: 1243,
+                user_name:'Sanskar',
+                from,
+                to,
+                ride_code: parseInt(Math.random()*10000),
+                ride_noofseats:4,
+                ride_status:'AVAILABLE',
+                ride_toc:new Date().toISOString()
+              });
+              console.log("hello: " + res);
+              if (res) {
+                setSearching(true);
+                setTimeout(() => {
+                  navigation.navigate("Ride");
+                  setSearching(false);
+                }, 5000);
+              }
             }}
             buttons={searching ? false : true}
           >

@@ -30,7 +30,7 @@ const reqrideSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
-  ride_Status:{
+  ride_status:{
     type: String,
     required:true
   },
@@ -38,8 +38,6 @@ const reqrideSchema = new mongoose.Schema({
     type: Number,
     required:true
   }
-
-
 });
 
 const reqrideschema = mongoose.model("reqride", reqrideSchema);

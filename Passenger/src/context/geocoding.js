@@ -1,3 +1,5 @@
+import axios from "axios";
+
 const APIKEY = "38899f5c95bf3dcef35c5a284ccf9316";
 const AUTOCOMPLETE_APIKEY = "pk.47f78342a09e37b19d7be8701334eb01";
 const ROUTE_APIKEY = "bd2b95ae1f9c46c7ae39b006969b39fd";
@@ -5,6 +7,8 @@ const ROUTE_APIKEY = "bd2b95ae1f9c46c7ae39b006969b39fd";
 const BASE_URL = "http://api.positionstack.com/v1";
 const AUTOCOMPLETE_URL = "https://api.locationiq.com/v1/autocomplete";
 const ROUTE_URL = "https://api.geoapify.com/v1/routing";
+
+const BASE_OUR_API_URL = "http://192.168.18.11:3001/v1/api";
 
 async function get(url) {
   let headers = {
@@ -65,4 +69,46 @@ export async function complete(search) {
   let data = await response.json();
   if (data.error) return null;
   return data;
+}
+
+export async function requestRide(data) {
+  const { user_name, user_id, ride_toc, ride_noofseats, ride_status, ride_code } = data;
+  const {
+    name: ride_to,
+    latitude: user_tolatitude,
+    longitude: user_tolongitude,
+  } = data.to;
+  const {
+    name: ride_from,
+    latitude: user_fromlatitude,
+    longitude: user_fromlongitude,
+  } = data.from;
+
+  let finalData = {
+    user_name,
+    ride_from,
+    ride_to,
+    user_id,
+    ride_toc,
+    ride_noofseats,
+    ride_status,
+    user_fromlatitude,
+    user_fromlongitude,
+    user_tolatitude,
+    user_tolongitude,
+    ride_code,
+  };
+  try {
+    let url = BASE_OUR_API_URL + "/reqride/post/";
+    console.log(url);
+    const res = await axios.post(url, finalData, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    console.log(res);
+    return true;
+  } catch (error) {
+    console.log(error);
+  }
 }

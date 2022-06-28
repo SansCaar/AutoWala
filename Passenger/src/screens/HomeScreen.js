@@ -8,21 +8,17 @@ import {
 } from "react-native";
 import React, { useContext, useState } from "react";
 import { StatusBar } from "expo-status-bar";
+import MapView, { Marker } from "react-native-maps";
 
 import Header from "../components/Header";
 import { Colors } from "../styles/Global";
-import { styles } from "../styles/home_design";
-
 import Box from "../components/Box";
 import DefaultLocationList from "../components/DefaultLocationList";
 
-import MapView, { Marker } from "react-native-maps";
-import {
-  getAddress,
-  getCoordinates,
-  getSuggestions,
-} from "../context/geocoding";
+import { styles } from "../styles/home_design";
+
 import AppContext from "../context/AppContext";
+import { getAddress } from "../context/geocoding";
 
 const defaultAddress = [
   {
@@ -43,8 +39,7 @@ const defaultAddress = [
 ];
 
 export default function HomeScreen({ navigation }) {
-  const { location, setLocation } = useContext(AppContext);
-  // const [from, setFrom] = useState();
+  const { location } = useContext(AppContext);
 
   return (
     <ScrollView style={styles.container}>
@@ -108,8 +103,7 @@ export default function HomeScreen({ navigation }) {
                 let res = await getAddress(latitude, longitude);
                 console.log(res);
               }}
-            >
-            </MapView>
+            ></MapView>
           )}
         </View>
       </Pressable>
