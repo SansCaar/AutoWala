@@ -1,6 +1,17 @@
 import mongoose from "mongoose";
 const reqrideSchema = new mongoose.Schema({
-
+user_name:{
+  type: String,
+  required: true,
+},
+ride_from:{
+  type: String,
+  required: true,
+},
+ride_to:{
+  type:String,
+  required: true,
+},
   user_id: {
     type: Number,
     required: true,
@@ -33,25 +44,19 @@ const reqrideSchema = new mongoose.Schema({
   ride_available:{
     type: Number,
     required:true
-
-
   },
   ride_booked :{
     type: Number,
     required:true
-
-
   },
    ride_ended:{
     type: Number,
     required:true
-
   },
   ride_code:{
     type: Number,
     required:true
   }
-
 
 });
 
