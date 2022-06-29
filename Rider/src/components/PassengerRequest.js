@@ -36,9 +36,9 @@ const PassengerRequest = ({navigation,data}) => {
       <View style={styles.right}>
         <Text style={styles.r_text}>{distance} away</Text>
         <Pressable onPress={ ()=>{
-        //  var data =await setAccepted(_id)
+         var data = setAccepted(_id)
 
-         navigation.navigate("Home")
+         navigation.navigate("CodeInput",{'id':_id})
         }
          } style={{ backgroundColor: "#78E975", ...styles.btn }}>
           <Icon name="check" size={32} color={Colors.white} />

@@ -10,7 +10,7 @@ import PassengerRequest from '../components/PassengerRequest';
 import TestComponent from "../screens/TestComponent";
 const Stack = createNativeStackNavigator();
 
-const AppStack = () => {
+const AppStack = () => {   
   return (
     <NavigationContainer>
     <Stack.Navigator initialRouteName='Home' screenOptions={{headerShown:false}}>

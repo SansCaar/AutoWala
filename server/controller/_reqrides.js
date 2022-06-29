@@ -58,6 +58,46 @@ export const setRide = async (req, res) => {
     }
   };
 
+
+  export const driverCanceled = async (req, res) => {
+    try {
+      const _id = req.params.id;
+      console.log(_id)
+      const updateRide = await reqrideschema.findByIdAndUpdate(_id,
+         {
+       ride_status: "DRIVER_CANCELED",
+      });
+
+      console.log(updateRide)
+      updateRide.save()
+      res.status(201).send(updateRide);
+
+    } catch (error) {
+      res.status(400).send(error);
+    }
+  };
+  export const userCanceled = async (req, res) => {
+    try {
+      const _id = req.params.id;
+      console.log(_id)
+      const updateRide = await reqrideschema.findByIdAndUpdate(_id,
+         {
+       ride_status: "USER_CANCELED",
+      });
+
+      console.log(updateRide)
+      updateRide.save()
+      res.status(201).send(updateRide);
+
+    } catch (error) {
+      res.status(400).send(error);
+    }
+  };
+
+
+
+
+
   export const checkAccepted = async (req, res) => {
     try {
       const _id = req.params.id;

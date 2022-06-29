@@ -18,9 +18,18 @@ export async function getrides()
     return data;
   }
 
-  export async function getData(id) 
+  export async function getRideData(id) 
   {
     var url =  BASE_OUR_API_URL +"/"+id;
+    let response = await fetch(url);
+    let data = await response.json();
+    return data;
+  }
+
+  export async function cancelRide(id) 
+  {
+    alert(id)
+    var url =  BASE_OUR_API_URL +"/drivercancel/"+id;
     let response = await fetch(url);
     let data = await response.json();
     return data;

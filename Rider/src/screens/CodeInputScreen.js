@@ -1,8 +1,8 @@
 import React,{useState} from "react";
-import { StyleSheet, Text, View, Image, Linking } from "react-native";
+import { StyleSheet, Text, View, Image, Linking, Pressable } from "react-native";
 import CodePopup from "../components/CodePopup";
 import Header from "../components/Header";
-import { getData } from "../context/api";
+import { getRideData,cancelRide } from "../context/api";
 // const rideDetails = {
 //   title: "Your Ride",
 //   name: "Ram Prasad",
@@ -14,10 +14,9 @@ import { getData } from "../context/api";
 // };
 const CodeInputScreen = ({ navigation, route }) => {
     const [rideDetails,setRideDetails]=useState({});
-//   const { rideID } = route.params;
-//   console.log(rideID);
- const data =async ()=>{
-  const rideData = await  getData('62bbc361a6fd7f99ca291e4c')
+  const { id } = route.params;
+ const data = async ()=>{
+  const rideData = await  getRideData(id)
   setRideDetails(rideData)
  }
 data();
@@ -36,6 +35,21 @@ data();
 
       
         <CodePopup data={rideDetails} />
+
+
+        <Pressable style={{
+          position:"absolute",
+          justifyContent:"center",
+          backgroundColor:"red",
+          width:120,
+          height:40,
+          borderRadius:20,
+          alignSelf:"center",
+          bottom:20,
+        }}><Text style={{
+          textAlign:"center",
+          color:"white"
+        }} onPress={()=>cancelRide(id)}>Cancel Ride</Text></Pressable>
       </View>
     </View>
   );
