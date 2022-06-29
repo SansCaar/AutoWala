@@ -35,11 +35,12 @@ const PassengerRequest = ({navigation,data}) => {
       </View>
       <View style={styles.right}>
         <Text style={styles.r_text}>{distance} away</Text>
-        <Pressable         onPressR={() => navigation.navigate('Profile', { name: 'Jane' })
-}
+        <Pressable onPress={ ()=>{
+        //  var data =await setAccepted(_id)
 
-         
-         style={{ backgroundColor: "#78E975", ...styles.btn }}>
+         navigation.navigate("Home")
+        }
+         } style={{ backgroundColor: "#78E975", ...styles.btn }}>
           <Icon name="check" size={32} color={Colors.white} />
         </Pressable>
         <Pressable style={{ backgroundColor: "#FF3838", ...styles.btn }}>
