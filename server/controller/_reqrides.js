@@ -9,7 +9,7 @@ export const setRide = async (req, res) => {
       res.status(400).json(e);
     }
   };
-  export const getRide = async (req, res) => {
+  export const getAllRide = async (req, res) => {
     try {
       const rides = await reqrideschema.find();
       res.status(201).send(rides);
@@ -18,6 +18,15 @@ export const setRide = async (req, res) => {
     }
   };
   
+  export const getRideById = async (req, res) => {
+    try {
+      const _id =req.params.id;
+      const rides = await reqrideschema.findById(_id);
+      res.status(201).send(rides);
+    } catch (error) {
+      res.status(400).send(error);
+    }
+  };
   export const getValidRides = async (req, res) => {
     try {
       const validrides = await reqrideschema.find({ride_status:'AVAILABLE'});
@@ -43,6 +52,7 @@ export const setRide = async (req, res) => {
       console.log(updateRide)
       updateRide.save()
       res.status(201).send(updateRide);
+
     } catch (error) {
       res.status(400).send(error);
     }

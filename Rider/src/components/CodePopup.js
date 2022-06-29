@@ -3,19 +3,19 @@ import React from "react";
 import Box from "./Box";
 import { Colors } from "../styles/Global";
 import Icon from "@expo/vector-icons/Ionicons";
-
+import {getRideData} from "../context/api" 
 
 const CodePopup = ({data}) => {
-  const {title,name,from, to,time,code} = data;
+  const {user_name,time,ride_status,ride_from,ride_to,ride_code,ride_toc } = data;
   return (
     <>
       <Box style={css.container}>
         <View style={css.left}>
-          <Text style={css.title}>{title}</Text>
-          <Text style={css.name}>{name}</Text>
-          <Text style={css.location}>From {from} to {to}</Text>
-          <Text style={css.distance}>{time}</Text>
-          <Text style={css.code}>#{code}</Text>
+          <Text style={css.title}>{ride_status}</Text>
+          <Text style={css.name}>{user_name}</Text>
+          <Text style={css.location}>From {ride_from} to {ride_to}</Text>
+          <Text style={css.distance}>{ride_toc}</Text>
+          <Text style={css.code}>#{ride_code}</Text>
         </View>
         <View style={css.right}>
           <Pressable style={{backgroundColor:"#FFD600",...css.btn}}>
@@ -57,7 +57,7 @@ const css = StyleSheet.create({
     fontSize: 13,
   },
   left: {
-    flex:1/2,
+    flex:1/1.5,
   },
   right: {
     justifyContent:"space-evenly",

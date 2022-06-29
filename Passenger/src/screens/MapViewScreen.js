@@ -329,8 +329,7 @@ export default function MapViewScreen({ navigation }) {
                     fontFamily: "Regular",
                     marginTop: 8,
                   }}
-                >
-                  The charges will only deduct after the driver accepts your
+                >The charges will only deduct after the driver accepts your
                   ride.
                 </Text>
               </>

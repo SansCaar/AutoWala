@@ -23,11 +23,13 @@ import { getrides  } from "../context/api";
 
 const RidemapScreen =  ({ navigation }) => {
   const [passenger,setPassenger] =useState([]);
-  const ride =async   ()=>{
-    const allrides = await getrides()
+  const ride =async ()=>{
+    const allrides = await getrides();
     setPassenger(allrides)
   }
-  ride()
+
+  ride();
+  console.log(passenger)
   return (
     <View style={styles.con}>
       <Header
@@ -40,12 +42,11 @@ const RidemapScreen =  ({ navigation }) => {
         <View style={styles.bottom_con}>
           <Text style={styles.b_text}>Ride Request</Text>
           <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-            {
-            passenger.map((data, i) => {
+            { 
+            passenger.length!=0&&passenger.map( (data, i)=> {
               console.log(data)
-            return <PassengerRequest data={data} key={i} />;
-          })         
-          }
+            return <PassengerRequest data={data}   navigation={navigation} key={i} />
+          })}
           </ScrollView>
         </View>
       </View>

@@ -18,7 +18,7 @@ const Stat = ({balance,point,location}) => {
             marginBottom: 6,
           }}
         >
-          nrs
+         Nrs
         </Text>
       </View>
     </View>

@@ -1,16 +1,32 @@
-export async function getrides() {
-    var url = "http://192.168.1.17:3001/v1/api/reqride/getrides";
+const BASE_OUR_API_URL="http://192.168.1.17:3001/v1/api/reqride";
+
+export async function getrides() 
+  {    
+    var url = BASE_OUR_API_URL +"/get/rides";
+
+    console.log(url)
     let response = await fetch(url);
     let data = await response.json();
     return data;
   }
-  export async function setAccepted(id) {
-    var url = "http://192.168.1.17:3001/v1/api/reqride/accept/"+id;
+  export async function setAccepted(id) 
+  {
+    var url =  BASE_OUR_API_URL +"/accept/"+id;
     let response = await fetch(url);
     let data = await response.json();
     alert('Successfully Accepted the ride')
     return data;
   }
+
+  export async function getData(id) 
+  {
+    var url =  BASE_OUR_API_URL +"/"+id;
+    let response = await fetch(url);
+    let data = await response.json();
+    return data;
+  }
+
+
 
 // export async function setAccepted(id) {
 //     alert(id)
@@ -26,6 +42,5 @@ export async function getrides() {
 //         alert("Successfully Register")
 //     } catch (error) {
 //         console.log(error);
-        
 //     }
 //   }

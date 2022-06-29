@@ -5,7 +5,7 @@ import Icon from "@expo/vector-icons/Feather";
 import Box from "../components/Box";
 import {setAccepted} from "../context/api"
 
-const PassengerRequest = ({data}) => {
+const PassengerRequest = ({navigation,data}) => {
     const {_id,ride_status,ride_noofseats,user_fromlatitude,user_tolatitude,user_name,ride_from,ride_to} = data;
     const distance =((user_tolatitude)^2+(user_fromlatitude)^2)^1/2
 
@@ -35,11 +35,11 @@ const PassengerRequest = ({data}) => {
       </View>
       <View style={styles.right}>
         <Text style={styles.r_text}>{distance} away</Text>
-        <Pressable onPress={ async()=>{
-         var data =await setAccepted(_id)
+        <Pressable         onPressR={() => navigation.navigate('Profile', { name: 'Jane' })
+}
+
          
-      
-         }} style={{ backgroundColor: "#78E975", ...styles.btn }}>
+         style={{ backgroundColor: "#78E975", ...styles.btn }}>
           <Icon name="check" size={32} color={Colors.white} />
         </Pressable>
         <Pressable style={{ backgroundColor: "#FF3838", ...styles.btn }}>
