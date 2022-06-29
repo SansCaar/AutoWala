@@ -1,7 +1,7 @@
 import userSchema from "../model/userSchema.js";
 
 
-//posting the user
+//adding a user
 export const postUser = async (req, res) => {
   try {
     const user = new userSchema(req.body);
@@ -12,7 +12,7 @@ export const postUser = async (req, res) => {
   }
 };
 
-//Getting whole user
+//Getting all the users
 export const getAllUser = async (req, res) => {
   try {
     const allUsers = await userSchema.find();
