@@ -3,7 +3,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import { connectDB } from "./db/connect.js";
 import userRouter from "./routes/usersRouter.js";
-import setRide from "./routes/reqRide.js";
+import reqriderouter from "./routes/reqRide.js";
 
 import colors from "colors";
 
@@ -32,4 +32,4 @@ app.listen(PORT, () => {
 });
 
 app.use("/v1/api/user", userRouter);
-app.use("/v1/api/reqride", setRide);
+app.use("/v1/api/reqride", reqriderouter);

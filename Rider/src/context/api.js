@@ -1,10 +1,9 @@
-const BASE_OUR_API_URL="http://192.168.1.17:3001/v1/api/reqride";
+const BASE_OUR_API_URL="http://192.168.1.12:3001/v1/api/reqride";
 
 export async function getrides() 
   {    
     var url = BASE_OUR_API_URL +"/get/rides";
 
-    console.log(url)
     let response = await fetch(url);
     let data = await response.json();
     return data;
@@ -15,6 +14,16 @@ export async function getrides()
     let response = await fetch(url);
     let data = await response.json();
     alert('Successfully Accepted the ride')
+    return data;
+  }
+  export async function setValidate(id) 
+  {
+    var url =  BASE_OUR_API_URL +"/accept/validate/"+id;
+    let response = await fetch(url);
+    let response1 = await fetch(url);
+
+    let data = await response1.json();
+    alert('Successfully Entered The Code ride')
     return data;
   }
 
@@ -28,8 +37,17 @@ export async function getrides()
 
   export async function cancelRide(id) 
   {
-    alert(id)
+
     var url =  BASE_OUR_API_URL +"/drivercancel/"+id;
+    let response = await fetch(url);
+    let data = await response.json();
+    return data;
+  }
+
+
+  export async function completeRide(id) 
+  {
+    var url =  BASE_OUR_API_URL +"/drivercomplete/"+id;
     let response = await fetch(url);
     let data = await response.json();
     return data;

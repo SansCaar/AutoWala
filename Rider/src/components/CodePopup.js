@@ -1,13 +1,40 @@
 import { View, Text, StyleSheet, Pressable, TextInput,Image } from "react-native";
-import React from "react";
+import React,{useState,useEffect} from "react";
 import Box from "./Box";
 import { Colors } from "../styles/Global";
 import Icon from "@expo/vector-icons/Ionicons";
-import {getRideData} from "../context/api" 
+
+import {getRideData,setValidate} from "../context/api" 
 import Icons from "@expo/vector-icons/Feather";
 
+
+
 const CodePopup = ({data}) => {
-  const {user_name,time,ride_status,ride_from,ride_to,ride_code,ride_toc } = data;
+ 
+
+  const checkPin=async (code,ride_code,id)=>{
+    if(code==ride_code) 
+    {
+     const  validation= await  setValidate(id);
+     const {ride_validated}=validation;
+     setValidated(ride_validated)
+    }
+    else{
+      alert("Invalid Code")
+      return  validation;
+      
+    
+    }
+    }
+  const [pin,setPin]=useState(null);
+  const {user_name,time,ride_status,ride_from,ride_to,ride_code,ride_toc, _id,ride_validated } = data;
+  const [validated,setValidated]=useState(false)
+  
+ 
+
+//  useEffect(async ()=> {
+//   await check();
+// },[ride_validated]);
   return (
     <>
       <Box style={css.container}>
@@ -16,16 +43,35 @@ const CodePopup = ({data}) => {
           <Text style={css.name}>{user_name}</Text>
           <Text style={css.location}>From {ride_from} to {ride_to}</Text>
           <Text style={css.distance}>{ride_toc}</Text>
+{validated ?
+          <Text style={css.code}>#{ride_code}</Text>
+          : 
 
-          <View style ={{flex:1,flexDirection:"row",marginBottom:40,marginTop:10}}>
-        <TextInput  style={{flex:1,height:40,width:150,borderRadius:20,borderBottomColor:"black",borderWidth:2,paddingLeft:20,}}
+          <View style ={{flex:1,flexDirection:"row",marginBottom:40,marginTop:10}}> 
+                    {/* <Text   style={{color:"white",flex:1}}>{ride_validated}</Text> */}
+
+        <TextInput  style={{flex:1,height:40,width:150,borderRadius:20,borderBottomColor:"black",borderWidth:2,paddingLeft:20,
+        
+      
+      }}
         placeholder="4  digit Pin"
+        maxLength={4}
+        onChangeText={(value)=>{
+          setPin(value)
+          
+          
+        }}
+        keyboardType="numeric"
+        onEndEditing={()=>
+        {
+checkPin(pin,ride_code,_id);
+        }}
         />
         <Pressable
                   onPress={() => {
-                    if (from?.latitude && to?.latitude) {
-                      popupRef.show();
-                    }
+                    checkPin(pin,ride_code,_id);
+
+
                   }}
                   style={{  height: 40,
                     width: 40,
@@ -45,9 +91,12 @@ const CodePopup = ({data}) => {
                     source={require("../../assets/Send.png")}
                   />
                 </Pressable>
+
                 </View>
+          
+}
+                    
              
-          {/* <Text style={css.code}>#{ride_code}</Text> */}
         </View>
         <View style={css.right}>
           <Pressable style={{backgroundColor:"#FFD600",...css.btn}}>

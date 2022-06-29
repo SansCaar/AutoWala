@@ -29,7 +29,6 @@ const RidemapScreen =  ({ navigation }) => {
   }
 
   ride();
-  console.log(passenger)
   return (
     <View style={styles.con}>
       <Header
@@ -44,7 +43,6 @@ const RidemapScreen =  ({ navigation }) => {
           <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
             { 
             passenger.length!=0&&passenger.map( (data, i)=> {
-              console.log(data)
             return <PassengerRequest data={data}   navigation={navigation} key={i} />
           })}
           </ScrollView>

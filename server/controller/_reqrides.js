@@ -1,7 +1,6 @@
 import reqrideschema from "../model/reqrideschema.js";
 export const setRide = async (req, res) => {
     try {
-      console.log(req.body)
       const user = new reqrideschema(req.body);
       const userdata = await user.save();
       res.status(201).json(userdata);
@@ -42,7 +41,6 @@ export const setRide = async (req, res) => {
   export const setAccepted = async (req, res) => {
     try {
       const _id = req.params.id;
-      console.log(_id)
       const updateRide = await reqrideschema.findByIdAndUpdate(_id,
          {
        ride_status: "BOOKED",
@@ -76,6 +74,45 @@ export const setRide = async (req, res) => {
       res.status(400).send(error);
     }
   };
+
+
+  export const userCompleted = async (req, res) => {
+    try {
+      const _id = req.params.id;
+      console.log(_id)
+      const updateRide = await reqrideschema.findByIdAndUpdate(_id,
+         {
+       ride_status: "USER_COMPLETED",
+      });
+
+      console.log(updateRide)
+      updateRide.save()
+      res.status(201).send(updateRide);
+
+    } catch (error) {
+      res.status(400).send(error);
+    }
+  };
+
+  export const driverCompleted = async (req, res) => {
+    try {
+      const _id = req.params.id;
+      console.log(_id)
+      const updateRide = await reqrideschema.findByIdAndUpdate(_id,
+         {
+       ride_status: "DRIVER_COMPLETED",
+      });
+
+      console.log(updateRide)
+      updateRide.save()
+      res.status(201).send(updateRide);
+
+    } catch (error) {
+      res.status(400).send(error);
+    }
+  };
+
+
   export const userCanceled = async (req, res) => {
     try {
       const _id = req.params.id;
@@ -84,6 +121,24 @@ export const setRide = async (req, res) => {
          {
        ride_status: "USER_CANCELED",
       });
+
+      console.log(updateRide)
+      updateRide.save()
+      res.status(201).send(updateRide);
+
+    } catch (error) {
+      res.status(400).send(error);
+    }
+  };
+
+  export const setValidate = async (req, res) => {
+    try {
+      const _id = req.params.id;
+  const updateRide = await reqrideschema.findByIdAndUpdate(_id,
+         {
+       ride_validated:true,
+      }
+      );
 
       console.log(updateRide)
       updateRide.save()

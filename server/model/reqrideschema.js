@@ -52,6 +52,10 @@ const reqrideSchema = new mongoose.Schema({
   rider_id:{
     type:Number,
     default:null,
+  },
+  ride_validated:{
+    type:Boolean,
+    default:false,
   }
 });
 
