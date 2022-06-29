@@ -2,11 +2,11 @@ import Joi from "joi";
 
 export const userValidator = (userData) => {
   const schema = Joi.object({
-    username: Joi.string().min(5).required(),
-    password: Joi.string().min(8).required(),
-    email: Joi.string().email().required(),
+    user_name: Joi.string().min(5).required(),
+    user_password: Joi.string().min(8).required(),
+    user_email: Joi.string().email().required(),
     user_address: Joi.string(),
-    user_contact: Joi.number().min(10).max(10),
+    user_contact: Joi.string().length(10).pattern(/^[0-9]+$/).required(),
     user_gfid: Joi.number(),
     user_toc: Joi.string(),
     user_referral: Joi.string(),
