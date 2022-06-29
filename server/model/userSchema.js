@@ -6,6 +6,9 @@ const user = new mongoose.Schema({
   user_email: {
     type: String,
   },
+  user_password: {
+    type: String,
+  },
   user_address: {
     type: String,
   },
