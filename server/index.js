@@ -5,20 +5,13 @@ import { connectDB } from "./db/connect.js";
 import userRouter from "./routes/usersRouter.js";
 import setRide from "./routes/reqRide.js";
 
-import colors from "colors";
-
 const PORT = process.env.PORT || 3001;
 const app = express();
 dotenv.config();
 connectDB();
 
 // for monitoring the incomming requests to the server
-app.use(
-  cors({
-    origin: "*",
-    credentials: true,
-  })
-);
+app.use(cors());
 
 // for json data
 app.use(

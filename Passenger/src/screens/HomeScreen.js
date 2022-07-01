@@ -46,7 +46,9 @@ export default function HomeScreen({ navigation }) {
       <Header
         iconL="menu"
         iconR="user"
-        onPressR={() => navigation.navigate("Profile")}
+        // onPressR={() => navigation.navigate("Profile")}
+        // this change was made for testing during the building of the login and register section soon after it is done it will be removed.
+        onPressR={() => navigation.navigate("Login")}
       />
       <View>
         <Text style={styles.h1}>Where are you going?</Text>
