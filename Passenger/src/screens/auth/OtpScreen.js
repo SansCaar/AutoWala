@@ -1,5 +1,5 @@
 import { Dimensions, Pressable, StyleSheet, Text, View } from "react-native";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { TextInput } from "react-native-paper";
 import AppContext from "../../context/AppContext";
 const OtpScreen = ({ navigation }) => {
@@ -9,9 +9,32 @@ const OtpScreen = ({ navigation }) => {
 
   const [otp, setOpt] = useState("");
 
+  const [otpMatch, setOtpMatch] = useState("NOTCOMPARED");
+
+  useEffect(() => {
+    if (otp.length < 4) return;
+
+    setOtpMatch(parseInt(otp) === parseInt(user.otp));
+  }, [otp]);
+  const submitForm = () => {
+    // the logic for validating the requested otp is not generated yet
+
+    console.log({ otpMatch: otpMatch });
+    if (!otpMatch) {
+      return;
+    } else if (otpMatch === "NOTCOMPARED") {
+      setOtpMatch(false);
+      return;
+    }
+    navigation.navigate("Home");
+  };
+  const goBack = () => {
+    navigation.navigate("GetDetailScreen");
+  };
+
   // styling
 
-  const styles = StyleSheet.create({
+  let styles = StyleSheet.create({
     main_container: {
       marginLeft: "auto",
       marginRight: "auto",
@@ -100,14 +123,6 @@ const OtpScreen = ({ navigation }) => {
     },
   });
 
-  const submitForm = () => {
-    // the logic for validating the requested otp is not generated yet
-    navigation.navigate("Home");
-  };
-  const goBack = () => {
-    navigation.navigate("GetDetailScreen");
-  };
-
   return (
     <View style={styles.main_container}>
       <Text style={styles.main_title}>Verification</Text>
@@ -134,21 +149,46 @@ const OtpScreen = ({ navigation }) => {
           onChangeText={(change) => {
             // console.log(typeof change);
             if (otp.length < 4) {
+              setOtpMatch("NOTCOMPARED");
               setOpt(change);
             }
           }}
         />
         <View style={styles.boxContainer}>
-          <View style={[styles.textBox, styles.textBox0]}>
+          <View
+            style={[
+              styles.textBox,
+              styles.textBox0,
+              !otpMatch ? { borderBottomColor: "#c74646" } : "",
+            ]}
+          >
             <Text>{otp[0]}</Text>
           </View>
-          <View style={[styles.textBox, styles.textBox1]}>
+          <View
+            style={[
+              styles.textBox,
+              styles.textBox1,
+              !otpMatch ? { borderBottomColor: "#c74646" } : "",
+            ]}
+          >
             <Text>{otp[1]}</Text>
           </View>
-          <View style={[styles.textBox, styles.textBox2]}>
+          <View
+            style={[
+              styles.textBox,
+              styles.textBox2,
+              !otpMatch ? { borderBottomColor: "#c74646" } : "",
+            ]}
+          >
             <Text>{otp[2]}</Text>
           </View>
-          <View style={[styles.textBox, styles.textBox3]}>
+          <View
+            style={[
+              styles.textBox,
+              styles.textBox3,
+              !otpMatch ? { borderBottomColor: "#c74646" } : "",
+            ]}
+          >
             <Text>{otp[3]}</Text>
           </View>
         </View>
@@ -156,7 +196,9 @@ const OtpScreen = ({ navigation }) => {
 
       <View style={styles.btmButtonCon}>
         <Pressable
-          onPress={() => submitForm()}
+          onPress={() => {
+            submitForm();
+          }}
           style={[styles.button, styles.firstButton]}
         >
           <Text style={styles.btnText}>Verify Code</Text>

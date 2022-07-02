@@ -13,6 +13,9 @@ import Icon from "@expo/vector-icons/Ionicons";
 import { Colors } from "../../styles/Global";
 import AppContext from "../../context/AppContext";
 
+// for date and time
+import moment from "moment";
+
 // Import Document Picker
 import * as DocumentPicker from "expo-document-picker";
 
@@ -22,12 +25,16 @@ const AdditionalInfo = ({ navigation }) => {
   const [user, setUser] = usr;
 
   // local context for storing the file
-  const [image, setImage] = useState(null);
+  const [file, setFile] = useState(null);
 
   const [data, setData] = useState({
-    user_address: "",
-    user_contact: "",
-    user_referral: "",
+    username: "",
+    email: "",
+    contact: "",
+    address: "",
+    toc: "",
+    gfid: "",
+    image: "",
   });
   const handleChange = (name, value) => {
     setData({ ...data, [name]: value });
@@ -35,21 +42,65 @@ const AdditionalInfo = ({ navigation }) => {
     // setUser({ ...user, [formData]: { ...data } });
   };
 
+  const generateOtp = (min, max) => {
+    return Math.floor(Math.random() * (max - min + 1) + min);
+  };
+
   const sendData = () => {
+    const toc = {
+      date: moment().format("MMM Do YYYY"),
+      time: moment().format("HH:MM:SS"),
+    };
+
+    setData((data) => {
+      return (data.toc = toc);
+    });
+
+    // setting the global states
+    const fourDigOtp = generateOtp(1000, 9999);
+
+    console.log({ fourDigOtp });
+
+    setUser((user) => {
+      return { ...user, formData: { ...data }, otp: fourDigOtp };
+    });
+
     navigation.navigate("OtpScreen");
+  };
+
+  const goBack = () => {
+    sendData({
+      username: "",
+      email: "",
+      contact: "",
+      address: "",
+      toc: "",
+      gfid: "",
+    });
+    navigation.navigate("SignUp");
   };
 
   // opening and selecting the file from the users mobile phone
 
   const selectFile = async () => {
     // Opening Document Picker to select one file
+    try {
+      let result = await DocumentPicker.getDocumentAsync({
+        multiple: false,
+        type: "image/*",
+      });
+      const selectedFile = {
+        name: result.name,
+        size: result.size,
+        uri: result.uri,
+      };
+      setFile(selectedFile);
+      setData({ ...data, image: selectedFile.uri });
+    } catch (e) {
+      console.log(e);
+    }
 
-    let result = DocumentPicker.getDocumentAsync({
-      multiple: false,
-      type: "image/*",
-    });
-
-    console.log({ result });
+    // console.log({ result });
     // let result = await launchImageLibraryAsync({ mediaTypes: "photo" });
     // console.log(result);
     // if (!result.cancelled) {
@@ -81,131 +132,148 @@ const AdditionalInfo = ({ navigation }) => {
   //   </View>
   // );
   return (
-    <ScrollView style={styles.main_container}>
-      <View style={styles.conWrapper}>
-        <Text style={styles.main_title}>Let us know you a bit better</Text>
+    <View style={styles.main_container}>
+      <ScrollView>
+        <View style={styles.conWrapper}>
+          <Text style={styles.main_title}>Let us know you a bit better</Text>
 
-        <Text style={styles.second_title}>
-          This following information will be used to create your profile.
-        </Text>
+          <Text style={styles.second_title}>
+            This following information will be used to create your profile.
+          </Text>
 
-        <View style={styles.inputCon}>
-          <View style={styles.fileInpContainer}>
-            <Image source={"xyz"} style={styles.inpImage} />
-            {/* file input */}
+          <View style={styles.fileMainCon}>
+            <View style={styles.fileInpContainer}>
+              <Pressable onPress={() => selectFile()}>
+                <Image
+                  source={
+                    file
+                      ? {
+                          uri: file?.uri,
+                        }
+                      : require("../../../assets/Files.webp")
+                  }
+                  style={{
+                    height: 100,
+                    width: 100,
+                    borderRadius: 50,
+                  }}
+                />
+              </Pressable>
+              {/* file input */}
+            </View>
+
+            <View style={styles.btnContainer}>
+              <Pressable
+                onPress={() => selectFile()}
+                style={[styles.button, styles.firstButton]}
+              >
+                <Text style={styles.btnText}>
+                  {data.profileImage ? "Change Image" : "change Image"}
+                </Text>
+              </Pressable>
+            </View>
           </View>
 
-          <View style={styles.btnContainer}>
-            <Pressable
-              onPress={() => selectFile()}
-              style={[styles.button, styles.firstButton]}
-            >
-              <Text style={styles.btnText}>
-                {data.profileImage ? "Change Image" : "change Image"}
-              </Text>
-            </Pressable>
+          <View style={styles.inputCon}>
+            <Text style={styles.inputTitle}>User Name</Text>
+
+            <View style={styles.inputWrapper}>
+              <Icon
+                name="person"
+                size={22}
+                color={Colors.grey}
+                style={styles.icon}
+              />
+              <TextInput
+                value={data.username}
+                selectionColor={Colors.grey}
+                style={styles.input}
+                placeholder="Eg: Ramesh Nepali"
+                onChangeText={(text) => {
+                  handleChange("username", text);
+                }}
+              />
+            </View>
+          </View>
+          <View style={styles.inputCon}>
+            <Text style={styles.inputTitle}>Address (City-Ward, District)</Text>
+            <View style={styles.inputWrapper}>
+              <Icon
+                name="location-sharp"
+                size={22}
+                color={Colors.grey}
+                style={styles.icon}
+              />
+              <TextInput
+                value={data.address}
+                selectionColor={Colors.grey}
+                style={styles.input}
+                placeholder="Eg: Butwal 13, Rupandehi"
+                onChangeText={(text) => {
+                  handleChange("address", text);
+                }}
+              />
+            </View>
+          </View>
+          <View style={styles.inputCon}>
+            <Text style={styles.inputTitle}>Phone Number</Text>
+            <View style={styles.inputWrapper}>
+              <Icon
+                name="call"
+                size={22}
+                color={Colors.grey}
+                style={styles.icon}
+              />
+              <TextInput
+                value={data.contact}
+                selectionColor={Colors.grey}
+                style={styles.input}
+                placeholder="Eg: 98********"
+                keyboardType="number-pad"
+                onChangeText={(text) => {
+                  handleChange("contact", text);
+                }}
+              />
+            </View>
+          </View>
+          <View style={styles.inputCon}>
+            <Text style={styles.inputTitle}>Referral Code ( Optional )</Text>
+            <View style={styles.inputWrapper}>
+              <Icon
+                name="gift"
+                size={22}
+                color={Colors.grey}
+                style={styles.icon}
+              />
+              <TextInput
+                value={data.referral}
+                selectionColor={Colors.grey}
+                style={styles.input}
+                placeholder="Eg: BXYZA0"
+                onChangeText={(text) => {
+                  handleChange("referral", text);
+                }}
+              />
+            </View>
           </View>
         </View>
 
-        <View style={styles.inputCon}>
-          <Text style={styles.inputTitle}>User Name</Text>
-
-          <View style={styles.inputWrapper}>
-            <Icon
-              name="person"
-              size={22}
-              color={Colors.grey}
-              style={styles.icon}
-            />
-            <TextInput
-              value={data.userName}
-              selectionColor={Colors.grey}
-              style={styles.input}
-              placeholder="Eg: Ramesh Nepali"
-              onChangeText={(text) => {
-                handleChange("userName", text);
-              }}
-            />
-          </View>
+        <View style={styles.btmButtonCon}>
+          <Pressable
+            onPress={() => sendData()}
+            style={[styles.button, styles.firstButton]}
+          >
+            <Text style={styles.btnText}>Continue</Text>
+          </Pressable>
+          <Pressable
+            onPress={() => goBack()}
+            style={[styles.button, styles.secondButton]}
+          >
+            <Text style={[styles.btnText, styles.secondBtnText]}>go back</Text>
+          </Pressable>
         </View>
-        <View style={styles.inputCon}>
-          <Text style={styles.inputTitle}>Address (City-Ward, District)</Text>
-          <View style={styles.inputWrapper}>
-            <Icon
-              name="location-sharp"
-              size={22}
-              color={Colors.grey}
-              style={styles.icon}
-            />
-            <TextInput
-              value={data.user_address}
-              selectionColor={Colors.grey}
-              style={styles.input}
-              placeholder="Eg: Butwal 13, Rupandehi"
-              onChangeText={(text) => {
-                handleChange("user_address", text);
-              }}
-            />
-          </View>
-        </View>
-        <View style={styles.inputCon}>
-          <Text style={styles.inputTitle}>Phone Number</Text>
-          <View style={styles.inputWrapper}>
-            <Icon
-              name="call"
-              size={22}
-              color={Colors.grey}
-              style={styles.icon}
-            />
-            <TextInput
-              value={data.user_contact}
-              selectionColor={Colors.grey}
-              style={styles.input}
-              placeholder="Eg: 98********"
-              keyboardType="number-pad"
-              onChangeText={(text) => {
-                handleChange("user_contact", text);
-              }}
-            />
-          </View>
-        </View>
-        <View style={styles.inputCon}>
-          <Text style={styles.inputTitle}>Referral Code ( Optional )</Text>
-          <View style={styles.inputWrapper}>
-            <Icon
-              name="gift"
-              size={22}
-              color={Colors.grey}
-              style={styles.icon}
-            />
-            <TextInput
-              value={data.user_referral}
-              selectionColor={Colors.grey}
-              style={styles.input}
-              placeholder="Eg: BXYZA0"
-              onChangeText={(text) => {
-                handleChange("user_referral", text);
-              }}
-            />
-          </View>
-        </View>
-      </View>
-
-      <View style={styles.btmButtonCon}>
-        <Pressable
-          onPress={() => sendData()}
-          style={[styles.button, styles.firstButton]}
-        >
-          <Text style={styles.btnText}>Continue</Text>
-        </Pressable>
-        <Pressable
-          onPress={() => goBack()}
-          style={[styles.button, styles.secondButton]}
-        >
-          <Text style={[styles.btnText, styles.secondBtnText]}>go back</Text>
-        </Pressable>
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </View>
   );
 };
 
@@ -217,6 +285,8 @@ const styles = StyleSheet.create({
     marginRight: "auto",
     width: "90%",
     paddingTop: 30,
+    // paddingBottom: 100,
+    height: "100%",
   },
   main_title: {
     fontSize: 30,
@@ -247,7 +317,7 @@ const styles = StyleSheet.create({
   btmButtonCon: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginTop: 50,
+    marginVertical: 50,
   },
   secondBtnText: {
     color: "#333",
@@ -285,5 +355,17 @@ const styles = StyleSheet.create({
   },
   inputTitle: {
     color: "#333",
+  },
+  fileMainCon: {
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 20,
+  },
+  fileInpContainer: {
+    backgroundColor: "#e8e8e8",
+    height: 100,
+    width: 100,
+    borderRadius: 50,
+    overflow: "hidden",
   },
 });
