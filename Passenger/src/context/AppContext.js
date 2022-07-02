@@ -6,7 +6,9 @@ const AppContext = createContext({});
 
 export const ContextProvider = ({ children }) => {
   const [location, setLocation] = useState(null);
-  const [user, setUser] = useState({});
+  const [user, setUser] = useState({
+    formData: {},
+  });
 
   useEffect(() => {
     async function GetLocation() {

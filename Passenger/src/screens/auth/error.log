@@ -71,3 +71,17 @@ XMLHttpRequest {
 
 
 note the data is undefined so, lets try another request method
+
+
+attempt 2 
+
+  {"DONE": 4, "HEADERS_RECEIVED": 2, "LOADING": 3, "OPENED": 1, "UNSENT": 0, "_aborted": false, "_cachedResponse": undefined, "_hasError": true, "_headers": {"accept": "application/json, text/plain, */*", "content-type": "application/json"}, "_incrementalEvents": false, "_lowerCaseResponseHeaders": {}, "_method": "POST", "_perfKey": "network_XMLHttpRequest_http://localhost:3001/v1/api/user/login", "_performanceLogger": {"_closed": false, "_extras": {}, "_pointExtras": {}, "_points": {"initializeCore_end": 1656665299899, "initializeCore_start": 1656665299826}, "_timespans": {"network_XMLHttpRequest_http://192.168.254.16:19000/logs": [Object], "network_XMLHttpRequest_http://localhost:3001/v1/api/user/login": [Object]}}, "_requestId": null, "_response": "Failed to connect to localhost/127.0.0.1:3001", "_responseType": "", "_sent": true, "_subscriptions": [], "_timedOut": false, "_trackingName": "unknown", "_url": "http://localhost:3001/v1/api/user/login", "data": undefined, "readyState": 4, "responseHeaders": undefined, "status": 0, "timeout": 0, "upload": {}, "withCredentials": true}
+
+
+
+  error response:
+
+  {"DONE": 4, "HEADERS_RECEIVED": 2, "LOADING": 3, "OPENED": 1, "UNSENT": 0, "_aborted": false, "_cachedResponse": undefined, "_hasError": true, "_headers": {"accept": "application/json, text/plain, */*", "content-type": "application/json"}, "_incrementalEvents": false, "_lowerCaseResponseHeaders": {}, "_method": "POST", "_perfKey": "network_XMLHttpRequest_http://localhost:3001/v1/api/user/login", "_performanceLogger": {"_closed": false, "_extras": {}, "_pointExtras": {}, "_points": {"initializeCore_end": 1656665299899, "initializeCore_start": 1656665299826}, "_timespans": {"network_XMLHttpRequest_http://192.168.254.16:19000/logs": [Object], "network_XMLHttpRequest_http://localhost:3001/v1/api/user/login": [Object]}}, "_requestId": null, "_response": "Failed to connect to localhost/127.0.0.1:3001", "_responseType": "", "_sent": true, "_subscriptions": [], "_timedOut": false, "_trackingName": "unknown", "_url": "http://localhost:3001/v1/api/user/login", "data": undefined, "readyState": 4, "responseHeaders": undefined, "status": 0, "timeout": 0, "upload": {}, "withCredentials": true}
+
+
+solution : to solve the error that says axios network error look the url used to send request properly in local development use an ip address

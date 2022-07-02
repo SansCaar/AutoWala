@@ -6,9 +6,12 @@ import ProfileScreen from "../screens/ProfileScreen";
 import LastrideScreen from "../screens/LastrideScreen";
 import MapViewScreen from "../screens/MapViewScreen";
 import RideScreen from "../screens/RideScreen";
-import LoginScreen from "../screens/auth/LoginScreen";
-import SignupScreen from "../screens/auth/SignupScreen";
+import SignupScreen from "./../screens/auth/SignupScreen.js";
+import LoginScreen from "./../screens/auth/LoginScreen.js";
+import GetDetailScreen from "../screens/auth/OtpScreen.js";
+import OtpScreen from "../screens/auth/OtpScreen.js";
 
+import AdditionalInfo from "../screens/auth/AdditionalInfo";
 const Stack = createNativeStackNavigator();
 
 const AppStack = () => {
@@ -25,7 +28,8 @@ const AppStack = () => {
         <Stack.Screen name="Ride" component={RideScreen} />
         <Stack.Screen name="SignUp" component={SignupScreen} />
         <Stack.Screen name="Login" component={LoginScreen} />
-        {/* <Stack.Screen name="GetDetail" component={GetDetailScreen} /> */}
+        <Stack.Screen name="GetDetailScreen" component={AdditionalInfo} />
+        <Stack.Screen name="OtpScreen" component={OtpScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

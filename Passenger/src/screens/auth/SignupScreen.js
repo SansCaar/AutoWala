@@ -1,11 +1,29 @@
 import { View, Text, Pressable, Image } from "react-native";
-import React from "react";
+import React, { useContext } from "react";
 import { styles } from "../../styles/login_design.js";
 import { Colors } from "../../styles/Global.js";
+import AppContext from "../../context/AppContext";
 
 // import signInWithGoogleAsync from "./googlesignin.js";
 const SignupScreen = ({ navigation }) => {
-  const googleSignup = async () => {};
+  // global states for setting the user
+  const { usr } = useContext(AppContext);
+
+  const [user, setUser] = usr;
+
+  const googleSignup = async () => {
+    console.log("The singup btn is pressed ");
+    // getting the email from the google and setting it in the state
+
+    const emailFromGoogle = "cashforapp39@gmail.com";
+
+    // setUser((usr) => {
+    //   return (user.email = emailFromGoogle);
+    // });
+
+    navigation.navigate("GetDetailScreen");
+  };
+
   return (
     <>
       <View

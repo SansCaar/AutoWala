@@ -4,17 +4,22 @@ import { styles } from "../../styles/login_design.js";
 import { Colors } from "../../styles/Global.js";
 import AppContext from "../../context/AppContext.js";
 import * as Google from "expo-auth-session/providers/google";
+import * as AuthSession from "expo-auth-session";
 
 import * as WebBrowser from "expo-web-browser";
 import axios from "axios";
 
-try {
-  WebBrowser.maybeCompleteAuthSession();
-} catch (e) {
-  console.log(e);
-}
-
+WebBrowser.maybeCompleteAuthSession();
+const redirectURI = AuthSession.makeRedirectUri({
+  // scheme: "exp://127.0.0.1:19000/",
+  useProxy: true,
+  // path: "https://auth.expo.io",
+});
+// console.log({ redirectURI });
 const expoClientId =
+  "845597949104-avopt2ga5gc2ed43geenb0571880c6ad.apps.googleusercontent.com";
+
+const androidClientId =
   "845597949104-avopt2ga5gc2ed43geenb0571880c6ad.apps.googleusercontent.com";
 
 const LoginScreen = ({ navigation }) => {
@@ -23,34 +28,33 @@ const LoginScreen = ({ navigation }) => {
 
   const [request, response, promptAsync] = Google.useAuthRequest({
     expoClientId: expoClientId,
+    androidClientId: androidClientId,
+    redirectUri: redirectURI,
   });
 
   useEffect(() => {
     if (response?.type === "success") {
       const { authentication } = response;
-      console.log(authentication);
+      console.log({ authentication });
     }
   }, [response]);
   const googleSignIn = async () => {
+    // getting the email from the google
+    promptAsync({ showInRecents: true });
+
     const domain = `http://localhost:3001`;
     const emailFromGoogle = "sarojregmi.official@gmail.com";
     console.log("The button was pressed");
     try {
-      const result = await axios({
-        method: "post",
-        url: "http://localhost:3001/v1/api/user/login",
-        data: {
-          email: emailFromGoogle,
-        },
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
-      });
+      const result = await axios.post(
+        "http://10.0.2.2:3001/v1/api/user/login",
+        {
+          email: "sarojregmi.offical@gmail.com",
+        }
+      );
       setUser(result.data);
-      console.log("result.data");
     } catch (e) {
-      console.log("res.data");
-      console.log(e.request);
+      console.log({ error: e.response.data });
     }
     // implementing the google login
 

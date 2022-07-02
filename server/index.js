@@ -5,6 +5,9 @@ import { connectDB } from "./db/connect.js";
 import userRouter from "./routes/usersRouter.js";
 import setRide from "./routes/reqRide.js";
 
+// this pacakage is imported to make the terminal more colorfull and easy to use @alert donot remove it or else the app will break.
+import colors from "colors";
+
 const PORT = process.env.PORT || 3001;
 const app = express();
 dotenv.config();

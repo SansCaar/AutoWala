@@ -2,6 +2,7 @@ import userSchema from "../model/userSchema.js";
 import { loginValidator } from "../config/userValidator.js";
 
 export const loginUser = async (req, res) => {
+  console.log({ backend: req.body.email });
   try {
     const data = {
       email: req.body.email,
