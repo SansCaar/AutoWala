@@ -12,6 +12,7 @@ export const userValidator = (userData, googleSignIn) => {
     user_gfid: Joi.number(),
     user_toc: Joi.string(),
     user_referral: Joi.string(),
+    user_image: Joi.string().required(),
   });
 
   return schema.validate(userData);

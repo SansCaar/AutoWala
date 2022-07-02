@@ -16,9 +16,13 @@ const user = new mongoose.Schema({
     type: Number,
   },
   user_toc: {
-    type: String,
+    date: { type: String },
+    time: { type: string },
   },
   user_referral: {
+    type: String,
+  },
+  user_image: {
     type: String,
   },
 });

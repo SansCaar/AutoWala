@@ -18,6 +18,7 @@ import moment from "moment";
 
 // Import Document Picker
 import * as DocumentPicker from "expo-document-picker";
+import axios from "axios";
 
 const AdditionalInfo = ({ navigation }) => {
   // global states for setting the user
@@ -36,6 +37,12 @@ const AdditionalInfo = ({ navigation }) => {
     gfid: "",
     image: "",
   });
+
+  const [error, setError] = useState({
+    target: "",
+    message: "",
+  });
+
   const handleChange = (name, value) => {
     setData({ ...data, [name]: value });
 
@@ -46,7 +53,67 @@ const AdditionalInfo = ({ navigation }) => {
     return Math.floor(Math.random() * (max - min + 1) + min);
   };
 
+  const uploadImage = async () => {
+    try {
+      // checks if the file is empty
+      if (file === null) {
+        setError({
+          target: "image",
+          message: "Please select a profile Image.",
+        });
+        return null;
+      }
+
+      // if not empty creating a form data to send to upload the image to the server
+      const imageToUpload = file;
+      const data = new FormData();
+
+      data.append("name", "Image upload");
+      data.append("file_attachment", imageToUpload);
+
+      const response = await axios.post(
+        "http://10.0.2.2:3001/v1/api/user/uploadImage",
+        {
+          data,
+        }
+      );
+
+      return response.data;
+    } catch (e) {
+      console.log({ catch: e });
+    }
+  };
+
   const sendData = () => {
+    // checking the input data
+    // checking if anyone is empty or not
+
+    if (data.email === "") {
+      setError({
+        target: "email",
+        message: "The email feild cannot be empty.",
+      });
+      return;
+    } else if (data.contact.length < 10) {
+      setError({
+        target: "contact",
+        message: "Please enter a valid phone number.",
+      });
+      return;
+    } else if (data.image === "") {
+      setError({
+        target: "image",
+        message: "Please select a profile Image.",
+      });
+      return;
+    } else if (data.address === "") {
+      setError({
+        target: "address",
+        message: "The address feild cannot be left empty.",
+      });
+      return;
+    }
+
     const toc = {
       date: moment().format("MMM Do YYYY"),
       time: moment().format("HH:MM:SS"),
@@ -69,7 +136,7 @@ const AdditionalInfo = ({ navigation }) => {
   };
 
   const goBack = () => {
-    sendData({
+    setData({
       username: "",
       email: "",
       contact: "",
@@ -89,13 +156,8 @@ const AdditionalInfo = ({ navigation }) => {
         multiple: false,
         type: "image/*",
       });
-      const selectedFile = {
-        name: result.name,
-        size: result.size,
-        uri: result.uri,
-      };
-      setFile(selectedFile);
-      setData({ ...data, image: selectedFile.uri });
+      setFile(result);
+      setData({ ...data, image: uploadImage() });
     } catch (e) {
       console.log(e);
     }

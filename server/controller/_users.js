@@ -1,6 +1,5 @@
 import userSchema from "../model/userSchema.js";
 
-
 //adding a user
 export const postUser = async (req, res) => {
   try {
@@ -59,4 +58,15 @@ export const updateUser = async (req, res) => {
   } catch (error) {
     res.status(400).send(error);
   }
+};
+
+// for uploading the user image to the data base
+
+export const uploadImage = async (req, res) => {
+  const imageToUpload = req.data;
+
+  // the image url in the server
+  const serverImageUrl = "someUrl";
+
+  return res.status(200).json(serverImageUrl);
 };

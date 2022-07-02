@@ -8,6 +8,7 @@ import {
   getOneUser,
   postUser,
   updateUser,
+  uploadImage,
 } from "../controller/_users.js";
 const router = express.Router();
 router.route("/").get(getAllUser);
@@ -20,4 +21,6 @@ router.route("/:id").patch(updateUser);
 router.route("/login").post(loginUser);
 router.route("/register").post(registerUser);
 
+// route for uploading the user image to the server
+router.route("/uploadImage").post(uploadImage);
 export default router;

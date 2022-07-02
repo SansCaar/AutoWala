@@ -8,6 +8,7 @@ const OtpScreen = ({ navigation }) => {
   const [user] = usr;
 
   const [otp, setOpt] = useState("");
+  console.log({ user });
 
   const [otpMatch, setOtpMatch] = useState("NOTCOMPARED");
 
@@ -129,7 +130,7 @@ const OtpScreen = ({ navigation }) => {
 
       <Text style={styles.second_title}>
         Enter the verification code sent to ********
-        {user.number ? user.number.slice(8) : ""}
+        {user.formData.contact ? user.formData.contact.slice(8) : ""}
       </Text>
 
       <View>

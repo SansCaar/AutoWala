@@ -10,6 +10,7 @@ export const registerUser = async (req, res) => {
     user_referral: req.body.referral,
     user_gfid: req.body.gfid,
     user_toc: req.body.toc,
+    user_image: req.body.image,
   };
 
   const { value, error } = userValidator(data);
