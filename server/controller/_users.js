@@ -1,5 +1,8 @@
 import userSchema from "../model/userSchema.js";
 
+// for parsing the file
+import multer from "multer";
+
 //adding a user
 export const postUser = async (req, res) => {
   try {
@@ -61,12 +64,13 @@ export const updateUser = async (req, res) => {
 };
 
 // for uploading the user image to the data base
-
 export const uploadImage = async (req, res) => {
-  const imageToUpload = req.data;
+  // const imageToUpload = req.data;
 
   // the image url in the server
-  const serverImageUrl = "someUrl";
+  // const serverImageUrl = "someUrl";
 
-  return res.status(200).json(serverImageUrl);
+  console.log({ file: req.file });
+
+  return res.status(200).json(req.file);
 };

@@ -23,6 +23,10 @@ app.use(
   })
 );
 
+// for making the upload folder publically accessable
+
+app.use("/uploads", express.static("uploads"));
+
 app.listen(PORT, () => {
   console.log(`The application is running in the port ${PORT}`.white);
 });

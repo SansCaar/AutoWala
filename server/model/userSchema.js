@@ -17,7 +17,7 @@ const user = new mongoose.Schema({
   },
   user_toc: {
     date: { type: String },
-    time: { type: string },
+    time: { type: String },
   },
   user_referral: {
     type: String,
