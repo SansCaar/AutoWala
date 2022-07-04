@@ -7,10 +7,11 @@ import {
   Image,
   TextInput,
 } from "react-native";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Icon from "@expo/vector-icons/Ionicons";
 // import { launchImageLibraryAsync } from "expo-image-picker";
 import { Colors } from "../../styles/Global";
+
 import AppContext from "../../context/AppContext";
 
 // for date and time
@@ -20,21 +21,25 @@ import moment from "moment";
 import * as DocumentPicker from "expo-document-picker";
 import axios from "axios";
 
+// setting up the server domain
+// this domain should be changed to the actual server location in the production
+const serverDomain = "http://10.0.2.2:3001/";
+
 const AdditionalInfo = ({ navigation }) => {
   // global states for setting the user
   const { usr } = useContext(AppContext);
   const [user, setUser] = usr;
+
+  console.log(user);
 
   // local context for storing the file
   const [file, setFile] = useState(null);
 
   const [data, setData] = useState({
     username: "",
-    email: "",
     contact: "",
     address: "",
     toc: "",
-    gfid: "",
     image: "",
   });
 
@@ -53,34 +58,48 @@ const AdditionalInfo = ({ navigation }) => {
     return Math.floor(Math.random() * (max - min + 1) + min);
   };
 
-  const uploadImage = async () => {
+  const uploadImage = async (file) => {
     try {
       // checks if the file is empty
       if (file === null) {
         setError({
           target: "image",
-          message: "Please select a profile Image.",
+          message: "Sorry ,There is some error with the profile picture!!",
         });
         return null;
       }
-
+      setError(false);
       // if not empty creating a form data to send to upload the image to the server
       const imageToUpload = file;
       const data = new FormData();
 
-      data.append("name", "Image upload");
-      data.append("file_attachment", imageToUpload);
-
-      const response = await axios.post(
-        "http://10.0.2.2:3001/v1/api/user/uploadImage",
+      data.append(
+        "profile",
         {
-          data,
-        }
+          uri: imageToUpload?.uri,
+          name: imageToUpload?.name,
+          type: imageToUpload?.mimeType,
+        },
+        "myfile"
       );
 
-      return response.data;
+      const serverUrl = "http://10.0.2.2:3001/v1/api/user/uploadImage";
+      const response = await axios(serverUrl, {
+        method: "post",
+        data: data,
+
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      return response?.data?.fileName;
     } catch (e) {
-      console.log({ catch: e });
+      setError({
+        target: "image",
+        message: "Sry, we are having trouble uploading the Profile ",
+      });
+      return;
     }
   };
 
@@ -88,22 +107,10 @@ const AdditionalInfo = ({ navigation }) => {
     // checking the input data
     // checking if anyone is empty or not
 
-    if (data.email === "") {
+    if (data.username === "") {
       setError({
-        target: "email",
+        target: "username",
         message: "The email feild cannot be empty.",
-      });
-      return;
-    } else if (data.contact.length < 10) {
-      setError({
-        target: "contact",
-        message: "Please enter a valid phone number.",
-      });
-      return;
-    } else if (data.image === "") {
-      setError({
-        target: "image",
-        message: "Please select a profile Image.",
       });
       return;
     } else if (data.address === "") {
@@ -112,6 +119,15 @@ const AdditionalInfo = ({ navigation }) => {
         message: "The address feild cannot be left empty.",
       });
       return;
+    } else if (data.contact.length !== 10) {
+      setError({
+        target: "contact",
+        message: "Please enter a valid phone number.",
+      });
+      return;
+    } else if (data.image === "") {
+      alert("Looks like you forgot to choose a profile");
+      return;
     }
 
     const toc = {
@@ -119,9 +135,9 @@ const AdditionalInfo = ({ navigation }) => {
       time: moment().format("HH:MM:SS"),
     };
 
-    setData((data) => {
-      return (data.toc = toc);
-    });
+    // setData((data) => {
+    //   return { ...data, toc: toc };
+    // });
 
     // setting the global states
     const fourDigOtp = generateOtp(1000, 9999);
@@ -129,12 +145,26 @@ const AdditionalInfo = ({ navigation }) => {
     console.log({ fourDigOtp });
 
     setUser((user) => {
-      return { ...user, formData: { ...data }, otp: fourDigOtp };
+      return { ...user, formData: { ...data }, otp: fourDigOtp, toc: toc };
     });
 
     navigation.navigate("OtpScreen");
   };
 
+  // checking what is changing
+
+  useEffect(() => {
+    console.log(
+      "data is changing....................................................."
+    );
+    console.log({ data, user });
+  }, [data]);
+
+  useEffect(() => {
+    if (error.target === "image") {
+      alert(error.message);
+    }
+  }, [error]);
   const goBack = () => {
     setData({
       username: "",
@@ -157,7 +187,11 @@ const AdditionalInfo = ({ navigation }) => {
         type: "image/*",
       });
       setFile(result);
-      setData({ ...data, image: uploadImage() });
+
+      uploadImage(result).then((res) => {
+        console.log({ res });
+        setData({ ...data, image: serverDomain + res });
+      });
     } catch (e) {
       console.log(e);
     }
@@ -195,7 +229,7 @@ const AdditionalInfo = ({ navigation }) => {
   // );
   return (
     <View style={styles.main_container}>
-      <ScrollView>
+      <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.conWrapper}>
           <Text style={styles.main_title}>Let us know you a bit better</Text>
 
@@ -208,9 +242,9 @@ const AdditionalInfo = ({ navigation }) => {
               <Pressable onPress={() => selectFile()}>
                 <Image
                   source={
-                    file
+                    data.image !== ""
                       ? {
-                          uri: file?.uri,
+                          uri: data.image,
                         }
                       : require("../../../assets/Files.webp")
                   }
@@ -243,7 +277,7 @@ const AdditionalInfo = ({ navigation }) => {
               <Icon
                 name="person"
                 size={22}
-                color={Colors.grey}
+                color={Colors.white}
                 style={styles.icon}
               />
               <TextInput
@@ -256,6 +290,9 @@ const AdditionalInfo = ({ navigation }) => {
                 }}
               />
             </View>
+            {error?.target === "username" ? (
+              <Text style={styles.error}> {error.message} </Text>
+            ) : null}
           </View>
           <View style={styles.inputCon}>
             <Text style={styles.inputTitle}>Address (City-Ward, District)</Text>
@@ -263,7 +300,7 @@ const AdditionalInfo = ({ navigation }) => {
               <Icon
                 name="location-sharp"
                 size={22}
-                color={Colors.grey}
+                color={Colors.white}
                 style={styles.icon}
               />
               <TextInput
@@ -276,6 +313,9 @@ const AdditionalInfo = ({ navigation }) => {
                 }}
               />
             </View>
+            {error?.target === "address" ? (
+              <Text style={styles.error}> {error.message} </Text>
+            ) : null}
           </View>
           <View style={styles.inputCon}>
             <Text style={styles.inputTitle}>Phone Number</Text>
@@ -283,7 +323,7 @@ const AdditionalInfo = ({ navigation }) => {
               <Icon
                 name="call"
                 size={22}
-                color={Colors.grey}
+                color={Colors.white}
                 style={styles.icon}
               />
               <TextInput
@@ -297,6 +337,9 @@ const AdditionalInfo = ({ navigation }) => {
                 }}
               />
             </View>
+            {error?.target === "contact" ? (
+              <Text style={styles.error}> {error.message} </Text>
+            ) : null}
           </View>
           <View style={styles.inputCon}>
             <Text style={styles.inputTitle}>Referral Code ( Optional )</Text>
@@ -304,7 +347,7 @@ const AdditionalInfo = ({ navigation }) => {
               <Icon
                 name="gift"
                 size={22}
-                color={Colors.grey}
+                color={Colors.white}
                 style={styles.icon}
               />
               <TextInput
@@ -360,7 +403,7 @@ const styles = StyleSheet.create({
     color: "#5f5f5f",
   },
   button: {
-    backgroundColor: "#333",
+    backgroundColor: Colors.primary,
     width: 150,
     textAlign: "center",
     display: "flex",
@@ -413,7 +456,7 @@ const styles = StyleSheet.create({
     height: 50,
     lineHeight: 50,
     textAlign: "center",
-    backgroundColor: "#d1d1d1",
+    backgroundColor: Colors.light_primary,
   },
   inputTitle: {
     color: "#333",

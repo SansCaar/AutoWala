@@ -1,26 +1,68 @@
 import { View, Text, Pressable, Image } from "react-native";
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { styles } from "../../styles/login_design.js";
 import { Colors } from "../../styles/Global.js";
 import AppContext from "../../context/AppContext";
 
-// import signInWithGoogleAsync from "./googlesignin.js";
+// packages for google auth
+import * as Google from "expo-auth-session/providers/google";
+// this might be necessary in the production so imported
+import * as AuthSession from "expo-auth-session";
+
+import * as WebBrowser from "expo-web-browser";
+import axios from "axios";
+
+WebBrowser.maybeCompleteAuthSession();
+
+const expoClientId =
+  "845597949104-2r2rup8te994mhbp3uc7lq2gf6q8rr4b.apps.googleusercontent.com";
+
+// not need for now
+const androidClientId =
+  "845597949104-avopt2ga5gc2ed43geenb0571880c6ad.apps.googleusercontent.com";
+
 const SignupScreen = ({ navigation }) => {
   // global states for setting the user
   const { usr } = useContext(AppContext);
 
   const [user, setUser] = usr;
 
+  const [request, response, promptAsync] = Google.useAuthRequest({
+    expoClientId: expoClientId,
+    // androidClientId: androidClientId,
+    // redirectUri: redirectURI,
+  });
+  // for allerting the user about the error that occured
+  const [Error, setError] = useState(false);
+
+  useEffect(() => {
+    if (response?.type === "success") {
+      const { authentication } = response;
+
+      const access_token = authentication.accessToken;
+
+      console.log({ access_token });
+      let userData = axios
+        .get(
+          `https://www.googleapis.com/oauth2/v3/userinfo?access_token=${access_token}`
+        )
+        .then((res) => {
+          setUser({
+            email: res.data.email,
+            gfid: access_token,
+          });
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    }
+  }, [response]);
+
   const googleSignup = async () => {
-    console.log("The singup btn is pressed ");
     // getting the email from the google and setting it in the state
+    await promptAsync({ showInRecents: true });
 
-    const emailFromGoogle = "cashforapp39@gmail.com";
-
-    // setUser((usr) => {
-    //   return (user.email = emailFromGoogle);
-    // });
-
+    // navigating to the additional details screen
     navigation.navigate("GetDetailScreen");
   };
 

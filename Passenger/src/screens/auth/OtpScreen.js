@@ -2,39 +2,76 @@ import { Dimensions, Pressable, StyleSheet, Text, View } from "react-native";
 import React, { useContext, useEffect, useState } from "react";
 import { TextInput } from "react-native-paper";
 import AppContext from "../../context/AppContext";
+// importing the styles
+
+import { Colors } from "../../styles/Global";
+import axios from "axios";
+
 const OtpScreen = ({ navigation }) => {
   const { usr } = useContext(AppContext);
 
   const [user] = usr;
 
   const [otp, setOpt] = useState("");
-  console.log({ user });
 
   const [otpMatch, setOtpMatch] = useState("NOTCOMPARED");
 
   useEffect(() => {
     if (otp.length < 4) return;
-
     setOtpMatch(parseInt(otp) === parseInt(user.otp));
   }, [otp]);
   const submitForm = () => {
     // the logic for validating the requested otp is not generated yet
 
-    console.log({ otpMatch: otpMatch });
     if (!otpMatch) {
       return;
     } else if (otpMatch === "NOTCOMPARED") {
       setOtpMatch(false);
       return;
     }
-    navigation.navigate("Home");
+    // if the program reaches here it means the validation are pass and its time to send data to the db
+    registerUser();
+    // then(() => {
+    //   navigation.navigate("Home");
+    // });
   };
   const goBack = () => {
     navigation.navigate("GetDetailScreen");
   };
 
-  // styling
+  const registerUser = async () => {
+    const finalUser = {
+      email: user.email,
+      contact: user.formData?.contact,
+      address: user.formData?.address,
+      image: user.formData?.image,
+      toc: user.toc,
+      gfid: user.gfid,
+      username: user.formData?.username,
+    };
 
+    axios
+      .post("http://10.0.2.2:3001/v1/api/user/register", finalUser)
+      .then((res) => {
+        if (res.status === 201) {
+          setUser({
+            id: res.data?.user?._id,
+            email: res.data?.user?.user_email,
+            contact: res.data?.user?.user_contact,
+            image: res.data?.user?.user_image,
+            name: res.data?.user?.user_name,
+            toc: res.data?.user?.user_toc,
+          });
+
+          navigation.navigate("Home");
+        }
+      })
+      .catch((error) => {
+        console.log({ error: error.response.data.error });
+      });
+  };
+
+  // styling
   let styles = StyleSheet.create({
     main_container: {
       marginLeft: "auto",
@@ -95,7 +132,7 @@ const OtpScreen = ({ navigation }) => {
       color: "#5f5f5f",
     },
     button: {
-      backgroundColor: "#333",
+      backgroundColor: Colors.primary,
       width: 150,
       textAlign: "center",
       display: "flex",
@@ -130,7 +167,7 @@ const OtpScreen = ({ navigation }) => {
 
       <Text style={styles.second_title}>
         Enter the verification code sent to ********
-        {user.formData.contact ? user.formData.contact.slice(8) : ""}
+        {user?.formData.contact ? user?.formData?.contact.slice(8) : ""}
       </Text>
 
       <View>

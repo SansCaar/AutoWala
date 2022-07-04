@@ -1,5 +1,5 @@
 import { View, Text, Pressable, Image } from "react-native";
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { styles } from "../../styles/login_design.js";
 import { Colors } from "../../styles/Global.js";
 import AppContext from "../../context/AppContext.js";
@@ -10,15 +10,18 @@ import * as WebBrowser from "expo-web-browser";
 import axios from "axios";
 
 WebBrowser.maybeCompleteAuthSession();
-const redirectURI = AuthSession.makeRedirectUri({
-  // scheme: "exp://127.0.0.1:19000/",
-  useProxy: true,
-  // path: "https://auth.expo.io",
-});
+
+// it might be necessary in the production
+// const redirectURI = AuthSession.makeRedirectUri({
+//   // scheme: "exp://127.0.0.1:19000/",
+//   useProxy: true,
+//   // path: "https://auth.expo.io",
+// });
 // console.log({ redirectURI });
 const expoClientId =
-  "845597949104-avopt2ga5gc2ed43geenb0571880c6ad.apps.googleusercontent.com";
+  "845597949104-2r2rup8te994mhbp3uc7lq2gf6q8rr4b.apps.googleusercontent.com";
 
+// not need for now
 const androidClientId =
   "845597949104-avopt2ga5gc2ed43geenb0571880c6ad.apps.googleusercontent.com";
 
@@ -28,40 +31,70 @@ const LoginScreen = ({ navigation }) => {
 
   const [request, response, promptAsync] = Google.useAuthRequest({
     expoClientId: expoClientId,
-    androidClientId: androidClientId,
-    redirectUri: redirectURI,
+    // androidClientId: androidClientId,
+    // redirectUri: redirectURI,
   });
+  // for allerting the user about the error that occured
+  const [Error, setError] = useState(false);
 
   useEffect(() => {
     if (response?.type === "success") {
       const { authentication } = response;
-      console.log({ authentication });
+
+      const access_token = authentication.accessToken;
+
+      axios
+        .get(
+          `https://www.googleapis.com/oauth2/v3/userinfo?access_token=${access_token}`
+        )
+        .then((res) => {
+          setUser(res.data.email);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
     }
   }, [response]);
   const googleSignIn = async () => {
     // getting the email from the google
-    promptAsync({ showInRecents: true });
+    await promptAsync({ showInRecents: true });
 
-    const domain = `http://localhost:3001`;
-    const emailFromGoogle = "sarojregmi.official@gmail.com";
-    console.log("The button was pressed");
-    try {
-      const result = await axios.post(
-        "http://10.0.2.2:3001/v1/api/user/login",
-        {
-          email: "sarojregmi.offical@gmail.com",
-        }
-      );
-      setUser(result.data);
-    } catch (e) {
-      console.log({ error: e.response.data });
-    }
     // implementing the google login
 
     // signInWithGoogleAsync();
     // after everything is done redirecting to the previous location
-    // navigation.navigate("Home");
   };
+
+  useEffect(() => {
+    if (Error) {
+      console.log("the alert is fired");
+      alert(Error);
+    }
+  }, [Error]);
+  useEffect(() => {
+    console.log({ user });
+    axios
+      .post("http://10.0.2.2:3001/v1/api/user/login", {
+        email: user,
+      })
+      .then((res) => {
+        if (res.status === 200) {
+          setUser({
+            id: res.data?.user?._id,
+            email: res.data?.user?.user_email,
+            contact: res.data?.user?.user_contact,
+            image: res.data?.user?.user_image,
+            name: res.data?.user?.user_name,
+            toc: res.data?.user?.user_toc,
+          });
+          setError(false);
+          navigation.navigate("Home");
+        }
+      })
+      .catch((e) => {
+        setError(e.response.data.error);
+      });
+  }, [user]);
 
   return (
     <>
@@ -74,7 +107,12 @@ const LoginScreen = ({ navigation }) => {
         <View style={styles.con}>
           <View>
             <View style={styles.logo}></View>
-            <Pressable style={styles.btn} onPress={googleSignIn}>
+            <Pressable
+              style={styles.btn}
+              // this will disable the btn until the request is loaded
+              disabled={!request}
+              onPress={googleSignIn}
+            >
               <Image
                 source={require("../../../assets/g1.png")}
                 style={styles.img}

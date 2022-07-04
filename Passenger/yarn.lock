@@ -4831,13 +4831,6 @@ expo-font@~10.1.0:
   dependencies:
     fontfaceobserver "^2.1.0"
 
-expo-google-app-auth@~8.3.0:
-  version "8.3.0"
-  resolved "https://registry.npmjs.org/expo-google-app-auth/-/expo-google-app-auth-8.3.0.tgz"
-  integrity sha512-JZd2N2W4mpqdoH0R68zrqmZvKKF8D/5i7lF4tmkWNdmWpGs5JgEfdKLYC5x93Yze7vwsrHKwEmyA6R74cR0e2A==
-  dependencies:
-    expo-app-auth "~11.1.0"
-
 expo-image-loader@~3.2.0:
   version "3.2.0"
   resolved "https://registry.yarnpkg.com/expo-image-loader/-/expo-image-loader-3.2.0.tgz#d98b021660edef7243f7c5ec011b8d0545626d41"
