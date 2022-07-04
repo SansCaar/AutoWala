@@ -10,10 +10,10 @@ const user = new mongoose.Schema({
     type: String,
   },
   user_contact: {
-    type: Number,
+    type: String,
   },
   user_gfid: {
-    type: Number,
+    type: String,
   },
   user_toc: {
     date: { type: String },

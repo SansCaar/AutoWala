@@ -2,7 +2,6 @@ import userSchema from "../model/userSchema.js";
 import { loginValidator } from "../config/userValidator.js";
 
 export const loginUser = async (req, res) => {
-  console.log({ backend: req.body.email });
   try {
     const data = {
       email: req.body.email,
@@ -24,9 +23,11 @@ export const loginUser = async (req, res) => {
 
     const exists = await userSchema.findOne({ user_email: data.email });
     if (!exists)
-      return res.status(400).json({ error: "Invalid email or password" });
+      return res
+        .status(400)
+        .json({ error: "Looks like you forgot to sign up !!!" });
 
-    //   all the validation passed means the user is legit and the id and passwords entered are correct
+    //   all the validation passed means the user is legit and the id  entered is correct
     res.status(200).json({ user: exists });
   } catch (e) {
     console.log(e);

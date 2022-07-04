@@ -9,8 +9,11 @@ export const userValidator = (userData, googleSignIn) => {
       .length(10)
       .pattern(/^[0-9]+$/)
       .required(),
-    user_gfid: Joi.number(),
-    user_toc: Joi.string(),
+    user_gfid: Joi.string(),
+    user_toc: Joi.object({
+      date: Joi.string(),
+      time: Joi.string(),
+    }),
     user_referral: Joi.string(),
     user_image: Joi.string().required(),
   });
