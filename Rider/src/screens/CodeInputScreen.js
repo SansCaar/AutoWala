@@ -62,7 +62,7 @@ data();
           const {ride_status}= data;
           if(ride_status=='DRIVER_COMPLETED')
           {
-            alert("Completed");
+            alert("Ride Completed");
             navigation.navigate("Home")
           }
         }
@@ -81,7 +81,14 @@ data();
         }}><Text style={{
           textAlign:"center",
           color:"white"
-        }} onPress={()=>cancelRide(id)}>Cancel Ride</Text></Pressable> }
+        }} onPress={()=>
+          {cancelRide(id)
+        
+          alert("Cancelled Successfully")
+          navigation.navigate("Home")
+          }
+        
+        }>Cancel Ride</Text></Pressable> }
       </View>
     </View>
   );

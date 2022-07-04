@@ -10,7 +10,7 @@ reqriderouter.route("/accept/:id").get(setAccepted)
 reqriderouter.route("/check/:id").get(checkAccepted)
 reqriderouter.route("/drivercancel/:id").get(driverCanceled)
 reqriderouter.route("/drivercomplete/:id").get(driverCompleted)
-reqriderouter.route("/usercomplete/:id").get(driverCompleted)
+// reqriderouter.route("/usercomplete/:id").get(userCompleted)
 
 
 reqriderouter.route("/usercancel/:id").get(userCanceled)
