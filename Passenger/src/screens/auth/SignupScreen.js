@@ -63,7 +63,7 @@ const SignupScreen = ({ navigation }) => {
     await promptAsync({ showInRecents: true });
 
     // navigating to the additional details screen
-    navigation.navigate("GetDetailScreen");
+    navigation.navigate("SignUpForm");
   };
 
   return (

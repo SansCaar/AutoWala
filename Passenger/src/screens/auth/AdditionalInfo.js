@@ -23,7 +23,7 @@ import axios from "axios";
 
 // setting up the server domain
 // this domain should be changed to the actual server location in the production
-const serverDomain = "http://10.0.2.2:3001/";
+const serverDomain = "http://192.168.1.12:3001/";
 
 const AdditionalInfo = ({ navigation }) => {
   // global states for setting the user
@@ -83,7 +83,7 @@ const AdditionalInfo = ({ navigation }) => {
         "myfile"
       );
 
-      const serverUrl = "http://10.0.2.2:3001/v1/api/user/uploadImage";
+      const serverUrl = "http://192.168.1.12:3001/v1/api/user/uploadImage";
       const response = await axios(serverUrl, {
         method: "post",
         data: data,
@@ -142,7 +142,7 @@ const AdditionalInfo = ({ navigation }) => {
     // setting the global states
     const fourDigOtp = generateOtp(1000, 9999);
 
-    console.log({ fourDigOtp });
+    console.log(fourDigOtp );
 
     setUser((user) => {
       return { ...user, formData: { ...data }, otp: fourDigOtp, toc: toc };

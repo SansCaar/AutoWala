@@ -30,10 +30,10 @@ const OtpScreen = ({ navigation }) => {
       return;
     }
     // if the program reaches here it means the validation are pass and its time to send data to the db
-    registerUser();
-    // then(() => {
-    //   navigation.navigate("Home");
-    // });
+    registerUser()
+    .then(() => {
+      navigation.navigate("Home");
+    });
   };
   const goBack = () => {
     navigation.navigate("GetDetailScreen");
@@ -51,7 +51,7 @@ const OtpScreen = ({ navigation }) => {
     };
 
     axios
-      .post("http://10.0.2.2:3001/v1/api/user/register", finalUser)
+      .post("http://192.168.1.12:3001/v1/api/user/register", finalUser)
       .then((res) => {
         if (res.status === 201) {
           setUser({

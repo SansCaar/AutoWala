@@ -46,57 +46,6 @@ const CodeInputScreen = ({ navigation, route }) => {
         <Header iconL="arrow-left" onPressL={navigation.goBack} />
 
         <CodePopup data={rideDetails} />
-<<<<<<< HEAD
-{checkvalidation?
-
-        <Pressable style={{
-          position:"absolute",
-          justifyContent:"center",
-          backgroundColor:"green",
-          width:120,
-          height:40,
-          borderRadius:20,
-          alignSelf:"center",
-          bottom:20,
-        }}><Text style={{
-          textAlign:"center",
-          color:"white"
-        }} onPress={async ()=>
-        
-        {
-          
-          var data = await completeRide(id)
-          const {ride_status}= data;
-          if(ride_status=='DRIVER_COMPLETED')
-          {
-            alert("Ride Completed");
-            navigation.navigate("Home")
-          }
-        }
-          }>Completed</Text>
-        </Pressable>
-
-           :  <Pressable style={{
-          position:"absolute",
-          justifyContent:"center",
-          backgroundColor:"red",
-          width:120,
-          height:40,
-          borderRadius:20,
-          alignSelf:"center",
-          bottom:20,
-        }}><Text style={{
-          textAlign:"center",
-          color:"white"
-        }} onPress={()=>
-          {cancelRide(id)
-        
-          alert("Cancelled Successfully")
-          navigation.navigate("Home")
-          }
-        
-        }>Cancel Ride</Text></Pressable> }
-=======
         {checkvalidation ? (
           <Pressable
             style={{
@@ -151,7 +100,6 @@ const CodeInputScreen = ({ navigation, route }) => {
             </Text>
           </Pressable>
         )}
->>>>>>> e46837f3132d81ab4027db08bc5737c6facedbd2
       </View>
     </View>
   );
