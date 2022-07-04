@@ -29,16 +29,20 @@ import {
   getRoutes,
   complete,
   requestRide,
+  checkAcceptedRide,
 } from "../context/geocoding";
 import Autocomplete from "../components/AutoCompleteInput";
+import BaseModal from "../components/BaseModal";
 
 export default function MapViewScreen({ navigation }) {
   const { location } = useContext(AppContext);
   const [data, setData] = useState([]);
 
   const [searching, setSearching] = useState(null);
+  const [confirmDialogue, setConfirmDialogue] = useState(true);
   const [from, setFrom] = useState(null);
   const [to, setTo] = useState(null);
+  const [rideAccepted, setRideAccepted] = useState(false);
 
   const [routes, setRoutes] = useState(null);
 
@@ -53,7 +57,7 @@ export default function MapViewScreen({ navigation }) {
       if (from?.latitude && to?.latitude) {
         const route = await getRoutes(from, to);
         setRoutes(route);
-        console.log('hi');
+        console.log("hi");
       }
     }
     map?.current?.fitToCoordinates(
@@ -123,6 +127,28 @@ export default function MapViewScreen({ navigation }) {
         strokeWidth={5}
       />
     );
+  }
+  function searchRides() {
+    setSearching(true);
+    console.log(rideId);
+    const checkForRidesInterval = setInterval(async () => {
+      let isRideAccepted = await checkAcceptedRide(rideId);
+      setRideAccepted(isRideAccepted);
+      console.log(rideAccepted);
+      if (isRideAccepted) {
+        setSearching(false);
+        clearInterval(checkForRidesInterval);
+        console.log("hello: " + rideId);
+        navigation.navigate("Ride", { id: rideId });
+      }
+    }, 5000);
+    setTimeout(() => {
+      setSearching(false);
+      if (rideAccepted) {
+        clearInterval(checkForRidesInterval);
+        navigation.navigate("Ride", { rideId: `${rideId}` });
+      }
+    }, 5 * 60 * 60 * 1000);
   }
   return (
     <KeyboardAvoidingView
@@ -261,9 +287,9 @@ export default function MapViewScreen({ navigation }) {
         >
           <ConfirmModal
             ref={(target) => (popupRef2 = target)}
-            title={searching ? null : "Confirm"}
+            title={confirmDialogue ? "Confirm" : null}
             onPressOk={async () => {
-              let res = await requestRide({
+              let rideId = await requestRide({
                 user_id: 1243,
                 user_name: "Sanskar",
                 from,
@@ -273,19 +299,10 @@ export default function MapViewScreen({ navigation }) {
                 ride_status: "AVAILABLE",
                 ride_toc: new Date().toISOString(),
               });
-              console.log("hello: " + res);
-              if (res) {
-                setSearching(true);
-                // const apiCall = setInterval(()=>{
-
-                // }, 5000)
-                setTimeout(() => {
-                  navigation.navigate("Ride", {rideId:res});
-                },5000 );
-              }
-              setSearching(false);
+              setConfirmDialogue(false);
+              if (rideId) searchRides();
             }}
-            buttons={searching ? false : true}
+            buttons={confirmDialogue}
           >
             {searching && (
               <View style={{ justifyContent: "center", alignItems: "center" }}>
@@ -302,7 +319,7 @@ export default function MapViewScreen({ navigation }) {
                 </Text>
               </View>
             )}
-            {!searching && (
+            {confirmDialogue && (
               <>
                 <View>
                   <View style={styles.row}>
@@ -329,12 +346,14 @@ export default function MapViewScreen({ navigation }) {
                     fontFamily: "Regular",
                     marginTop: 8,
                   }}
-                >The charges will only deduct after the driver accepts your
+                >
+                  The charges will only deduct after the driver accepts your
                   ride.
                 </Text>
               </>
             )}
           </ConfirmModal>
+          <BaseModal />
           <BottomModal
             animationType="slide"
             ref={(target) => (popupRef = target)}

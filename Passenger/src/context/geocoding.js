@@ -8,7 +8,7 @@ const BASE_URL = "http://api.positionstack.com/v1";
 const AUTOCOMPLETE_URL = "https://api.locationiq.com/v1/autocomplete";
 const ROUTE_URL = "https://api.geoapify.com/v1/routing";
 
-const BASE_OUR_API_URL = "http://192.168.1.17:3001/v1/api";
+const BASE_OUR_API_URL = "http://192.168.18.11:3001/v1/api";
 
 async function get(url) {
   let headers = {
@@ -81,7 +81,14 @@ export async function complete(search) {
 }
 
 export async function requestRide(data) {
-  const { user_name, user_id, ride_toc, ride_noofseats, ride_status, ride_code } = data;
+  const {
+    user_name,
+    user_id,
+    ride_toc,
+    ride_noofseats,
+    ride_status,
+    ride_code,
+  } = data;
   const {
     name: ride_to,
     latitude: user_tolatitude,
@@ -120,4 +127,28 @@ export async function requestRide(data) {
   } catch (error) {
     console.log(error);
   }
+}
+export async function checkAcceptedRide(user_id) {
+  console.log(user_id);
+  let url = BASE_OUR_API_URL + `/reqride/check/${user_id}`;
+  try {
+    console.log(url);
+    let res = await axios.get(url, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+    return res.data.status;
+  } catch (error) {
+    console.log(error);
+  }
+}
+export async function cancelRide(id) 
+{
+  var url =  BASE_OUR_API_URL +"/reqride/usercancel/"+id;
+  console.log(url);
+  let response = await fetch(url);
+  let data = await response.json();
+  console.log(data)
+  return data;
 }

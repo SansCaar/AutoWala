@@ -1,7 +1,8 @@
-import React from "react";
-import { StyleSheet, Text, View, Image, Linking } from "react-native";
+import React, { useEffect } from "react";
+import { StyleSheet, Text, View, Image, Linking ,Pressable } from "react-native";
 import CodePopup from "../components/CodePopup";
 import Header from "../components/Header";
+import { cancelRide } from "../context/geocoding";
 
 const rideDetails = {
   title: "Your Ride",
@@ -13,9 +14,11 @@ const rideDetails = {
   phoneNumber: "+9779847000000",
 };
 const RideScreen = ({ navigation, route }) => {
-  const { rideID } = route.params;
-  console.log(rideID);
-
+  const { id } = route.params;
+  useEffect(()=>{
+    console.log('id'+id);
+    alert("ID:"+id)
+  })
   return (
     <View style={{ flex: 1 }}>
       <Image source={require("../../assets/map2.png")} style={styles.map} />
@@ -29,6 +32,29 @@ const RideScreen = ({ navigation, route }) => {
       >
         <Header iconL="arrow-left" onPressL={navigation.goBack} />
         <CodePopup {...rideDetails} />
+        <Text>Hello:{id}</Text>
+        <Pressable
+            style={{
+              position: "absolute",
+              justifyContent: "center",
+              backgroundColor: "red",
+              width: 120,
+              height: 40,
+              borderRadius: 20,
+              alignSelf: "center",
+              bottom: 20,
+            }}
+          >
+            <Text
+              style={{
+                textAlign: "center",
+                color: "white",
+              }}
+              onPress={async() => await cancelRide(id)}
+            >
+              Cancel Ride
+            </Text>
+          </Pressable>
       </View>
     </View>
   );
