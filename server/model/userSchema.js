@@ -6,22 +6,23 @@ const user = new mongoose.Schema({
   user_email: {
     type: String,
   },
-  user_password: {
-    type: String,
-  },
   user_address: {
     type: String,
   },
   user_contact: {
-    type: Number,
-  },
-  user_gfid: {
-    type: Number,
-  },
-  user_toc: {
     type: String,
   },
+  user_gfid: {
+    type: String,
+  },
+  user_toc: {
+    date: { type: String },
+    time: { type: String },
+  },
   user_referral: {
+    type: String,
+  },
+  user_image: {
     type: String,
   },
 });

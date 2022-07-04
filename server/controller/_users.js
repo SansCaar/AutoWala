@@ -1,5 +1,7 @@
 import userSchema from "../model/userSchema.js";
 
+// for parsing the file
+import multer from "multer";
 
 //adding a user
 export const postUser = async (req, res) => {
@@ -27,7 +29,7 @@ export const dltUser = async (req, res) => {
   try {
     const _id = req.params.id;
     const dltUser = await userSchema.findByIdAndDelete(_id);
-    res.status(202).send(dltUser);
+    res.status(202).json({ message: "The user has been deleted successfully" });
   } catch (error) {
     res.status(500).send(error);
   }
@@ -59,4 +61,17 @@ export const updateUser = async (req, res) => {
   } catch (error) {
     res.status(400).send(error);
   }
+};
+
+// for uploading the user image to the data base
+export const uploadImage = async (req, res) => {
+  // const imageToUpload = req.data;
+
+  // the image url in the server
+  // const serverImageUrl = "someUrl";
+
+  console.log({ "function File": req.file });
+
+  if (req.file) return res.status(200).json({ fileName: req.file.path });
+  return res.status(400).json({ error: "failed to upload file " });
 };

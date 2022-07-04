@@ -5,5 +5,5 @@ export const Colors = {
   background: "#FAFAFA",
   white: "#FFFFFF",
   black: "#2B2B2B",
+  light_primary: "#6c6cffc7",
 };
-

@@ -5,6 +5,7 @@ import { connectDB } from "./db/connect.js";
 import userRouter from "./routes/usersRouter.js";
 import reqriderouter from "./routes/reqRide.js";
 
+// this pacakage is imported to make the terminal more colorfull and easy to use @alert donot remove it or else the app will break.
 import colors from "colors";
 
 const PORT = process.env.PORT || 3001;
@@ -13,12 +14,7 @@ dotenv.config();
 connectDB();
 
 // for monitoring the incomming requests to the server
-app.use(
-  cors({
-    origin: "*",
-    credentials: true,
-  })
-);
+app.use(cors());
 
 // for json data
 app.use(
@@ -26,6 +22,10 @@ app.use(
     extended: false,
   })
 );
+
+// for making the upload folder publically accessable
+
+app.use("/uploads", express.static("uploads"));
 
 app.listen(PORT, () => {
   console.log(`The application is running in the port ${PORT}`.white);

@@ -6,6 +6,9 @@ const AppContext = createContext({});
 
 export const ContextProvider = ({ children }) => {
   const [location, setLocation] = useState(null);
+  const [user, setUser] = useState({
+    formData: {},
+  });
 
   useEffect(() => {
     async function GetLocation() {
@@ -26,7 +29,12 @@ export const ContextProvider = ({ children }) => {
     GetLocation();
   }, []);
   return (
-    <AppContext.Provider value={{ location, setLocation }}>
+    <AppContext.Provider
+      value={{
+        geo: [location, setLocation],
+        usr: [user, setUser],
+      }}
+    >
       {children}
     </AppContext.Provider>
   );
