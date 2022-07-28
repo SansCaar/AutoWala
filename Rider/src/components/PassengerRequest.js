@@ -1,17 +1,33 @@
-import { View, Text, StyleSheet,Image,Pressable, Dimensions } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  Pressable,
+  Dimensions,
+} from "react-native";
 import React from "react";
 import { Colors } from "../styles/Global";
 import Icon from "@expo/vector-icons/Feather";
 import Box from "../components/Box";
-import {setAccepted} from "../context/api"
+import { setAccepted } from "../context/api";
 
-const PassengerRequest = ({navigation,data}) => {
-    const {_id,ride_status,ride_noofseats,user_fromlatitude,user_tolatitude,user_name,ride_from,ride_to} = data;
-    const distance =((user_tolatitude)^2+(user_fromlatitude)^2)^1/2
+const PassengerRequest = ({ navigation, data }) => {
+  const {
+    _id,
+    ride_status,
+    ride_noofseats,
+    user_fromlatitude,
+    user_tolatitude,
+    user_name,
+    ride_from,
+    ride_to,
+  } = data;
+  const distance = user_tolatitude ^ (2 + user_fromlatitude) ^ 2 ^ (1 / 2);
 
-    console.log(data)
+  console.log(data);
   return (
-    <Box style={styles.box} >
+    <Box style={styles.box}>
       <View style={styles.left}>
         <Text style={styles.l_text}>{user_name}</Text>
         <View style={styles.mid}>
@@ -20,27 +36,33 @@ const PassengerRequest = ({navigation,data}) => {
             style={styles.l_img}
           />
           <View style={styles.l_location}>
-            <Text style={{ fontFamily: "Regular" }} numberOfLines={1}>{ride_from}</Text>
             <Text style={{ fontFamily: "Regular" }} numberOfLines={1}>
-              {ride_to}{"  "}{" "}
-              <Text style={{ color: Colors.light_grey }}></Text>
+              {ride_from}
+            </Text>
+            <Text style={{ fontFamily: "Regular" }} numberOfLines={1}>
+              {ride_to}
+              {"  "} <Text style={{ color: Colors.light_grey }}></Text>
             </Text>
           </View>
         </View>
         <Text style={styles.text}>No. of Passenger: {ride_noofseats}</Text>
         <Text style={styles.text}>
           Total Price: 25*{ride_noofseats} ={" "}
-          <Text style={{ color: "#78E975", ...styles.text }}>{25*ride_noofseats}</Text>
+          <Text style={{ color: "#78E975", ...styles.text }}>
+            {25 * ride_noofseats}
+          </Text>
         </Text>
       </View>
       <View style={styles.right}>
         <Text style={styles.r_text}>{distance} away</Text>
-        <Pressable onPress={ ()=>{
-         var data = setAccepted(_id)
+        <Pressable
+          onPress={() => {
+            var data = setAccepted(_id);
 
-         navigation.navigate("CodeInput",{'id':_id})
-        }
-         } style={{ backgroundColor: "#78E975", ...styles.btn }}>
+            navigation.navigate("CodeInput", { id: _id });
+          }}
+          style={{ backgroundColor: "#78E975", ...styles.btn }}
+        >
           <Icon name="check" size={32} color={Colors.white} />
         </Pressable>
         <Pressable style={{ backgroundColor: "#FF3838", ...styles.btn }}>
@@ -53,12 +75,12 @@ const PassengerRequest = ({navigation,data}) => {
 const styles = StyleSheet.create({
   box: {
     height: "auto",
-    flex:1,
+    flex: 1,
     marginVertical: 8,
     elevation: 5,
     alignItems: "center",
     flexDirection: "row",
-    marginRight:8,
+    marginRight: 8,
   },
   l_text: {
     fontFamily: "Bold",
@@ -78,7 +100,7 @@ const styles = StyleSheet.create({
   right: {
     alignSelf: "flex-end",
     flex: 1 / 4,
-    marginLeft:50,
+    marginLeft: 50,
     flexDirection: "column",
   },
   r_text: {
@@ -103,9 +125,9 @@ const styles = StyleSheet.create({
     marginRight: 24,
   },
   l_location: {
-    justifyContent:"space-between",
+    justifyContent: "space-between",
     flex: 1,
-    height:"100%"
+    height: "100%",
   },
 });
 
