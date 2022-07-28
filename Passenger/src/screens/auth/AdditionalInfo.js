@@ -30,7 +30,7 @@ const AdditionalInfo = ({ navigation }) => {
   const { usr } = useContext(AppContext);
   const [user, setUser] = usr;
 
-  console.log(user);
+  // console.log(user);
 
   // local context for storing the file
   const [file, setFile] = useState(null);
@@ -59,6 +59,8 @@ const AdditionalInfo = ({ navigation }) => {
   };
 
   const uploadImage = async (file) => {
+    console.log("the file you have choosed is ");
+    console.log(file);
     try {
       // checks if the file is empty
       if (file === null) {
@@ -95,6 +97,24 @@ const AdditionalInfo = ({ navigation }) => {
 
       return response?.data?.fileName;
     } catch (e) {
+      console.log("trying again ");
+
+      axios(serverUrl, {
+        method: "post",
+        data: data,
+
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((error) => {
+          console.log("second error");
+          console.log(error);
+        });
+
       setError({
         target: "image",
         message: "Sry, we are having trouble uploading the Profile ",
@@ -153,12 +173,12 @@ const AdditionalInfo = ({ navigation }) => {
 
   // checking what is changing
 
-  useEffect(() => {
-    console.log(
-      "data is changing....................................................."
-    );
-    console.log({ data, user });
-  }, [data]);
+  // useEffect(() => {
+  //   console.log(
+  //     "data is changing....................................................."
+  //   );
+  //   console.log({ data, user });
+  // }, [data]);
 
   useEffect(() => {
     if (error.target === "image") {
