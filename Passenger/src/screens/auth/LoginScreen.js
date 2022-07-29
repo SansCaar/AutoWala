@@ -4,7 +4,10 @@ import { styles } from "../../styles/login_design.js";
 import { Colors } from "../../styles/Global.js";
 import AppContext from "../../context/AppContext.js";
 import * as Google from "expo-auth-session/providers/google";
-import * as AuthSession from "expo-auth-session";
+
+// for facebook login
+import * as Facebook from "expo-auth-session/providers/facebook";
+import { ResponseType } from "expo-auth-session";
 
 import * as WebBrowser from "expo-web-browser";
 import axios from "axios";
@@ -62,7 +65,6 @@ const LoginScreen = ({ navigation }) => {
 
     // implementing the google login
 
-    // signInWithGoogleAsync();
     // after everything is done redirecting to the previous location
   };
 
@@ -97,6 +99,24 @@ const LoginScreen = ({ navigation }) => {
       });
   }, [user]);
 
+  const [freq, fres, fblogin] = Facebook.useAuthRequest({
+    expoClientId: fbClientId,
+    responseType: ResponseType.Code,
+  });
+  // for facebook login
+  const facebookLogin = () => {
+    fblogin();
+  };
+  // for looking up the response
+  useEffect(() => {
+    if (fres?.type === "success") {
+      const { code } = fres.params;
+
+    } else {
+      console.log("unsuccessfull login attempt");
+    }
+  }, [fres]);
+
   return (
     <>
       <View
@@ -120,7 +140,7 @@ const LoginScreen = ({ navigation }) => {
               />
               <Text style={styles.text}>Sign in with Google</Text>
             </Pressable>
-            <Pressable style={styles.btn}>
+            <Pressable style={styles.btn} onPress={facebookLogin}>
               <Image
                 source={require("../../../assets/fb.png")}
                 style={styles.img}
