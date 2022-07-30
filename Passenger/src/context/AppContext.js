@@ -20,6 +20,7 @@ export const ContextProvider = ({ children }) => {
           let { coords } = await Location.getCurrentPositionAsync({});
           if (coords) {
             setLocation(coords);
+            console.log(coords)
           }
         }
       } catch (error) {

@@ -7,13 +7,14 @@ import {
   ScrollView,
   Pressable,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Colors } from "../styles/Global";
 import Header from "../components/Header";
 import Icon from "@expo/vector-icons/Feather";
 import Stat from "../components/Stat";
 import MapView from "react-native-maps";
 import * as Location from "expo-location";
+import AppContext from "../context/AppContext";
 
 const balance = 2000;
 const point = 20;
@@ -26,24 +27,13 @@ const passenger = [
 ];
 
 export default function HomeScreen({ navigation }) {
-  const [location, setLocation] = useState({});
+  const {
+    geo: [location],
+  } = useContext(AppContext);
 
-  React.useEffect(() => {
-    async function GetLocation() {
-      let { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== "granted") {
-        console.log("hello");
-      } else {
-        let { coords } = await Location.getCurrentPositionAsync({});
-        if (coords) {
-          setLocation(coords);
-        }
-      }
-    }
-    GetLocation();
-  }, []);
   return (
-    <View style={styles.conainer}>
+    
+    <ScrollView style={styles.conainer}>
       <Header
         iconL="menu"
         iconR="user"
@@ -52,19 +42,21 @@ export default function HomeScreen({ navigation }) {
       <Stat balance={balance} point={point} location="Home" />
       <View style={styles.map}>
         <Text style={styles.map_text}>Your Location</Text>
-        <View style={{ marginTop: 16, borderRadius: 16,overflow:"hidden" }}>
-          <MapView
-            style={styles.map_img}
-            mapType="standard"
-            showsUserLocation={true}
-            followsUserLocation={true}
-            initialRegion={{
-              latitude: location?.latitude,
-              longitude: location?.longitude,
-              latitudeDelta: 0.00522,
-              longitudeDelta: 0.00021,
-            }}
-          />
+        <View style={{ marginTop: 16, borderRadius: 16, overflow: "hidden" }}>
+          {location?.latitude && (
+            <MapView
+              style={styles.map_img}
+              mapType="standard"
+              showsUserLocation={true}
+              followsUserLocation={true}
+              initialRegion={{
+                latitude: location?.latitude,
+                longitude: location?.longitude,
+                latitudeDelta: 0.00522,
+                longitudeDelta: 0.00021,
+              }}
+            />
+          )}
         </View>
       </View>
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -87,7 +79,7 @@ export default function HomeScreen({ navigation }) {
           );
         })}
       </ScrollView>
-    </View>
+    </ScrollView>
   );
 }
 const styles = StyleSheet.create({

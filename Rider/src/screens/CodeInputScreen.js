@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import {
   StyleSheet,
   Text,
@@ -6,35 +6,49 @@ import {
   Image,
   Linking,
   Pressable,
+  Dimensions,
 } from "react-native";
+import MapView from "react-native-maps";
 import CodePopup from "../components/CodePopup";
 import Header from "../components/Header";
 
 import { getRideData, cancelRide, completeRide } from "../context/api";
-// const rideDetails = {
-//   title: "Your Ride",
-//   name: "Ram Prasad",
-//   from: "Golpark",
-//   to: "Devinagar",
-//   time: "12min",
-//   code: 12345,
-//   phoneNumber: "+9779847000000",
-// };
+import AppContext from "../context/AppContext";
+
 const CodeInputScreen = ({ navigation, route }) => {
   const [rideDetails, setRideDetails] = useState({});
   const [checkvalidation, setCheckValidation] = useState(false);
+  const [routes, setRoutes] = useState(null);
+  const {
+    geo: [location],
+  } = useContext(AppContext);
 
   const { id } = route.params;
-  const data = async () => {
-    const rideData = await getRideData(id);
-    setRideDetails(rideData);
-    const { ride_validated } = rideData;
-    setCheckValidation(ride_validated);
-  };
-  data();
+  useEffect(() => {
+    const data = async () => {
+      const rideData = await getRideData(id);
+      setRideDetails(rideData);
+      setCheckValidation(rideData.ride_validated);
+      console.log(rideDetails);
+    };
+    data();
+  });
   return (
     <View style={{ flex: 1 }}>
-      <Image source={require("../../assets/map2.png")} style={styles.map} />
+      {location?.latitude && (
+        <MapView
+          style={styles.map_img}
+          mapType="standard"
+          showsUserLocation={true}
+          followsUserLocation={true}
+          initialRegion={{
+            latitude: location?.latitude,
+            longitude: location?.longitude,
+            latitudeDelta: 0.00522,
+            longitudeDelta: 0.00021,
+          }}
+        />
+      )}
       <View
         style={{
           position: "absolute",
@@ -94,7 +108,7 @@ const CodeInputScreen = ({ navigation, route }) => {
                 textAlign: "center",
                 color: "white",
               }}
-              onPress={() => cancelRide(id)}
+              onPress={async() => await cancelRide(id)}
             >
               Cancel Ride
             </Text>
@@ -108,11 +122,9 @@ const CodeInputScreen = ({ navigation, route }) => {
 export default CodeInputScreen;
 
 const styles = StyleSheet.create({
-  map: {
+  map_img: {
     flex: 1,
-    // position: "absolute",
-    height: "100%",
-    width: "100%",
-    bottom: 0,
+    height: Dimensions.get("window").height,
+    ...StyleSheet.absoluteFill,
   },
 });

@@ -8,7 +8,7 @@ const BASE_URL = "http://api.positionstack.com/v1";
 const AUTOCOMPLETE_URL = "https://api.locationiq.com/v1/autocomplete";
 const ROUTE_URL = "https://api.geoapify.com/v1/routing";
 
-const BASE_OUR_API_URL = "http://192.168.18.11:3001/v1/api";
+const BASE_OUR_API_URL = "http://192.168.18.21:3001/v1/api";
 
 async function get(url) {
   let headers = {

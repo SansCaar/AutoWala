@@ -1,4 +1,5 @@
-const BASE_OUR_API_URL="http://192.168.1.12:3001/v1/api/reqride";
+const BASE_OUR_API_URL="http://192.168.18.21:3001/v1/api/reqride";
+const ROUTE_URL = "https://api.geoapify.com/v1/routing";
 
 export async function getrides() 
   {    
@@ -53,6 +54,17 @@ export async function getrides()
     return data;
   }
 
+  export async function getRoutes(from, to) {
+    let url =
+      ROUTE_URL +
+      `?apiKey=${ROUTE_APIKEY}&waypoints=${from.latitude}%2C${from.longitude}%7C${to.latitude}%2C${to.longitude}&mode=drive`;
+    let res = await get(url);
+    res = res.features[0].geometry.coordinates[0];
+    res = res.map((cords) => ({ longitude: cords[0], latitude: cords[1] }));
+    console.log("API4");
+  
+    return res;
+  }
 
 
 // export async function setAccepted(id) {

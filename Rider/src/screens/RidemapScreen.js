@@ -1,36 +1,44 @@
-import {
-  View,
-  Text,
-  StyleSheet,
-  Image,
-  Pressable,
-  ScrollView,
-  Dimensions,
-  FlatList,
-} from "react-native";
-import {
-  widthPercentageToDP as wp,
-  heightPercentageToDP as hp,
-} from "react-native-responsive-screen";
+import { View, Text, StyleSheet, ScrollView, Dimensions } from "react-native";
 
-import React,{useState} from "react";
+import React, { useState, useContext, useEffect } from "react";
 import Header from "../components/Header";
-import Box from "../components/Box";
 import { Colors } from "../styles/Global";
-import Icon from "@expo/vector-icons/Feather";
 import PassengerRequest from "../components/PassengerRequest";
-import { getrides  } from "../context/api";
+import { getrides } from "../context/api";
+import MapView from "react-native-maps";
+import AppContext from "../context/AppContext";
 
-const RidemapScreen =  ({ navigation }) => {
-  const [passenger,setPassenger] =useState([]);
-  const ride =async ()=>{
-    const allrides = await getrides();
-    setPassenger(allrides)
-  }
+const RidemapScreen = ({ navigation }) => {
+  const [passenger, setPassenger] = useState([]);
+  useEffect(() => {
+    async function ride() {
+      const allrides = await getrides();
+      setPassenger(await allrides);
+      console.log(allrides);
+    }
+    ride();
+  }, [passenger]);
+  const {
+    geo: [location],
+  } = useContext(AppContext);
 
-  ride();
   return (
     <View style={styles.con}>
+      <MapView
+        style={{
+          flex: 1,
+          height: Dimensions.get("window").height,
+          ...StyleSheet.absoluteFill,
+        }}
+        initialRegion={{
+          latitude: location?.latitude,
+          longitude: location?.longitude,
+          latitudeDelta: 0.00522,
+          longitudeDelta: 0.00021,
+        }}
+        mapType="standard"
+        showsUserLocation={true}
+      ></MapView>
       <Header
         onPressL={navigation.goBack}
         iconL="arrow-left"
@@ -38,15 +46,25 @@ const RidemapScreen =  ({ navigation }) => {
         onPressR={() => navigation.navigate("Profile")}
       />
       <View style={styles.bottomWrapper}>
-        <View style={styles.bottom_con}>
-          <Text style={styles.b_text}>Ride Request</Text>
-          <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-            { 
-            passenger.length!=0&&passenger.map( (data, i)=> {
-            return <PassengerRequest data={data}   navigation={navigation} key={i} />
-          })}
-          </ScrollView>
-        </View>
+        {passenger.length > 0 && (
+          <View style={styles.bottom_con}>
+            <Text style={styles.b_text}>Ride Request</Text>
+            <ScrollView
+              horizontal={true}
+              showsHorizontalScrollIndicator={false}
+            >
+              {passenger?.map((data, i) => {
+                return (
+                  <PassengerRequest
+                    data={data}
+                    navigation={navigation}
+                    key={i}
+                  />
+                );
+              })}
+            </ScrollView>
+          </View>
+        )}
       </View>
     </View>
   );
