@@ -51,7 +51,7 @@ const OtpScreen = ({ navigation }) => {
     };
 
     axios
-      .post("http://192.168.1.12:3001/v1/api/user/register", finalUser)
+      .post("http://192.168.10.102:3001/v1/api/user/register", finalUser)
       .then((res) => {
         if (res.status === 201) {
           setUser({
