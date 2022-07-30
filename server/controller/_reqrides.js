@@ -148,3 +148,19 @@ export const checkAccepted = async (req, res) => {
     res.status(500).send(error);
   }
 };
+export const getRidesByUserId = async (req,res) =>{
+  try {
+    const _id = req.params.id;
+    const SpecificUser = await reqrideschema.find({user_id:_id}).sort({_id:-1});
+    if (!SpecificUser) {
+      return res.status(404).send();
+    } else {
+      res.status(201).send(SpecificUser);
+    }
+    
+  } catch (error) {
+    res.status(400).send(error)
+    
+  }
+}
+
