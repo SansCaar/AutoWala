@@ -152,3 +152,12 @@ export async function cancelRide(id)
   console.log(data)
   return data;
 }
+export async function getRideData(id) 
+{
+  var url =  BASE_OUR_API_URL +"/reqride/"+id;
+  console.log(url);
+  let response = await fetch(url);
+  let data = await response.json();
+  console.log(data)
+  return data;
+}
