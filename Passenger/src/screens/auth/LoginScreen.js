@@ -6,8 +6,9 @@ import AppContext from "../../context/AppContext.js";
 import * as Google from "expo-auth-session/providers/google";
 
 // for facebook login
-import * as Facebook from "expo-auth-session/providers/facebook";
+// import * as Facebook from "expo-auth-session/providers/facebook";
 import { ResponseType } from "expo-auth-session";
+import * as Facebook from "expo-facebook";
 
 import * as WebBrowser from "expo-web-browser";
 import axios from "axios";
@@ -53,6 +54,7 @@ const LoginScreen = ({ navigation }) => {
         )
         .then((res) => {
           setUser(res.data.email);
+          LOGIN();
         })
         .catch((e) => {
           console.log(e);
@@ -70,12 +72,12 @@ const LoginScreen = ({ navigation }) => {
 
   useEffect(() => {
     if (Error) {
-      console.log("the alert is fired");
       alert(Error);
     }
   }, [Error]);
-  useEffect(() => {
-    console.log({ user });
+
+  // function to send the login request to the backend
+  const LOGIN = () => {
     axios
       .post("http://10.0.2.2:3001/v1/api/user/login", {
         email: user,
@@ -97,25 +99,30 @@ const LoginScreen = ({ navigation }) => {
       .catch((e) => {
         setError(e.response.data.error);
       });
-  }, [user]);
-
-  const [freq, fres, fblogin] = Facebook.useAuthRequest({
-    expoClientId: fbClientId,
-    responseType: ResponseType.Code,
-  });
-  // for facebook login
-  const facebookLogin = () => {
-    fblogin();
   };
-  // for looking up the response
-  useEffect(() => {
-    if (fres?.type === "success") {
-      const { code } = fres.params;
 
-    } else {
-      console.log("unsuccessfull login attempt");
+  // for facebook login
+  const facebookLogin = async () => {
+    try {
+      await Facebook.initializeAsync({
+        appId: fbClientId,
+      });
+      const { type, token } = await Facebook.logInWithReadPermissionsAsync({
+        permissions: ["public_profile"],
+      });
+      if (type === "success") {
+        // Get the user's name using Facebook's Graph API
+        const response = await fetch(
+          `https://graph.facebook.com/me?access_token=${token}`
+        );
+        await response.json();
+      } else {
+        // type === 'cancel'
+      }
+    } catch ({ message }) {
+      alert(`Facebook Login Error: ${message}`);
     }
-  }, [fres]);
+  };
 
   return (
     <>
