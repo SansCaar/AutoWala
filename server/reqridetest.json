@@ -1,15 +1,15 @@
 {
-    "user_name":"Hri Chand",
-    "user_id" :787899456,
-    "user_contact" : 978478945,
-      "ride_toc" :"Bhattarai",
-      "user_tolatitude" :7884455,
-    "user_tolongitude" : 978478945,
-      "user_fromlatitude" :7884455,
-    "user_fromlongitude" : 978478945,
-    "ride_noofseats":4,
-    "ride_from":"butwal",
-    "ride_to":"Ktm",
-    "ride_code":1834,
-    "ride_status":"AVAILABLE"
+  "user_name": "Hri Chand",
+  "user_id": 787899456,
+  "user_contact": 978478945,
+  "ride_toc": "Bhattarai",
+  "user_tolatitude": 7884455,
+  "user_tolongitude": 978478945,
+  "user_fromlatitude": 7884455,
+  "user_fromlongitude": 978478945,
+  "ride_noofseats": 4,
+  "ride_from": "butwal",
+  "ride_to": "Ktm",
+  "ride_code": 1834,
+  "ride_status": "AVAILABLE"
 }

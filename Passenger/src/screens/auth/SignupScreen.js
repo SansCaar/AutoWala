@@ -3,6 +3,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { styles } from "../../styles/login_design.js";
 import { Colors } from "../../styles/Global.js";
 import AppContext from "../../context/AppContext";
+import { EXPO_CLIENT_ID, ANDROID_CLIENT_ID } from "@env";
 
 // packages for google auth
 import * as Google from "expo-auth-session/providers/google";
@@ -14,12 +15,10 @@ import axios from "axios";
 
 WebBrowser.maybeCompleteAuthSession();
 
-const expoClientId =
-  "845597949104-2r2rup8te994mhbp3uc7lq2gf6q8rr4b.apps.googleusercontent.com";
+const expoClientId = EXPO_CLIENT_ID;
 
 // not need for now
-const androidClientId =
-  "845597949104-avopt2ga5gc2ed43geenb0571880c6ad.apps.googleusercontent.com";
+const androidClientId = ANDROID_CLIENT_ID;
 
 const SignupScreen = ({ navigation }) => {
   // global states for setting the user
@@ -47,6 +46,7 @@ const SignupScreen = ({ navigation }) => {
           `https://www.googleapis.com/oauth2/v3/userinfo?access_token=${access_token}`
         )
         .then((res) => {
+          console.log(res.data.email);
           setUser({
             email: res.data.email,
             gfid: access_token,

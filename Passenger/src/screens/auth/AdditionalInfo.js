@@ -8,6 +8,7 @@ import {
   TextInput,
 } from "react-native";
 import React, { useContext, useEffect, useState } from "react";
+import {API_URL} from "@env"
 import Icon from "@expo/vector-icons/Ionicons";
 // import { launchImageLibraryAsync } from "expo-image-picker";
 import { Colors } from "../../styles/Global";
@@ -23,7 +24,7 @@ import axios from "axios";
 
 // setting up the server domain
 // this domain should be changed to the actual server location in the production
-const serverDomain = "http://192.168.1.12:3001/";
+const serverDomain = API_URL;
 
 const AdditionalInfo = ({ navigation }) => {
   // global states for setting the user
@@ -82,8 +83,8 @@ const AdditionalInfo = ({ navigation }) => {
         },
         "myfile"
       );
-
-      const serverUrl = "http://192.168.1.12:3001/v1/api/user/uploadImage";
+      const serverUrl = `http://192.168.156.235:3001/v1/api/user/uploadImage`;
+      console.log(serverUrl)
       const response = await axios(serverUrl, {
         method: "post",
         data: data,
@@ -190,7 +191,7 @@ const AdditionalInfo = ({ navigation }) => {
 
       uploadImage(result).then((res) => {
         console.log({ res });
-        setData({ ...data, image: serverDomain + res });
+        setData({ ...data, image: "http://192.168.156.235:3001" +"/"+ res });
       });
     } catch (e) {
       console.log(e);

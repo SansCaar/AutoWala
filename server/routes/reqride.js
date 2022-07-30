@@ -10,6 +10,8 @@ import {
   userCanceled,
   setValidate,
   driverCompleted,
+  getRidesByUserId
+  
 } from "../controller/_reqrides.js";
 const reqriderouter = express.Router();
 
@@ -25,6 +27,7 @@ reqriderouter.route("/usercomplete/:id").get(driverCompleted);
 
 reqriderouter.route("/usercancel/:id").get(userCanceled);
 reqriderouter.route("/accept/validate/:id").get(setValidate);
+reqriderouter.route("/getRidesbyUserId/:id").get(getRidesByUserId);
 
 // router.route("/:id").get(getOneUser)
 // router.route("/:id").delete(dltUser)

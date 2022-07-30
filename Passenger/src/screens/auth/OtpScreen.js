@@ -2,12 +2,15 @@ import { Dimensions, Pressable, StyleSheet, Text, View } from "react-native";
 import React, { useContext, useEffect, useState } from "react";
 import { TextInput } from "react-native-paper";
 import AppContext from "../../context/AppContext";
+import {API_URL} from "@env"
 // importing the styles
 
 import { Colors } from "../../styles/Global";
 import axios from "axios";
 
 const OtpScreen = ({ navigation }) => {
+
+  const serverDomain = API_URL;
   const { usr } = useContext(AppContext);
 
   const [user] = usr;
@@ -41,6 +44,7 @@ const OtpScreen = ({ navigation }) => {
 
   const registerUser = async () => {
     const finalUser = {
+      id:user.id,
       email: user.email,
       contact: user.formData?.contact,
       address: user.formData?.address,
@@ -51,7 +55,7 @@ const OtpScreen = ({ navigation }) => {
     };
 
     axios
-      .post("http://192.168.1.12:3001/v1/api/user/register", finalUser)
+      .post(`http://192.168.156.235:3001/v1/api/user/register`, finalUser)
       .then((res) => {
         if (res.status === 201) {
           setUser({
@@ -62,6 +66,7 @@ const OtpScreen = ({ navigation }) => {
             name: res.data?.user?.user_name,
             toc: res.data?.user?.user_toc,
           });
+          console.log(res.data?.user?._id)
 
           navigation.navigate("Home");
         }
