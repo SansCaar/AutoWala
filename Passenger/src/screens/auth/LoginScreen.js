@@ -5,6 +5,8 @@ import { Colors } from "../../styles/Global.js";
 import AppContext from "../../context/AppContext.js";
 import * as Google from "expo-auth-session/providers/google";
 import * as AuthSession from "expo-auth-session";
+import { EXPO_CLIENT_ID, ANDROID_CLIENT_ID,API_URL } from "@env";
+
 
 import * as WebBrowser from "expo-web-browser";
 import axios from "axios";
@@ -18,12 +20,13 @@ WebBrowser.maybeCompleteAuthSession();
 //   // path: "https://auth.expo.io",
 // });
 // console.log({ redirectURI });
-const expoClientId =
-  "845597949104-2r2rup8te994mhbp3uc7lq2gf6q8rr4b.apps.googleusercontent.com";
+const expoClientId = EXPO_CLIENT_ID;
 
 // not need for now
-const androidClientId =
-  "845597949104-avopt2ga5gc2ed43geenb0571880c6ad.apps.googleusercontent.com";
+const androidClientId = ANDROID_CLIENT_ID;
+
+//for api domain
+const serverDomain = API_URL;
 
 const LoginScreen = ({ navigation }) => {
   const { usr } = useContext(AppContext);
@@ -74,7 +77,7 @@ const LoginScreen = ({ navigation }) => {
   useEffect(() => {
     console.log({ user });
     axios
-      .post("http://10.0.2.2:3001/v1/api/user/login", {
+      .post(`${serverDomain}/v1/api/user/login`, {
         email: user,
       })
       .then((res) => {

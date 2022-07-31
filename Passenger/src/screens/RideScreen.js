@@ -1,8 +1,8 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { StyleSheet, Text, View, Image, Linking ,Pressable } from "react-native";
 import CodePopup from "../components/CodePopup";
 import Header from "../components/Header";
-import { cancelRide } from "../context/geocoding";
+import { cancelRide, getRideData} from "../context/geocoding";
 
 const rideDetails = {
   title: "Your Ride",
@@ -16,9 +16,11 @@ const rideDetails = {
 const RideScreen = ({ navigation, route }) => {
   const { id } = route.params;
   useEffect(()=>{
-    console.log('id'+id);
-    alert("ID:"+id)
+    let data = getRideById(id);
+    setRideData(data)
+    console.log(data);
   })
+  const [rideData, setRideData] = useState({});
   return (
     <View style={{ flex: 1 }}>
       <Image source={require("../../assets/map2.png")} style={styles.map} />
@@ -32,8 +34,7 @@ const RideScreen = ({ navigation, route }) => {
       >
         <Header iconL="arrow-left" onPressL={navigation.goBack} />
         <CodePopup {...rideDetails} />
-        <Text>Hello:{id}</Text>
-        <Pressable
+        {!rideData.ride_validated && <Pressable
             style={{
               position: "absolute",
               justifyContent: "center",
@@ -54,7 +55,7 @@ const RideScreen = ({ navigation, route }) => {
             >
               Cancel Ride
             </Text>
-          </Pressable>
+          </Pressable>}
       </View>
     </View>
   );

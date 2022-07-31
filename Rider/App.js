@@ -1,6 +1,7 @@
 import { StatusBar } from "expo-status-bar";
 import { useFonts } from "expo-font";
 import AppStack from "./src/navigation/AppStack";
+import { ContextProvider } from "./src/context/AppContext";
 
 
 export default function App() {
@@ -11,9 +12,9 @@ export default function App() {
   });
   if (!fontsLoaded) return null;
   return (
-    <>
+    <ContextProvider>
       <AppStack/>
       <StatusBar style="auto" />
-    </>
+    </ContextProvider>
   );    
 }

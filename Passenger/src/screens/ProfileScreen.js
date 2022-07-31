@@ -1,30 +1,11 @@
 import { View, Text, Image, Pressable, ScrollView } from "react-native";
-import React from "react";
+import React, { useContext } from "react";
 import { styles } from "../styles/profile_design";
 import Header from "../components/Header.js";
-import ListBox from "../components/ListBox";
-import Icon from "@expo/vector-icons/Feather";
 import { Colors } from "../styles/Global";
 import DefaultLocationList from "../components/DefaultLocationList";
-
-
-const listData = [
-  {
-    type: "transaction",
-    date: "20 Mar 2020",
-    balance: 1001,
-    payment_method: "esewa",
-    add_balance: "1000",
-  },
-  {
-    type: "charge",
-    date: "20 Mar 2020",
-    balance: 1001,
-    payment_method: "esewa",
-    add_balance: "20",
-  },
-];
-
+import AppContext from "../context/AppContext";
+import ListBox from "../components/ListBox";
 const defaultAddress = [
   {
     icon: "home",
@@ -32,24 +13,23 @@ const defaultAddress = [
     location: "Golpark",
   },
 ];
-const ProfileScreen = ({navigation}) => {
+const ProfileScreen = ({ navigation }) => {
+  // for user data accessing from context
+  const { usrr,reride } = useContext(AppContext);
+  const [reqride,setReqride] = reride;
+  const [usr, setUsr] = usrr;
+  const { user_name, user_contact, user_image, user_email } = usr;
   const balance = 2000;
   const point = 1000;
   return (
-    <ScrollView
-    showsVerticalScrollIndicator={false}
-
-    >
+    <ScrollView showsVerticalScrollIndicator={false} style={{flex:1,backgroundColor:Colors.background}}>
       <View style={styles.container}>
         <Header iconL="arrow-left" onPressL={navigation.goBack} />
         <View style={styles.profile_header}>
-            <Image
-              source={require("../../assets/pp.jpg")}
-              style={styles.profile_img}
-            />
-          <Text style={styles.name}>The Rock Prasad</Text>
-          <Text style={styles.number}>98000000000</Text>
-          <Text style={styles.email}>rockprasad110@gmail.com</Text>
+          <Image source={{uri:user_image}} style={styles.profile_img} />
+          <Text style={styles.name}>{user_name}</Text>
+          <Text style={styles.number}>{user_contact}</Text>
+          <Text style={styles.email}>{user_email}</Text>
         </View>
         <View style={styles.profile_stat}>
           <View>
@@ -74,7 +54,7 @@ const ProfileScreen = ({navigation}) => {
             <Text style={styles.point}>{point}</Text>
           </View>
         </View>
-        <View style={styles.wallet_wrapper}>
+        {/* <View style={styles.wallet_wrapper}>
           <Text style={{ fontFamily: "Bold", fontSize: 16, marginLeft: 8 }}>
             Load wallet with
           </Text>
@@ -102,14 +82,30 @@ const ProfileScreen = ({navigation}) => {
               </Pressable>
             </View>
           </View>
-        </View>
-        <View style={styles.trans_con}>
-          <ListBox title="Recent Transaction" data={listData} />
-        </View>
-        <View style={{marginTop:'auto', marginBottom:60}}>
-          <Text style={{fontFamily: "Bold", fontSize: 16, marginLeft: 8,marginBottom:8}}>Quick Places</Text>
-        <DefaultLocationList defaultAddress={defaultAddress} />
+        </View> */}
+        <View style={{ marginTop: 16}}>
+        {reqride?.slice(0,2).map((data,i) =>{
+          return(
+            <ListBox
+            data={data}
+          />
+          )
+        })}
+       
       </View>
+        <View style={{ marginTop: "auto", marginBottom: 60 }}>
+          <Text
+            style={{
+              fontFamily: "Bold",
+              fontSize: 16,
+              marginLeft: 8,
+              marginBottom: 8,
+            }}
+          >
+            Quick Places
+          </Text>
+          <DefaultLocationList defaultAddress={defaultAddress} />
+        </View>
       </View>
     </ScrollView>
   );

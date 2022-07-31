@@ -35,7 +35,8 @@ import Autocomplete from "../components/AutoCompleteInput";
 import BaseModal from "../components/BaseModal";
 
 export default function MapViewScreen({ navigation }) {
-  const { location } = useContext(AppContext);
+  const { geo } = useContext(AppContext);
+  console.log(geo)
   const [data, setData] = useState([]);
 
   const [searching, setSearching] = useState(null);
@@ -154,15 +155,15 @@ export default function MapViewScreen({ navigation }) {
     <KeyboardAvoidingView
       style={{ ...styles.container, marginTop: Constants.statusBarHeight }}
     >
-      {location?.latitude && location?.longitude && (
+      {geo?.latitude && geo?.longitude && (
         <MapView
           ref={map}
           style={styles.map}
           mapType="standard"
           showsUserLocation={true}
           initialRegion={{
-            latitude: location?.latitude,
-            longitude: location?.longitude,
+            latitude: geo?.latitude,
+            longitude: geo?.longitude,
             latitudeDelta: 0.00522,
             longitudeDelta: 0.00021,
           }}

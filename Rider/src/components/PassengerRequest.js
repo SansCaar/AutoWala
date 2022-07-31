@@ -25,7 +25,6 @@ const PassengerRequest = ({ navigation, data }) => {
   } = data;
   const distance = user_tolatitude ^ (2 + user_fromlatitude) ^ 2 ^ (1 / 2);
 
-  console.log(data);
   return (
     <Box style={styles.box}>
       <View style={styles.left}>
@@ -57,8 +56,7 @@ const PassengerRequest = ({ navigation, data }) => {
         <Text style={styles.r_text}>{distance} away</Text>
         <Pressable
           onPress={() => {
-            var data = setAccepted(_id);
-
+            setAccepted(_id);
             navigation.navigate("CodeInput", { id: _id });
           }}
           style={{ backgroundColor: "#78E975", ...styles.btn }}
