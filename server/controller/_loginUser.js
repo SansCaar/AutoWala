@@ -24,11 +24,9 @@ export const loginUser = async (req, res) => {
     const exists = await userSchema.findOne({ user_id: data.id });
 
     if (!exists || exists.length == 0)
-      return res
-        .status(400)
-        .json({
-          error: "Sry account not found, you will need to signup first!!!",
-        });
+      return res.status(404).json({
+        error: "Sry account not found, you will need to signup first!!!",
+      });
 
     //   all the validation passed means the user is legit and the id  entered is correct
     res.status(200).json({ user: exists });

@@ -103,7 +103,8 @@ const SignupScreen = ({ navigation }) => {
       );
       console.log({ response: res });
       if (res.status === 200) {
-        setError("Your account is registerd already!!!");
+        setError("Your account is registered already!!!");
+        navigation.navigate("Login");
         return true;
       }
     } catch (error) {

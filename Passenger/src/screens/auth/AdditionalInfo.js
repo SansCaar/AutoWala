@@ -7,7 +7,7 @@ import {
   Image,
   TextInput,
 } from "react-native";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import Icon from "@expo/vector-icons/Ionicons";
 // import { launchImageLibraryAsync } from "expo-image-picker";
 import { Colors } from "../../styles/Global";
@@ -130,13 +130,15 @@ const AdditionalInfo = ({ navigation }) => {
     if (data.username === "") {
       setError({
         target: "username",
-        message: "The email feild cannot be empty.",
+        message: "User name cannot be empty.",
       });
+      // making the username feild red
+
       return;
     } else if (data.address === "") {
       setError({
         target: "address",
-        message: "The address feild cannot be left empty.",
+        message: "Address cannot be left empty.",
       });
       return;
     } else if (data.contact.length !== 10) {
@@ -272,7 +274,12 @@ const AdditionalInfo = ({ navigation }) => {
           <View style={styles.inputCon}>
             <Text style={styles.inputTitle}>User Name</Text>
 
-            <View style={styles.inputWrapper}>
+            <View
+              style={[
+                styles.inputWrapper,
+                error?.target === "username" ? styles.errorInp : "",
+              ]}
+            >
               <Icon
                 name="person"
                 size={22}
@@ -282,7 +289,7 @@ const AdditionalInfo = ({ navigation }) => {
               <TextInput
                 value={data.username}
                 selectionColor={Colors.grey}
-                style={styles.input}
+                style={[styles.input]}
                 placeholder="Eg: Ramesh Nepali"
                 onChangeText={(text) => {
                   handleChange("username", text);
@@ -295,7 +302,12 @@ const AdditionalInfo = ({ navigation }) => {
           </View>
           <View style={styles.inputCon}>
             <Text style={styles.inputTitle}>Address (City-Ward, District)</Text>
-            <View style={styles.inputWrapper}>
+            <View
+              style={[
+                styles.inputWrapper,
+                error?.target === "address" ? styles.errorInp : "",
+              ]}
+            >
               <Icon
                 name="location-sharp"
                 size={22}
@@ -305,7 +317,7 @@ const AdditionalInfo = ({ navigation }) => {
               <TextInput
                 value={data.address}
                 selectionColor={Colors.grey}
-                style={styles.input}
+                style={[styles.input]}
                 placeholder="Eg: Butwal 13, Rupandehi"
                 onChangeText={(text) => {
                   handleChange("address", text);
@@ -316,9 +328,14 @@ const AdditionalInfo = ({ navigation }) => {
               <Text style={styles.error}> {error.message} </Text>
             ) : null}
           </View>
-          <View style={styles.inputCon}>
+          <View style={[styles.inputCon]}>
             <Text style={styles.inputTitle}>Phone Number</Text>
-            <View style={styles.inputWrapper}>
+            <View
+              style={[
+                styles.inputWrapper,
+                error?.target === "contact" ? styles.errorInp : "",
+              ]}
+            >
               <Icon
                 name="call"
                 size={22}
@@ -328,7 +345,7 @@ const AdditionalInfo = ({ navigation }) => {
               <TextInput
                 value={data.contact}
                 selectionColor={Colors.grey}
-                style={styles.input}
+                style={[styles.input]}
                 placeholder="Eg: 98********"
                 keyboardType="number-pad"
                 onChangeText={(text) => {
@@ -471,5 +488,9 @@ const styles = StyleSheet.create({
     width: 100,
     borderRadius: 50,
     overflow: "hidden",
+  },
+  errorInp: {
+    borderWidth: 2,
+    borderColor: "red",
   },
 });
