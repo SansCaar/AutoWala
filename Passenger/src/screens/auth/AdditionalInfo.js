@@ -21,6 +21,7 @@ import moment from "moment";
 // Import Document Picker
 import * as DocumentPicker from "expo-document-picker";
 import axios from "axios";
+import { BASE_OUR_API_URL } from "../../context/geocoding";
 
 // setting up the server domain
 // this domain should be changed to the actual server location in the production
@@ -83,7 +84,7 @@ const AdditionalInfo = ({ navigation }) => {
         },
         "myfile"
       );
-      const serverUrl = `http://192.168.156.235:3001/v1/api/user/uploadImage`;
+      const serverUrl = BASE_OUR_API_URL+`/user/uploadImage`;
       console.log(serverUrl)
       const response = await axios(serverUrl, {
         method: "post",
@@ -191,7 +192,7 @@ const AdditionalInfo = ({ navigation }) => {
 
       uploadImage(result).then((res) => {
         console.log({ res });
-        setData({ ...data, image: "http://192.168.156.235:3001" +"/"+ res });
+        setData({ ...data, image: "http://192.168.18.21:3001" +"/"+ res });
       });
     } catch (e) {
       console.log(e);

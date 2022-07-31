@@ -16,7 +16,7 @@ const rideDetails = {
 const RideScreen = ({ navigation, route }) => {
   const { id } = route.params;
   useEffect(()=>{
-    let data = getRideById(id);
+    let data = getRideData(id);
     setRideData(data)
     console.log(data);
   })

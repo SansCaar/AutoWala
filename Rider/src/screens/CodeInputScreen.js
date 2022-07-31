@@ -81,6 +81,7 @@ const CodeInputScreen = ({ navigation, route }) => {
               onPress={async () => {
                 var data = await completeRide(id);
                 const { ride_status } = data;
+                console.log(ride_status)
                 if (ride_status == "DRIVER_COMPLETED") {
                   alert("Completed");
                   navigation.navigate("Home");

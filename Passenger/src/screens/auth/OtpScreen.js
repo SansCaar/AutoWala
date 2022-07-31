@@ -2,14 +2,14 @@ import { Dimensions, Pressable, StyleSheet, Text, View } from "react-native";
 import React, { useContext, useEffect, useState } from "react";
 import { TextInput } from "react-native-paper";
 import AppContext from "../../context/AppContext";
-import {API_URL} from "@env"
+import { API_URL } from "@env";
 // importing the styles
 
 import { Colors } from "../../styles/Global";
 import axios from "axios";
+import { BASE_OUR_API_URL } from "../../context/geocoding";
 
 const OtpScreen = ({ navigation }) => {
-
   const serverDomain = API_URL;
   const { usr } = useContext(AppContext);
 
@@ -33,8 +33,7 @@ const OtpScreen = ({ navigation }) => {
       return;
     }
     // if the program reaches here it means the validation are pass and its time to send data to the db
-    registerUser()
-    .then(() => {
+    registerUser().then(() => {
       navigation.navigate("Home");
     });
   };
@@ -44,7 +43,7 @@ const OtpScreen = ({ navigation }) => {
 
   const registerUser = async () => {
     const finalUser = {
-      id:user.id,
+      id: user.id,
       email: user.email,
       contact: user.formData?.contact,
       address: user.formData?.address,
@@ -55,7 +54,7 @@ const OtpScreen = ({ navigation }) => {
     };
 
     axios
-      .post(`http://192.168.156.235:3001/v1/api/user/register`, finalUser)
+      .post(BASE_OUR_API_URL + `/user/register`, finalUser)
       .then((res) => {
         if (res.status === 201) {
           setUser({
@@ -66,7 +65,7 @@ const OtpScreen = ({ navigation }) => {
             name: res.data?.user?.user_name,
             toc: res.data?.user?.user_toc,
           });
-          console.log(res.data?.user?._id)
+          console.log(res.data?.user?._id);
 
           navigation.navigate("Home");
         }
