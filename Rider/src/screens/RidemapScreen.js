@@ -4,12 +4,17 @@ import React, { useState, useContext, useEffect } from "react";
 import Header from "../components/Header";
 import { Colors } from "../styles/Global";
 import PassengerRequest from "../components/PassengerRequest";
-import { getrides } from "../context/api";
+import { getrides, getRoutes } from "../context/api";
 import MapView from "react-native-maps";
 import AppContext from "../context/AppContext";
 
 const RidemapScreen = ({ navigation }) => {
   const [passenger, setPassenger] = useState([]);
+
+  const {
+    geo: [location],
+  } = useContext(AppContext);
+
   useEffect(() => {
     async function ride() {
       const allrides = await getrides();
@@ -18,9 +23,6 @@ const RidemapScreen = ({ navigation }) => {
     }
     ride();
   }, [passenger]);
-  const {
-    geo: [location],
-  } = useContext(AppContext);
 
   return (
     <View style={styles.con}>
@@ -38,7 +40,7 @@ const RidemapScreen = ({ navigation }) => {
         }}
         mapType="standard"
         showsUserLocation={true}
-      ></MapView>
+      />
       <Header
         onPressL={navigation.goBack}
         iconL="arrow-left"

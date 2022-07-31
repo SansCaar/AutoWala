@@ -16,14 +16,28 @@ import { getRideData, cancelRide, completeRide } from "../context/api";
 import AppContext from "../context/AppContext";
 
 const CodeInputScreen = ({ navigation, route }) => {
-  const [rideDetails, setRideDetails] = useState({});
-  const [checkvalidation, setCheckValidation] = useState(false);
-  const [routes, setRoutes] = useState(null);
   const {
     geo: [location],
   } = useContext(AppContext);
 
   const { id } = route.params;
+  const [rideDetails, setRideDetails] = useState({});
+  const [checkvalidation, setCheckValidation] = useState(false);
+
+  const [from, setFrom] = useState([]);
+  const [to, setTo] = useState([]);
+  const [routes, setRoutes] = useState(null);
+
+  function renderPolyLine(routes) {
+    return (
+      <Polyline
+        coordinates={routes}
+        strokeColor={Colors.primary} // fallback for when `strokeColors` is not supported by the map-provider
+        strokeWidth={5}
+      />
+    );
+  }
+
   useEffect(() => {
     const data = async () => {
       const rideData = await getRideData(id);
@@ -47,7 +61,9 @@ const CodeInputScreen = ({ navigation, route }) => {
             latitudeDelta: 0.00522,
             longitudeDelta: 0.00021,
           }}
-        />
+        >
+          {routes && renderPolyLine(routes)}
+        </MapView>
       )}
       <View
         style={{
@@ -109,7 +125,7 @@ const CodeInputScreen = ({ navigation, route }) => {
                 textAlign: "center",
                 color: "white",
               }}
-              onPress={async() => await cancelRide(id)}
+              onPress={async () => await cancelRide(id)}
             >
               Cancel Ride
             </Text>
