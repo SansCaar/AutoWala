@@ -168,6 +168,7 @@ const AdditionalInfo = ({ navigation }) => {
       return { ...user, formData: { ...data }, otp: fourDigOtp, toc: toc };
     });
 
+    console.log(user);
     navigation.navigate("OtpScreen");
   };
 
@@ -193,6 +194,7 @@ const AdditionalInfo = ({ navigation }) => {
       address: "",
       toc: "",
       gfid: "",
+      userId: "",
     });
     navigation.navigate("SignUp");
   };
@@ -224,29 +226,6 @@ const AdditionalInfo = ({ navigation }) => {
     // }
   };
 
-  // return (
-  //   <View style={styles.main_container}>
-  //     <Text style={styles.main_title}>Let us know you a bit better</Text>
-  //     <Text style={styles.sub_title}>
-  //       This following information will be used to create your profile.
-  //     </Text>
-  //     <View style={styles.feild_container}>
-  //       <Text style={styles.feild_title}> Display Name </Text>
-  //       <TextInput placeholder="Eg :- Saroj Regmi" />
-  //     </View>
-  //     <View style={styles.feild_container}>
-  //       <Text style={styles.feild_title}> Phone Number</Text>
-  //       <TextInput placeholder="Eg :- 98********" />
-  //     </View>
-  //     <View style={styles.feild_container}>
-  //       <Text style={styles.feild_title}> Referral code</Text>
-  //       <TextInput placeholder="Eg :- BXC3Y0" />
-  //     </View>
-  //     <Pressable onPress={() => submitForm()}>
-  //       <Text>Continue</Text>
-  //     </Pressable>
-  //   </View>
-  // );
   return (
     <View style={styles.main_container}>
       <ScrollView showsVerticalScrollIndicator={false}>

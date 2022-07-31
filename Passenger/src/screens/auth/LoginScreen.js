@@ -29,6 +29,7 @@ const expoClientId =
 const androidClientId =
   "845597949104-avopt2ga5gc2ed43geenb0571880c6ad.apps.googleusercontent.com";
 
+  // for facebook app login
 const fbClientId = "582916613232390";
 const LoginScreen = ({ navigation }) => {
   const { usr } = useContext(AppContext);

@@ -10,7 +10,7 @@ import axios from "axios";
 const OtpScreen = ({ navigation }) => {
   const { usr } = useContext(AppContext);
 
-  const [user] = usr;
+  const [user, setUser] = usr;
 
   const [otp, setOpt] = useState("");
 
@@ -40,6 +40,9 @@ const OtpScreen = ({ navigation }) => {
   };
 
   const registerUser = async () => {
+    console.log({
+      user,
+    });
     const finalUser = {
       email: user.email,
       contact: user.formData?.contact,
@@ -48,6 +51,7 @@ const OtpScreen = ({ navigation }) => {
       toc: user.toc,
       gfid: user.gfid,
       username: user.formData?.username,
+      userId: user.userId,
     };
 
     axios
@@ -55,7 +59,7 @@ const OtpScreen = ({ navigation }) => {
       .then((res) => {
         if (res.status === 201) {
           setUser({
-            id: res.data?.user?._id,
+            userId: res.data?.user?.userId,
             email: res.data?.user?.user_email,
             contact: res.data?.user?.user_contact,
             image: res.data?.user?.user_image,
@@ -67,9 +71,14 @@ const OtpScreen = ({ navigation }) => {
         }
       })
       .catch((error) => {
+        console.log({ main: error });
         console.log({ error: error.response.data.error });
       });
   };
+
+  useEffect(() => {
+    console.log(user);
+  }, [user]);
 
   // styling
   let styles = StyleSheet.create({

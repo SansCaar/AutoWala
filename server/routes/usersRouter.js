@@ -9,6 +9,7 @@ import {
   postUser,
   updateUser,
   uploadImage,
+  userExistance,
 } from "../controller/_users.js";
 const router = express.Router();
 
@@ -27,6 +28,9 @@ router.route("/:id").patch(updateUser);
 // login and register routes
 router.route("/login").post(loginUser);
 router.route("/register").post(registerUser);
+
+// checking for registers users existance
+router.route("/register/existance").post(userExistance);
 
 // route for uploading the user image to the server
 
