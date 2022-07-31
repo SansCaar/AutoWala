@@ -42,6 +42,11 @@ const LoginScreen = ({ navigation }) => {
   // for allerting the user about the error that occured
   const [Error, setError] = useState(false);
 
+  const googleSignIn = async () => {
+    // getting the email from the google
+    await promptAsync({ showInRecents: true });
+  };
+
   useEffect(() => {
     if (response?.type === "success") {
       const { authentication } = response;
@@ -53,34 +58,43 @@ const LoginScreen = ({ navigation }) => {
           `https://www.googleapis.com/oauth2/v3/userinfo?access_token=${access_token}`
         )
         .then((res) => {
-          setUser(res.data.email);
-          LOGIN();
+          LOGIN(res.data?.sub);
         })
         .catch((e) => {
           console.log(e);
         });
     }
   }, [response]);
-  const googleSignIn = async () => {
-    // getting the email from the google
-    await promptAsync({ showInRecents: true });
 
-    // implementing the google login
-
-    // after everything is done redirecting to the previous location
+  // for facebook login
+  const facebookLogin = async () => {
+    try {
+      await Facebook.initializeAsync({
+        appId: fbClientId,
+      });
+      const { type, token } = await Facebook.logInWithReadPermissionsAsync({
+        permissions: ["public_profile"],
+      });
+      if (type === "success") {
+        // Get the user's name using Facebook's Graph API
+        const response = await fetch(
+          `https://graph.facebook.com/me?access_token=${token}`
+        );
+        const { id } = await response.json();
+        LOGIN(id);
+      } else {
+        // type === 'cancel'
+      }
+    } catch ({ message }) {
+      alert(`Facebook Login Error: ${message}`);
+    }
   };
 
-  useEffect(() => {
-    if (Error) {
-      alert(Error);
-    }
-  }, [Error]);
-
   // function to send the login request to the backend
-  const LOGIN = () => {
+  const LOGIN = (userId) => {
     axios
       .post("http://10.0.2.2:3001/v1/api/user/login", {
-        email: user,
+        id: userId,
       })
       .then((res) => {
         if (res.status === 200) {
@@ -101,28 +115,13 @@ const LoginScreen = ({ navigation }) => {
       });
   };
 
-  // for facebook login
-  const facebookLogin = async () => {
-    try {
-      await Facebook.initializeAsync({
-        appId: fbClientId,
-      });
-      const { type, token } = await Facebook.logInWithReadPermissionsAsync({
-        permissions: ["public_profile"],
-      });
-      if (type === "success") {
-        // Get the user's name using Facebook's Graph API
-        const response = await fetch(
-          `https://graph.facebook.com/me?access_token=${token}`
-        );
-        await response.json();
-      } else {
-        // type === 'cancel'
-      }
-    } catch ({ message }) {
-      alert(`Facebook Login Error: ${message}`);
+  // error handeling
+  useEffect(() => {
+    if (Error) {
+      alert(Error);
+      setError(false);
     }
-  };
+  }, [Error]);
 
   return (
     <>
