@@ -45,13 +45,36 @@ const RideScreen = ({ navigation, route }) => {
               alignSelf: "center",
               bottom: 20,
             }}
+            onPress={() => {
+              console.log("hello ");
+              Alert.alert(
+                "Ride Cnaceled",
+                "Your ride has been cancelled. You are requested not to cancel any rides if ",
+                [
+                  {
+                    text: "Cancel",
+                    style: "cancel",
+                  },
+                  {
+                    text: "Ok",
+                    onPress: async () => {
+                      Promise.all([
+                        await cancelRide(id),
+                        await navigation.navigate("Home"),
+                      ]);
+                    },
+                  },
+                ],
+                { cancelable: true }
+              );
+            }}
           >
             <Text
               style={{
                 textAlign: "center",
                 color: "white",
               }}
-              onPress={async() => await cancelRide(id)}
+              
             >
               Cancel Ride
             </Text>

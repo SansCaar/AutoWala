@@ -60,7 +60,7 @@ export async function getRoutes(from, to) {
     ROUTE_URL +
     `?apiKey=${ROUTE_APIKEY}&waypoints=${from.latitude}%2C${from.longitude}%7C${to.latitude}%2C${to.longitude}&mode=drive`;
   let res = await get(url);
-  res = res.features[0].geometry.coordinates[0];
+  res = res?.features[0].geometry.coordinates[0];
   res = res.map((cords) => ({ longitude: cords[0], latitude: cords[1] }));
   console.log("API4");
 
