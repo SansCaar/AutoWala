@@ -89,3 +89,10 @@ export const uploadImage = async (req, res) => {
 
   return res.status(400).json({ error: "failed to upload file " });
 };
+
+// only for the current use
+export const deleteAll = async (req, res) => {
+  const deleteUsers = await userSchema.deleteMany({});
+
+  return res.status(200).json({ msg: "done deleting all the users" });
+};

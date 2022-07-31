@@ -41,7 +41,7 @@ const OtpScreen = ({ navigation }) => {
 
   const registerUser = async () => {
     console.log({
-      user,
+      data: user.formData.contact,
     });
     const finalUser = {
       email: user.email,
@@ -58,8 +58,9 @@ const OtpScreen = ({ navigation }) => {
       .post("http://10.0.2.2:3001/v1/api/user/register", finalUser)
       .then((res) => {
         if (res.status === 201) {
+          console.log();
           setUser({
-            userId: res.data?.user?.userId,
+            userId: res.data?.user?.user_id,
             email: res.data?.user?.user_email,
             contact: res.data?.user?.user_contact,
             image: res.data?.user?.user_image,
@@ -176,7 +177,7 @@ const OtpScreen = ({ navigation }) => {
 
       <Text style={styles.second_title}>
         Enter the verification code sent to ********
-        {user?.formData.contact ? user?.formData?.contact.slice(8) : ""}
+        {user?.formData?.contact ? user?.formData?.contact.slice(8) : ""}
       </Text>
 
       <View>
