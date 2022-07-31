@@ -41,9 +41,9 @@ export const dltUser = async (req, res) => {
 export const getOneUser = async (req, res) => {
   try {
     const _id = req.params.id;
-    const singleUser = await userSchema.findById(_id);
+    const singleUser = await userSchema.findOne({ user_id: _id });
     if (!singleUser) {
-      return res.status(404).send();
+      return res.status(404).send("user not found");
     } else {
       return res.status(201).send(singleUser);
     }
