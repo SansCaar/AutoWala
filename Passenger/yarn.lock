@@ -1576,6 +1576,13 @@
     mkdirp "^1.0.4"
     rimraf "^3.0.2"
 
+"@react-native-async-storage/async-storage@^1.17.7":
+  version "1.17.7"
+  resolved "https://registry.yarnpkg.com/@react-native-async-storage/async-storage/-/async-storage-1.17.7.tgz#f9213e8cc6202a8c29df5a4da1db588f3b0fa8a9"
+  integrity sha512-mDtWhCcpxzrZhA95f6zi0pnBsjBEZW1LKZWfxVXG0UfaWpPxDBCKowNk2xjRTytckZeVhjmPJPtBU+8QNQcR0A==
+  dependencies:
+    merge-options "^3.0.4"
+
 "@react-native-community/cli-debugger-ui@^7.0.3":
   version "7.0.3"
   resolved "https://registry.npmjs.org/@react-native-community/cli-debugger-ui/-/cli-debugger-ui-7.0.3.tgz"
@@ -4818,7 +4825,7 @@ expo-error-recovery@~3.1.0:
 
 expo-facebook@~12.2.0:
   version "12.2.0"
-  resolved "https://registry.yarnpkg.com/expo-facebook/-/expo-facebook-12.2.0.tgz#7d552d18620c5070e3061747ab8e8940953d85a5"
+  resolved "https://registry.npmjs.org/expo-facebook/-/expo-facebook-12.2.0.tgz"
   integrity sha512-goW+s2tyzAxo2EX6Qp0vML8fjb25TE8ZzpmjGdwh3FvapIBzcY3AKpiAyjH/1sGMvadtbgfy2ApiMKNIom6aTA==
   dependencies:
     "@expo/config-plugins" "^4.0.14"
@@ -4840,12 +4847,12 @@ expo-font@~10.1.0:
 
 expo-image-loader@~3.2.0:
   version "3.2.0"
-  resolved "https://registry.yarnpkg.com/expo-image-loader/-/expo-image-loader-3.2.0.tgz#d98b021660edef7243f7c5ec011b8d0545626d41"
+  resolved "https://registry.npmjs.org/expo-image-loader/-/expo-image-loader-3.2.0.tgz"
   integrity sha512-LU3Q2prn64/HxdToDmxgMIRXS1ZvD9Q3iCxRVTZn1fPQNNDciIQFE5okaa74Ogx20DFHs90r6WoUd7w9Af1OGQ==
 
 expo-image-picker@^13.1.1:
   version "13.1.1"
-  resolved "https://registry.yarnpkg.com/expo-image-picker/-/expo-image-picker-13.1.1.tgz#e039bf9748ccb7b89370ff2969c3ef07cc949192"
+  resolved "https://registry.npmjs.org/expo-image-picker/-/expo-image-picker-13.1.1.tgz"
   integrity sha512-fU8oONRkKg5DvuU+7KvnuOtf1ubzXNU/OsE/T6yB149LbXb+ZN5A49NicvJ+cOG4Oa5NAnILt0aAAkchIr3iRQ==
   dependencies:
     "@expo/config-plugins" "^4.0.14"
@@ -6453,6 +6460,11 @@ is-plain-obj@^1.0.0:
   resolved "https://registry.npmjs.org/is-plain-obj/-/is-plain-obj-1.1.0.tgz"
   integrity sha512-yvkRyxmFKEOQ4pNXCmJG5AEQNlXJS5LaONXo5/cLdTZdWvsZ1ioJEonLGAosKlMWE8lwUy/bJzMjcw8az73+Fg==
 
+is-plain-obj@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/is-plain-obj/-/is-plain-obj-2.1.0.tgz#45e42e37fccf1f40da8e5f76ee21515840c09287"
+  integrity sha512-YWnfyRwxL/+SsrWYfOpUtz5b3YD+nyfkHvjbcanzk8zgyO4ASD67uVMRt8k5bM4lLMDnXfriRhOpemw+NfT1eA==
+
 is-plain-object@^2.0.3, is-plain-object@^2.0.4:
   version "2.0.4"
   resolved "https://registry.npmjs.org/is-plain-object/-/is-plain-object-2.0.4.tgz"
@@ -7207,6 +7219,13 @@ merge-descriptors@1.0.1:
   resolved "https://registry.npmjs.org/merge-descriptors/-/merge-descriptors-1.0.1.tgz"
   integrity sha512-cCi6g3/Zr1iqQi6ySbseM1Xvooa98N0w31jzUYrXPX2xqObmFGHJ0tQ5u74H3mVh7wLouTseZyYIq39g8cNp1w==
 
+merge-options@^3.0.4:
+  version "3.0.4"
+  resolved "https://registry.yarnpkg.com/merge-options/-/merge-options-3.0.4.tgz#84709c2aa2a4b24c1981f66c179fe5565cc6dbb7"
+  integrity sha512-2Sug1+knBjkaMsMgf1ctR1Ujx+Ayku4EdJN4Z+C2+JzoeF7A3OZ9KM2GY0CpQS51NR61LTurMJrRKPhSs3ZRTQ==
+  dependencies:
+    is-plain-obj "^2.1.0"
+
 merge-stream@^2.0.0:
   version "2.0.0"
   resolved "https://registry.npmjs.org/merge-stream/-/merge-stream-2.0.0.tgz"
@@ -7671,9 +7690,9 @@ mkdirp@^1.0.3, mkdirp@^1.0.4:
   integrity sha512-vVqVZQyf3WLx2Shd0qJ9xuvqgAyKPLAiqITEtqW0oIUjzo3PePDd6fW9iFz30ef7Ysp/oiWqbhszeGWW2T6Gzw==
 
 moment@^2.29.3:
-  version "2.29.3"
-  resolved "https://registry.yarnpkg.com/moment/-/moment-2.29.3.tgz#edd47411c322413999f7a5940d526de183c031f3"
-  integrity sha512-c6YRvhEo//6T2Jz/vVtYzqBzwvPT95JBQ+smCytzf7c50oMZRsR/a4w88aD34I+/QVSfnoAnSBFPJHItlOMJVw==
+  version "2.29.4"
+  resolved "https://registry.npmjs.org/moment/-/moment-2.29.4.tgz"
+  integrity sha512-5LC9SOxjSc2HF6vO2CyuTDNivEdoz2IvyJJGj6X8DJ0eFyfszE0QiEd+iXmBvUP3WHxSjFH/vIsA0EN00cgr8w==
 
 move-concurrently@^1.0.1:
   version "1.0.1"
@@ -9307,6 +9326,11 @@ react-native-maps@0.30.2:
   dependencies:
     "@types/geojson" "^7946.0.7"
     deprecated-react-native-prop-types "^2.3.0"
+
+react-native-mmkv-storage@^0.8.0:
+  version "0.8.0"
+  resolved "https://registry.npmjs.org/react-native-mmkv-storage/-/react-native-mmkv-storage-0.8.0.tgz"
+  integrity sha512-L782Le5IuDYlDLGXF/qimbnzvkbYsSmV5PiDleo1DSS8Kr8Q31UK8YWtUICrDGQ9Fm7Xx4PxP9ffe2XzGeWaHQ==
 
 react-native-paper@^4.12.2:
   version "4.12.2"
@@ -11188,7 +11212,7 @@ utils-merge@1.0.1:
 
 uuid@7.0.2:
   version "7.0.2"
-  resolved "https://registry.yarnpkg.com/uuid/-/uuid-7.0.2.tgz#7ff5c203467e91f5e0d85cfcbaaf7d2ebbca9be6"
+  resolved "https://registry.npmjs.org/uuid/-/uuid-7.0.2.tgz"
   integrity sha512-vy9V/+pKG+5ZTYKf+VcphF5Oc6EFiu3W8Nv3P3zIh0EqVI80ZxOzuPfe9EHjkFNvf8+xuTHVeei4Drydlx4zjw==
 
 uuid@^3.1.0, uuid@^3.3.2, uuid@^3.4.0:

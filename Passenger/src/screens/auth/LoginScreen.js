@@ -13,6 +13,9 @@ import * as Facebook from "expo-facebook";
 import * as WebBrowser from "expo-web-browser";
 import axios from "axios";
 
+// for storing the logged in user locally
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
 WebBrowser.maybeCompleteAuthSession();
 
 // it might be necessary in the production
@@ -32,8 +35,10 @@ const androidClientId =
 // for facebook app login
 const fbClientId = "582916613232390";
 const LoginScreen = ({ navigation }) => {
-  const { usr } = useContext(AppContext);
+  const { usr, localStorage } = useContext(AppContext);
   const [user, setUser] = usr;
+
+  const [storedUser, setStoredUser] = localStorage.user;
 
   const [request, response, promptAsync] = Google.useAuthRequest({
     expoClientId: expoClientId,
@@ -106,8 +111,17 @@ const LoginScreen = ({ navigation }) => {
             image: res.data?.user?.user_image,
             name: res.data?.user?.user_name,
             toc: res.data?.user?.user_toc,
+            userId: res.data?.user_id,
           });
+
+          // saving the session
+          setStoredUser(res.data?.user_id);
+
+          AsyncStorage.setItem("user_id", res.data?.user_id);
+
+          // removing all the errors
           setError(false);
+          // navigating to the home page
           navigation.navigate("Home");
         }
       })
