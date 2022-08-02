@@ -45,7 +45,7 @@ export const getOneUser = async (req, res) => {
     if (!singleUser) {
       return res.status(404).send("user not found");
     } else {
-      return res.status(201).send(singleUser);
+      return res.status(200).send(singleUser);
     }
   } catch (error) {
     return res.status(500).send(error);

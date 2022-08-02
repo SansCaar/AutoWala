@@ -111,13 +111,17 @@ const LoginScreen = ({ navigation }) => {
             image: res.data?.user?.user_image,
             name: res.data?.user?.user_name,
             toc: res.data?.user?.user_toc,
-            userId: res.data?.user_id,
+            userId: res.data?.user?.user_id,
           });
-
           // saving the session
-          setStoredUser(res.data?.user_id);
-
-          AsyncStorage.setItem("user_id", res.data?.user_id);
+          setStoredUser(res.data?.user?.user_id);
+          console.log(
+            "setting the user_id in the store with the value ",
+            res.data?.user?.user_id
+          );
+          AsyncStorage.clear();
+          console.log("async storage is now clear");
+          AsyncStorage.setItem("user_id", res.data?.user?.user_id);
 
           // removing all the errors
           setError(false);

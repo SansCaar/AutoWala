@@ -7,8 +7,14 @@ import AppContext from "../../context/AppContext";
 import { Colors } from "../../styles/Global";
 import axios from "axios";
 
+// for storing the logged in user locally
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
 const OtpScreen = ({ navigation }) => {
-  const { usr } = useContext(AppContext);
+  const { usr, localStorage } = useContext(AppContext);
+
+  // for setting up the async storage state
+  const [, setStoredUser] = localStorage.user;
 
   const [user, setUser] = usr;
 
@@ -58,7 +64,6 @@ const OtpScreen = ({ navigation }) => {
       .post("http://10.0.2.2:3001/v1/api/user/register", finalUser)
       .then((res) => {
         if (res.status === 201) {
-          console.log();
           setUser({
             userId: res.data?.user?.user_id,
             email: res.data?.user?.user_email,
@@ -67,6 +72,12 @@ const OtpScreen = ({ navigation }) => {
             name: res.data?.user?.user_name,
             toc: res.data?.user?.user_toc,
           });
+
+          // saving the session
+          setStoredUser(res.data?.user?.user_id);
+
+          AsyncStorage.clear();
+          AsyncStorage.setItem("user_id", res.data?.user?.user_id);
 
           navigation.navigate("Home");
         }
