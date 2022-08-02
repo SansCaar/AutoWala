@@ -155,7 +155,9 @@ const LoginScreen = ({ navigation }) => {
       >
         <View style={styles.con}>
           <View>
-            <View style={styles.logo}></View>
+            <View style={styles.logo}>
+              <Image source={require("../../../assets/logo.jpg")} style={styles.logoImg}/>
+            </View>
             <Pressable
               style={styles.btn}
               // this will disable the btn until the request is loaded

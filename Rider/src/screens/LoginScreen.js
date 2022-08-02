@@ -14,7 +14,9 @@ const LoginScreen = () => {
       >
         <View style={styles.con}>
           <View>
-            <View style={styles.logo}></View>
+            <View style={styles.logo}>
+              <Image source={require("../../assets/logo.jpeg")}></Image>
+            </View>
             <Pressable style={styles.btn}>
               <Image
                 source={require("../../assets/g1.png")}

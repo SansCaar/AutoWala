@@ -7,7 +7,6 @@ export const styles = StyleSheet.create({
     paddingBottom: 52,
     justifyContent: "center",
     paddingHorizontal: 52,
-
   },
   btn: {
     backgroundColor: Colors.white,
@@ -67,5 +66,12 @@ export const styles = StyleSheet.create({
     alignSelf: "center",
     marginBottom: 64,
     borderRadius: 100,
+    position: "relative",
+  },
+  logoImg: {
+    position: "absolute",
+    height:200,
+    width:200,
+    borderRadius:100
   },
 });

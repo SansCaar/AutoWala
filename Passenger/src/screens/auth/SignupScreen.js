@@ -136,7 +136,12 @@ const SignupScreen = ({ navigation }) => {
       >
         <View style={styles.con}>
           <View>
-            <View style={styles.logo}></View>
+            <View style={styles.logo}>
+              <Image
+                source={require("../../../assets/logo.jpg")}
+                style={styles.logoImg}
+              />
+            </View>
             <Pressable
               style={styles.btn}
               // onPress={async () => {
