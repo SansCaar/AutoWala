@@ -36,7 +36,7 @@ export const styles = StyleSheet.create({
     textDecorationLine: "underline",
   },
   text: {
-    fontSize: 16,
+    fontSize: 15,
     flex: 0.75,
     color: Colors.black,
     fontFamily: "Regular",
@@ -70,8 +70,8 @@ export const styles = StyleSheet.create({
   },
   logoImg: {
     position: "absolute",
-    height:200,
-    width:200,
-    borderRadius:100
+    height: 200,
+    width: 200,
+    borderRadius: 100,
   },
 });
