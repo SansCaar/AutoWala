@@ -28,7 +28,7 @@ export const getAllUser = async (req, res) => {
 export const dltUser = async (req, res) => {
   try {
     const _id = req.params.id;
-    const dltUser = await userSchema.findByIdAndDelete(_id);
+    const dltUser = await userSchema.findOneAndDelete({user_id : _id});
     return res
       .status(202)
       .json({ message: "The user has been deleted successfully" });
@@ -56,7 +56,7 @@ export const getOneUser = async (req, res) => {
 export const updateUser = async (req, res) => {
   try {
     const _id = req.params.id;
-    const updateUser = await userSchema.findByIdAndUpdate(_id, req.body, {
+    const updateUser = await userSchema.findOneAndUpdate({ user_id: _id }, req.body, {
       new: true,
     });
     return res.status(201).send(updateUser);
