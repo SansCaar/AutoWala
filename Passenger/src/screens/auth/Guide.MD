@@ -78,3 +78,25 @@ patch serverUrl/v1/api/user/
 > "user_image": "http://10.0.2.2:3001/uploads\\471c3598-9ae7-4e0f-97ab-54151bc7d1a8depositphotos_22343351-Elegant-young-handsome-man..Multicolored-digital-painted-image-portrait-of-men-face..jpg",
 > "\_\_v": 0
 > }
+
+
+
+
+# The data to be expected in the context is:
+
+> this is the data you are going to get from the context and it is the one that must be mapped to the user profile and other section where logged in user is in use.
+
+
+```
+id: String, // _id from the database
+email: String , // user email Note: if user is logged in using the facebook then this will be undefined
+contact: String,
+image: String,
+name: String,
+toc: {
+    date: String,
+    time: String,
+},
+userId: String, // This is the id that is used to query anything in the database or in any other routes this is the id that is actually used.
+
+```
