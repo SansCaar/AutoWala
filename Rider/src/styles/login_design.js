@@ -7,7 +7,6 @@ export const styles = StyleSheet.create({
     paddingBottom: 52,
     justifyContent: "center",
     paddingHorizontal: 52,
-
   },
   btn: {
     backgroundColor: Colors.white,
@@ -63,7 +62,7 @@ export const styles = StyleSheet.create({
   logo: {
     width: 200,
     height: 200,
-    backgroundColor: "#efefef",
+    backgroundColor: "#000",
     alignSelf: "center",
     marginBottom: 64,
     borderRadius: 100,

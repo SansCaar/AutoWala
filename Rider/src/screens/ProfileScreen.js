@@ -105,7 +105,7 @@ const ProfileScreen = ({navigation}) => {
           <Text style={styles.email}>rockprasad110@gmail.com</Text>
         </View>
         <Stat balance={balance} point={point} />
-        <View style={{ marginTop: 16 }}>
+        {/* <View style={{ marginTop: 16 }}>
           <Text style={{ fontFamily: "Bold", fontSize: 16, marginLeft: 8 }}>
             Income Summary
           </Text>
@@ -129,7 +129,7 @@ const ProfileScreen = ({navigation}) => {
               })}
             </View>
           </Box>
-        </View>
+        </View> */}
         <View style={styles.trans_con}>
           <ListBox title="Recent Rides" data={listData} />
         </View>

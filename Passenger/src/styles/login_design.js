@@ -7,7 +7,6 @@ export const styles = StyleSheet.create({
     paddingBottom: 52,
     justifyContent: "center",
     paddingHorizontal: 52,
-
   },
   btn: {
     backgroundColor: Colors.white,
@@ -37,7 +36,7 @@ export const styles = StyleSheet.create({
     textDecorationLine: "underline",
   },
   text: {
-    fontSize: 16,
+    fontSize: 15,
     flex: 0.75,
     color: Colors.black,
     fontFamily: "Regular",
@@ -66,6 +65,13 @@ export const styles = StyleSheet.create({
     backgroundColor: "#efefef",
     alignSelf: "center",
     marginBottom: 64,
+    borderRadius: 100,
+    position: "relative",
+  },
+  logoImg: {
+    position: "absolute",
+    height: 200,
+    width: 200,
     borderRadius: 100,
   },
 });

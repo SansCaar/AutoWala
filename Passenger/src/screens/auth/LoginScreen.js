@@ -8,8 +8,16 @@ import * as AuthSession from "expo-auth-session";
 import { EXPO_CLIENT_ID, ANDROID_CLIENT_ID,API_URL } from "@env";
 
 
+// for facebook login
+// import * as Facebook from "expo-auth-session/providers/facebook";
+import { ResponseType } from "expo-auth-session";
+import * as Facebook from "expo-facebook";
+
 import * as WebBrowser from "expo-web-browser";
 import axios from "axios";
+
+// for storing the logged in user locally
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -28,9 +36,13 @@ const androidClientId = ANDROID_CLIENT_ID;
 //for api domain
 const serverDomain = API_URL;
 
+// for facebook app login
+const fbClientId = "582916613232390";
 const LoginScreen = ({ navigation }) => {
-  const { usr } = useContext(AppContext);
+  const { usr, localStorage } = useContext(AppContext);
   const [user, setUser] = usr;
+
+  const [storedUser, setStoredUser] = localStorage.user;
 
   const [request, response, promptAsync] = Google.useAuthRequest({
     expoClientId: expoClientId,
@@ -39,6 +51,11 @@ const LoginScreen = ({ navigation }) => {
   });
   // for allerting the user about the error that occured
   const [Error, setError] = useState(false);
+
+  const googleSignIn = async () => {
+    // getting the email from the google
+    await promptAsync({ showInRecents: true });
+  };
 
   useEffect(() => {
     if (response?.type === "success") {
@@ -51,34 +68,43 @@ const LoginScreen = ({ navigation }) => {
           `https://www.googleapis.com/oauth2/v3/userinfo?access_token=${access_token}`
         )
         .then((res) => {
-          setUser(res.data.email);
+          LOGIN(res.data?.sub);
         })
         .catch((e) => {
           console.log(e);
         });
     }
   }, [response]);
-  const googleSignIn = async () => {
-    // getting the email from the google
-    await promptAsync({ showInRecents: true });
 
-    // implementing the google login
-
-    // signInWithGoogleAsync();
-    // after everything is done redirecting to the previous location
+  // for facebook login
+  const facebookLogin = async () => {
+    try {
+      await Facebook.initializeAsync({
+        appId: fbClientId,
+      });
+      const { type, token } = await Facebook.logInWithReadPermissionsAsync({
+        permissions: ["public_profile"],
+      });
+      if (type === "success") {
+        // Get the user's name using Facebook's Graph API
+        const response = await fetch(
+          `https://graph.facebook.com/me?access_token=${token}`
+        );
+        const { id } = await response.json();
+        LOGIN(id);
+      } else {
+        // type === 'cancel'
+      }
+    } catch ({ message }) {
+      alert(`Facebook Login Error: ${message}`);
+    }
   };
 
-  useEffect(() => {
-    if (Error) {
-      console.log("the alert is fired");
-      alert(Error);
-    }
-  }, [Error]);
-  useEffect(() => {
-    console.log({ user });
+  // function to send the login request to the backend
+  const LOGIN = (userId) => {
     axios
-      .post(`${serverDomain}/v1/api/user/login`, {
-        email: user,
+      .post("http://10.0.2.2:3001/v1/api/user/login", {
+        id: userId,
       })
       .then((res) => {
         if (res.status === 200) {
@@ -89,15 +115,39 @@ const LoginScreen = ({ navigation }) => {
             image: res.data?.user?.user_image,
             name: res.data?.user?.user_name,
             toc: res.data?.user?.user_toc,
+            userId: res.data?.user?.user_id,
           });
+          // saving the session
+          setStoredUser(res.data?.user?.user_id);
+          console.log(
+            "setting the user_id in the store with the value ",
+            res.data?.user?.user_id
+          );
+          AsyncStorage.clear();
+          console.log("async storage is now clear");
+          AsyncStorage.setItem("user_id", res.data?.user?.user_id);
+
+          // removing all the errors
           setError(false);
+          // navigating to the home page
           navigation.navigate("Home");
         }
       })
       .catch((e) => {
         setError(e.response.data.error);
+        if (e.response.status === 404) {
+          navigation.navigate("SignUp");
+        }
       });
-  }, [user]);
+  };
+
+  // error handeling
+  useEffect(() => {
+    if (Error) {
+      alert(Error);
+      setError(false);
+    }
+  }, [Error]);
 
   return (
     <>
@@ -109,7 +159,9 @@ const LoginScreen = ({ navigation }) => {
       >
         <View style={styles.con}>
           <View>
-            <View style={styles.logo}></View>
+            <View style={styles.logo}>
+              <Image source={require("../../../assets/logo.jpg")} style={styles.logoImg}/>
+            </View>
             <Pressable
               style={styles.btn}
               // this will disable the btn until the request is loaded
@@ -122,7 +174,7 @@ const LoginScreen = ({ navigation }) => {
               />
               <Text style={styles.text}>Sign in with Google</Text>
             </Pressable>
-            <Pressable style={styles.btn}>
+            <Pressable style={styles.btn} onPress={facebookLogin}>
               <Image
                 source={require("../../../assets/fb.png")}
                 style={styles.img}

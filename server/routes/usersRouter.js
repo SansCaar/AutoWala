@@ -9,6 +9,8 @@ import {
   postUser,
   updateUser,
   uploadImage,
+  userExistance,
+  deleteAll,
 } from "../controller/_users.js";
 const router = express.Router();
 
@@ -24,9 +26,15 @@ router.route("/:id").get(getOneUser);
 router.route("/:id").delete(dltUser);
 router.route("/:id").patch(updateUser);
 
+// delete all the users
+router.route("/").delete(deleteAll);
+
 // login and register routes
 router.route("/login").post(loginUser);
 router.route("/register").post(registerUser);
+
+// checking for registers users existance
+router.route("/register/existance").post(userExistance);
 
 // route for uploading the user image to the server
 
@@ -43,4 +51,5 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 router.route("/uploadImage").post(upload.single("profile"), uploadImage);
+
 export default router;
