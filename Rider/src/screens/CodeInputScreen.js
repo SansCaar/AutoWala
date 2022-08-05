@@ -12,7 +12,7 @@ import MapView from "react-native-maps";
 import CodePopup from "../components/CodePopup";
 import Header from "../components/Header";
 
-import { getRideData, cancelRide, completeRide } from "../context/api";
+import { getRideData, cancelRide, completeRide, getRoutes } from "../context/api";
 import AppContext from "../context/AppContext";
 
 const CodeInputScreen = ({ navigation, route }) => {
@@ -30,9 +30,12 @@ const CodeInputScreen = ({ navigation, route }) => {
 
   function renderPolyLine(routes) {
     return (
+
+
+
+
       <Polyline
-        coordinates={routes}
-        strokeColor={Colors.primary} // fallback for when `strokeColors` is not supported by the map-provider
+        coordinates={routes}// fallback for when `strokeColors` is not supported by the map-provider
         strokeWidth={5}
       />
     );
@@ -42,6 +45,7 @@ const CodeInputScreen = ({ navigation, route }) => {
     const data = async () => {
       const rideData = await getRideData(id);
       setRideDetails(rideData);
+      const res = await getRoutes(from, to);
       setCheckValidation(rideData.ride_validated);
       console.log(rideDetails);
     };
