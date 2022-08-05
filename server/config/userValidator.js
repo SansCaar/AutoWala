@@ -2,8 +2,9 @@ import Joi from "joi";
 
 export const userValidator = (userData, googleSignIn) => {
   const schema = Joi.object({
+    user_id: Joi.string().required(),
     user_name: Joi.string().min(5).required(),
-    user_email: Joi.string().email().required(),
+    user_email: Joi.string().email(),
     user_address: Joi.string(),
     user_contact: Joi.string()
       .length(10)
@@ -23,7 +24,7 @@ export const userValidator = (userData, googleSignIn) => {
 
 export const loginValidator = (loginData) => {
   const schema = new Joi.object({
-    email: Joi.string().email().required(),
+    id: new Joi.string().required(),
   });
   return schema.validate(loginData);
 };

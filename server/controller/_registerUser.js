@@ -3,6 +3,7 @@ import userSchema from "../model/userSchema.js";
 
 export const registerUser = async (req, res) => {
   const data = {
+    user_id: req.body.userId,
     user_name: req.body.username,
     user_email: req.body.email,
     user_contact: req.body.contact,
@@ -14,15 +15,17 @@ export const registerUser = async (req, res) => {
   };
 
   console.log({ data });
-  //   checking if the user exists in the db or not
-  const exists = await userSchema.findOne({
-    user_email: data.user_email,
-  });
 
-  if (exists)
-    return res
-      .status(409)
-      .json({ error: "The user already exists try logging in " });
+  // user existance is now sepeareated and moved to another route
+  // //   checking if the user exists in the db or not
+  // const exists = await userSchema.findOne({
+  //   user_id: data.user_id,
+  // });
+
+  // if (exists)
+  //   return res
+  //     .status(409)
+  //     .json({ error: "The user already exists try logging in " });
 
   // user should be checked before validating because if the btn is clicked for google login then there is no other data and if the user exists he she should be informed early rather than after filling the entire form
 

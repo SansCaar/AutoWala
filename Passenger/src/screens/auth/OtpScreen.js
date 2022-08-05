@@ -9,11 +9,17 @@ import { Colors } from "../../styles/Global";
 import axios from "axios";
 import { BASE_OUR_API_URL } from "../../context/geocoding";
 
-const OtpScreen = ({ navigation }) => {
-  const serverDomain = API_URL;
-  const { usr } = useContext(AppContext);
+// for storing the logged in user locally
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-  const [user] = usr;
+const OtpScreen = ({ navigation }) => {
+   const serverDomain = API_URL;
+  const { usr, localStorage } = useContext(AppContext);
+
+  // for setting up the async storage state
+  const [, setStoredUser] = localStorage.user;
+
+  const [user, setUser] = usr;
 
   const [otp, setOpt] = useState("");
 
@@ -42,6 +48,9 @@ const OtpScreen = ({ navigation }) => {
   };
 
   const registerUser = async () => {
+    console.log({
+      data: user.formData.contact,
+    });
     const finalUser = {
       id: user.id,
       email: user.email,
@@ -51,6 +60,7 @@ const OtpScreen = ({ navigation }) => {
       toc: user.toc,
       gfid: user.gfid,
       username: user.formData?.username,
+      userId: user.userId,
     };
 
     axios
@@ -58,7 +68,7 @@ const OtpScreen = ({ navigation }) => {
       .then((res) => {
         if (res.status === 201) {
           setUser({
-            id: res.data?.user?._id,
+            userId: res.data?.user?.user_id,
             email: res.data?.user?.user_email,
             contact: res.data?.user?.user_contact,
             image: res.data?.user?.user_image,
@@ -67,13 +77,24 @@ const OtpScreen = ({ navigation }) => {
           });
           console.log(res.data?.user?._id);
 
+          // saving the session
+          setStoredUser(res.data?.user?.user_id);
+
+          AsyncStorage.clear();
+          AsyncStorage.setItem("user_id", res.data?.user?.user_id);
+
           navigation.navigate("Home");
         }
       })
       .catch((error) => {
+        console.log({ main: error });
         console.log({ error: error.response.data.error });
       });
   };
+
+  useEffect(() => {
+    console.log(user);
+  }, [user]);
 
   // styling
   let styles = StyleSheet.create({
@@ -171,7 +192,7 @@ const OtpScreen = ({ navigation }) => {
 
       <Text style={styles.second_title}>
         Enter the verification code sent to ********
-        {user?.formData.contact ? user?.formData?.contact.slice(8) : ""}
+        {user?.formData?.contact ? user?.formData?.contact.slice(8) : ""}
       </Text>
 
       <View>

@@ -7,7 +7,7 @@ import {
   Image,
   TextInput,
 } from "react-native";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState , useRef } from "react";
 import {API_URL} from "@env"
 import Icon from "@expo/vector-icons/Ionicons";
 // import { launchImageLibraryAsync } from "expo-image-picker";
@@ -32,7 +32,7 @@ const AdditionalInfo = ({ navigation }) => {
   const { usr } = useContext(AppContext);
   const [user, setUser] = usr;
 
-  console.log(user);
+  // console.log(user);
 
   // local context for storing the file
   const [file, setFile] = useState(null);
@@ -61,6 +61,8 @@ const AdditionalInfo = ({ navigation }) => {
   };
 
   const uploadImage = async (file) => {
+    console.log("the file you have choosed is ");
+    console.log(file);
     try {
       // checks if the file is empty
       if (file === null) {
@@ -97,6 +99,24 @@ const AdditionalInfo = ({ navigation }) => {
 
       return response?.data?.fileName;
     } catch (e) {
+      console.log("trying again ");
+
+      axios(serverUrl, {
+        method: "post",
+        data: data,
+
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((error) => {
+          console.log("second error");
+          console.log(error);
+        });
+
       setError({
         target: "image",
         message: "Sry, we are having trouble uploading the Profile ",
@@ -112,13 +132,15 @@ const AdditionalInfo = ({ navigation }) => {
     if (data.username === "") {
       setError({
         target: "username",
-        message: "The email feild cannot be empty.",
+        message: "User name cannot be empty.",
       });
+      // making the username feild red
+
       return;
     } else if (data.address === "") {
       setError({
         target: "address",
-        message: "The address feild cannot be left empty.",
+        message: "Address cannot be left empty.",
       });
       return;
     } else if (data.contact.length !== 10) {
@@ -150,17 +172,18 @@ const AdditionalInfo = ({ navigation }) => {
       return { ...user, formData: { ...data }, otp: fourDigOtp, toc: toc };
     });
 
+    console.log(user);
     navigation.navigate("OtpScreen");
   };
 
   // checking what is changing
 
-  useEffect(() => {
-    console.log(
-      "data is changing....................................................."
-    );
-    console.log({ data, user });
-  }, [data]);
+  // useEffect(() => {
+  //   console.log(
+  //     "data is changing....................................................."
+  //   );
+  //   console.log({ data, user });
+  // }, [data]);
 
   useEffect(() => {
     if (error.target === "image") {
@@ -175,6 +198,7 @@ const AdditionalInfo = ({ navigation }) => {
       address: "",
       toc: "",
       gfid: "",
+      userId: "",
     });
     navigation.navigate("SignUp");
   };
@@ -206,29 +230,6 @@ const AdditionalInfo = ({ navigation }) => {
     // }
   };
 
-  // return (
-  //   <View style={styles.main_container}>
-  //     <Text style={styles.main_title}>Let us know you a bit better</Text>
-  //     <Text style={styles.sub_title}>
-  //       This following information will be used to create your profile.
-  //     </Text>
-  //     <View style={styles.feild_container}>
-  //       <Text style={styles.feild_title}> Display Name </Text>
-  //       <TextInput placeholder="Eg :- Saroj Regmi" />
-  //     </View>
-  //     <View style={styles.feild_container}>
-  //       <Text style={styles.feild_title}> Phone Number</Text>
-  //       <TextInput placeholder="Eg :- 98********" />
-  //     </View>
-  //     <View style={styles.feild_container}>
-  //       <Text style={styles.feild_title}> Referral code</Text>
-  //       <TextInput placeholder="Eg :- BXC3Y0" />
-  //     </View>
-  //     <Pressable onPress={() => submitForm()}>
-  //       <Text>Continue</Text>
-  //     </Pressable>
-  //   </View>
-  // );
   return (
     <View style={styles.main_container}>
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -275,7 +276,12 @@ const AdditionalInfo = ({ navigation }) => {
           <View style={styles.inputCon}>
             <Text style={styles.inputTitle}>User Name</Text>
 
-            <View style={styles.inputWrapper}>
+            <View
+              style={[
+                styles.inputWrapper,
+                error?.target === "username" ? styles.errorInp : "",
+              ]}
+            >
               <Icon
                 name="person"
                 size={22}
@@ -285,7 +291,7 @@ const AdditionalInfo = ({ navigation }) => {
               <TextInput
                 value={data.username}
                 selectionColor={Colors.grey}
-                style={styles.input}
+                style={[styles.input]}
                 placeholder="Eg: Ramesh Nepali"
                 onChangeText={(text) => {
                   handleChange("username", text);
@@ -298,7 +304,12 @@ const AdditionalInfo = ({ navigation }) => {
           </View>
           <View style={styles.inputCon}>
             <Text style={styles.inputTitle}>Address (City-Ward, District)</Text>
-            <View style={styles.inputWrapper}>
+            <View
+              style={[
+                styles.inputWrapper,
+                error?.target === "address" ? styles.errorInp : "",
+              ]}
+            >
               <Icon
                 name="location-sharp"
                 size={22}
@@ -308,7 +319,7 @@ const AdditionalInfo = ({ navigation }) => {
               <TextInput
                 value={data.address}
                 selectionColor={Colors.grey}
-                style={styles.input}
+                style={[styles.input]}
                 placeholder="Eg: Butwal 13, Rupandehi"
                 onChangeText={(text) => {
                   handleChange("address", text);
@@ -319,9 +330,14 @@ const AdditionalInfo = ({ navigation }) => {
               <Text style={styles.error}> {error.message} </Text>
             ) : null}
           </View>
-          <View style={styles.inputCon}>
+          <View style={[styles.inputCon]}>
             <Text style={styles.inputTitle}>Phone Number</Text>
-            <View style={styles.inputWrapper}>
+            <View
+              style={[
+                styles.inputWrapper,
+                error?.target === "contact" ? styles.errorInp : "",
+              ]}
+            >
               <Icon
                 name="call"
                 size={22}
@@ -331,7 +347,7 @@ const AdditionalInfo = ({ navigation }) => {
               <TextInput
                 value={data.contact}
                 selectionColor={Colors.grey}
-                style={styles.input}
+                style={[styles.input]}
                 placeholder="Eg: 98********"
                 keyboardType="number-pad"
                 onChangeText={(text) => {
@@ -474,5 +490,9 @@ const styles = StyleSheet.create({
     width: 100,
     borderRadius: 50,
     overflow: "hidden",
+  },
+  errorInp: {
+    borderWidth: 2,
+    borderColor: "red",
   },
 });
