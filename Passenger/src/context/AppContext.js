@@ -1,6 +1,6 @@
 import React, { createContext, useEffect, useState } from "react";
 import * as Location from "expo-location";
-import { getSuggestions } from "./geocoding";
+import { BASE_OUR_API_URL, getSuggestions } from "./geocoding";
 import {api} from "../config/axios.js"
 import axios from "axios";
 
@@ -19,7 +19,7 @@ export const ContextProvider = ({ children }) => {
 
   const getUser = () =>{
     try {
-      axios.get("http://192.168.156.235:3001/v1/api/user/62e53aedf1a19219593c078b").then(res =>{
+      axios.get(BASE_OUR_API_URL+"/user/62e53aedf1a19219593c078b").then(res =>{
         setUsr(res.data);
         console.log(usr)
       })
@@ -30,7 +30,7 @@ export const ContextProvider = ({ children }) => {
   }
   const getRides = async () =>{
     try {
-      axios.get("http://192.168.156.235:3001/v1/api/reqride/getRidesbyUserId/1243").then(res =>{
+      axios.get(BASE_OUR_API_URL+"/reqride/getRidesbyUserId/1243").then(res =>{
         setReqride(res.data);
       }).catch(err =>{
         console.log(err);
@@ -41,31 +41,29 @@ export const ContextProvider = ({ children }) => {
    
    
   }
+  async function GetLocation() {
+    try {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== "granted") {
+        console.log("Error");
+      } else {
+        let { coords } = await Location.getCurrentPositionAsync({});
+        if (coords) {
+          setLocation(coords);
+          console.log(coords)
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
   useEffect(() =>{
     getRides();
     getUser();
+    GetLocation();
 
   },[])
 
-  useEffect(() => {
-    async function GetLocation() {
-      try {
-        let { status } = await Location.requestForegroundPermissionsAsync();
-        if (status !== "granted") {
-          console.log("Error");
-        } else {
-          let { coords } = await Location.getCurrentPositionAsync({});
-          if (coords) {
-            setLocation(coords);
-            console.log(coords)
-          }
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    }
-    GetLocation();
-  }, []);
   return (
     <AppContext.Provider
       value={{

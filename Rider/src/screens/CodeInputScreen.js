@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect, useRef } from "react";
 import {
   StyleSheet,
   Text,
@@ -7,13 +7,21 @@ import {
   Linking,
   Pressable,
   Dimensions,
+  Alert,
+  Button,
 } from "react-native";
-import MapView from "react-native-maps";
+import MapView, { Polyline } from "react-native-maps";
 import CodePopup from "../components/CodePopup";
 import Header from "../components/Header";
 
-import { getRideData, cancelRide, completeRide, getRoutes } from "../context/api";
+import {
+  getRideData,
+  cancelRide,
+  completeRide,
+  getRoutes,
+} from "../context/api";
 import AppContext from "../context/AppContext";
+import { Colors } from "../styles/Global";
 
 const CodeInputScreen = ({ navigation, route }) => {
   const {
@@ -35,12 +43,12 @@ const CodeInputScreen = ({ navigation, route }) => {
 
 
       <Polyline
-        coordinates={routes}// fallback for when `strokeColors` is not supported by the map-provider
+        coordinates={routes ? [...routes] : []}
+        strokeColor={Colors.primary} // fallback for when `strokeColors` is not supported by the map-provider
         strokeWidth={5}
       />
     );
   }
-
   useEffect(() => {
     const data = async () => {
       const rideData = await getRideData(id);
@@ -48,9 +56,30 @@ const CodeInputScreen = ({ navigation, route }) => {
       const res = await getRoutes(from, to);
       setCheckValidation(rideData.ride_validated);
       console.log(rideDetails);
+
+      if (checkvalidation) {
+      }
     };
+    if (rideDetails?.user_fromlatitude && rideDetails.user_tolongitude) {
+      console.log(
+        rideDetails.user_fromlatitude + " " + rideDetails.user_fromlongitude
+      );
+      const res = getRoutes(
+        {
+          latitude: rideDetails.user_tolatitude,
+          longitude: rideDetails.user_tolongitude,
+        },
+        {
+          latitude: rideDetails.user_fromlatitude,
+          longitude: rideDetails.user_fromlongitude,
+        }
+      );
+      setRoutes(res);
+      console.log(routes);
+    }
     data();
-  });
+  }, [rideDetails]);
+
   return (
     <View style={{ flex: 1 }}>
       {location?.latitude && (
@@ -92,19 +121,31 @@ const CodeInputScreen = ({ navigation, route }) => {
               alignSelf: "center",
               bottom: 20,
             }}
+            onPress={() => {
+              Alert.alert(
+                "Ride Completed",
+                "Your ride has been completed. ",
+                [
+                  {
+                    text: "Cancel",
+                    style: "cancel",
+                  },
+                  {
+                    text: "Ok",
+                    onPress: async () => {
+                      await completeRide(id);
+                      await navigation.navigate("Home");
+                    },
+                  },
+                ],
+                { cancelable: true }
+              );
+            }}
           >
             <Text
               style={{
                 textAlign: "center",
                 color: "white",
-              }}
-              onPress={async () => {
-                var data = await completeRide(id);
-                const { ride_status } = data;
-                if (ride_status == "DRIVER_COMPLETED") {
-                  alert("Completed");
-                  navigation.navigate("Home");
-                }
               }}
             >
               Completed
@@ -122,13 +163,35 @@ const CodeInputScreen = ({ navigation, route }) => {
               alignSelf: "center",
               bottom: 20,
             }}
+            onPress={() => {
+              console.log("hello ");
+              Alert.alert(
+                "Ride Cnaceled",
+                "Your ride has been cancelled. You are requested not to cancel any rides if ",
+                [
+                  {
+                    text: "Cancel",
+                    style: "cancel",
+                  },
+                  {
+                    text: "Ok",
+                    onPress: async () => {
+                      Promise.all([
+                        await cancelRide(id),
+                        await navigation.navigate("Home"),
+                      ]);
+                    },
+                  },
+                ],
+                { cancelable: true }
+              );
+            }}
           >
             <Text
               style={{
                 textAlign: "center",
                 color: "white",
               }}
-              onPress={async () => await cancelRide(id)}
             >
               Cancel Ride
             </Text>

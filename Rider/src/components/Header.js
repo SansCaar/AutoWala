@@ -28,7 +28,7 @@ export default function Header({ iconL, iconR, title, onPressR, onPressL }) {
 const styles = StyleSheet.create({
   headerContainer: {
     flexDirection: "row",
-    marginTop: Constants.statusBarHeight,
+    marginTop: Constants.statusBarHeight + 16,
     marginBottom: 20,
     alignItems: "center",
   },

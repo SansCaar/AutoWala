@@ -8,7 +8,7 @@ const BASE_URL = "http://api.positionstack.com/v1";
 const AUTOCOMPLETE_URL = "https://api.locationiq.com/v1/autocomplete";
 const ROUTE_URL = "https://api.geoapify.com/v1/routing";
 
-const BASE_OUR_API_URL = "http://192.168.18.21:3001/v1/api";
+export const BASE_OUR_API_URL = "http://192.168.18.21:3001/v1/api";
 
 async function get(url) {
   let headers = {
@@ -60,7 +60,7 @@ export async function getRoutes(from, to) {
     ROUTE_URL +
     `?apiKey=${ROUTE_APIKEY}&waypoints=${from.latitude}%2C${from.longitude}%7C${to.latitude}%2C${to.longitude}&mode=drive`;
   let res = await get(url);
-  res = res.features[0].geometry.coordinates[0];
+  res = res?.features[0].geometry.coordinates[0];
   res = res.map((cords) => ({ longitude: cords[0], latitude: cords[1] }));
   console.log("API4");
 

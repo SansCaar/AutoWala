@@ -35,8 +35,7 @@ import Autocomplete from "../components/AutoCompleteInput";
 import BaseModal from "../components/BaseModal";
 
 export default function MapViewScreen({ navigation }) {
-  const { geo } = useContext(AppContext);
-  console.log(geo)
+  const { geo:[location] } = useContext(AppContext);
   const [data, setData] = useState([]);
 
   const [searching, setSearching] = useState(null);
@@ -129,7 +128,7 @@ export default function MapViewScreen({ navigation }) {
       />
     );
   }
-  function searchRides() {
+  function searchRides(rideId) {
     setSearching(true);
     console.log(rideId);
     const checkForRidesInterval = setInterval(async () => {
@@ -155,15 +154,15 @@ export default function MapViewScreen({ navigation }) {
     <KeyboardAvoidingView
       style={{ ...styles.container, marginTop: Constants.statusBarHeight }}
     >
-      {geo?.latitude && geo?.longitude && (
+      {location?.latitude && location?.longitude && (
         <MapView
           ref={map}
           style={styles.map}
           mapType="standard"
           showsUserLocation={true}
           initialRegion={{
-            latitude: geo?.latitude,
-            longitude: geo?.longitude,
+            latitude: location?.latitude,
+            longitude: location?.longitude,
             latitudeDelta: 0.00522,
             longitudeDelta: 0.00021,
           }}
@@ -301,7 +300,8 @@ export default function MapViewScreen({ navigation }) {
                 ride_toc: new Date().toISOString(),
               });
               setConfirmDialogue(false);
-              if (rideId) searchRides();
+              console.log(rideId)
+              if (rideId) searchRides(rideId);
             }}
             buttons={confirmDialogue}
           >

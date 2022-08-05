@@ -63,17 +63,16 @@ const PassengerRequest = ({ navigation, data }) => {
         >
           <Icon name="check" size={32} color={Colors.white} />
         </Pressable>
-        <Pressable style={{ backgroundColor: "#FF3838", ...styles.btn }}>
+        {/* <Pressable style={{ backgroundColor: "#FF3838", ...styles.btn }}>
           <Icon name="x" size={32} color={Colors.white} />
-        </Pressable>
+        </Pressable> */}
       </View>
     </Box>
   );
 };
 const styles = StyleSheet.create({
   box: {
-    height: "auto",
-    flex: 1,
+    // flex: 1,
     marginVertical: 8,
     elevation: 5,
     alignItems: "center",
@@ -88,20 +87,23 @@ const styles = StyleSheet.create({
   mid: {
     marginVertical: 8,
     height: "auto",
-    alignItems: "center",
-    flex: 1.5,
+    // alignItems: "center",
+    flex: 1,
     flexDirection: "row",
   },
   left: {
     height: "auto",
   },
   right: {
+    flex:1,
+    height:'100%',
     alignSelf: "flex-end",
-    flex: 1 / 4,
+    justifyContent:"space-between",
     marginLeft: 50,
     flexDirection: "column",
   },
   r_text: {
+    // alignItems:"flex-start",
     fontFamily: "SemiBold",
     color: Colors.light_grey,
     fontSize: 14,

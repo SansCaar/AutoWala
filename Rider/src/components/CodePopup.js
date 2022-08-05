@@ -55,7 +55,7 @@ const CodePopup = ({data}) => {
       
       }}
         placeholder="4  digit Pin"
-        maxLength={4}
+        // maxLength={4}
         onChangeText={(value)=>{
           setPin(value)
           

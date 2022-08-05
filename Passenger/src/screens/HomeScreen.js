@@ -39,7 +39,7 @@ const defaultAddress = [
 ];
 
 export default function HomeScreen({ navigation }) {
-  const { location } = useContext(AppContext);
+  const { geo:[location] } = useContext(AppContext);
 
   return (
     <ScrollView style={styles.container}>
