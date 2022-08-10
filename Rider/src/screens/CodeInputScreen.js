@@ -38,10 +38,6 @@ const CodeInputScreen = ({ navigation, route }) => {
 
   function renderPolyLine(routes) {
     return (
-
-
-
-
       <Polyline
         coordinates={routes ? [...routes] : []}
         strokeColor={Colors.primary} // fallback for when `strokeColors` is not supported by the map-provider
@@ -52,8 +48,14 @@ const CodeInputScreen = ({ navigation, route }) => {
   useEffect(() => {
     const data = async () => {
       const rideData = await getRideData(id);
-      setRideDetails(rideData);
+
+      //  updated: using the spread operator for the context to get updated.
+      setRideDetails({... rideData});
+
+
       const res = await getRoutes(from, to);
+      
+      
       setCheckValidation(rideData.ride_validated);
       console.log(rideDetails);
 
@@ -74,7 +76,9 @@ const CodeInputScreen = ({ navigation, route }) => {
           longitude: rideDetails.user_fromlongitude,
         }
       );
-      setRoutes(res);
+// again using the spread operator here
+
+      setRoutes({ ... res});
       console.log(routes);
     }
     data();
